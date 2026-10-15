@@ -9,7 +9,7 @@ import connectToDB from "./config/db_config.ts";
 const app: Express = express();
 app.set('trust proxy', 1)
 
-const allowedOrigins : string[] = (CLIENT_URL || 'http:localhost:3000').split(',').map((url) => url.trim()).filter(Boolean)
+const allowedOrigins = (CLIENT_URL || 'http:localhost:3000').split(',').map((url) => url.trim()).filter(Boolean)
 
 app.use(
   cors({

@@ -23,6 +23,12 @@ const userSchema = new mongoose.Schema({
     avatarUrl: {
         url: {type: String, default: null},
         publicId: {type: String, default: null}
+    },
+    houseHold: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Household',
+        required: true,
+        index: true
     }
 },
 {timestamps: true})
