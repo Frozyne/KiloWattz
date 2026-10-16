@@ -1,7 +1,17 @@
-import mongoose from "mongoose";
+import mongoose, {Document, Types} from "mongoose";
 
-const quotaRecordSchema = new mongoose.Schema({
-    houseHold: {
+export interface IQuotaRecord extends Document {
+  household: Types.ObjectId;
+  date: string;
+  allocatedQuotaKWh: number;
+  consumedKWh: number;
+  quotaBreached: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const quotaRecordSchema = new mongoose.Schema<IQuotaRecord>({
+    household: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Household',
         required: true,
@@ -31,5 +41,5 @@ const quotaRecordSchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const QuotaRecord = mongoose.model('QuotaRecord', quotaRecordSchema)
+const QuotaRecord = mongoose.model<IQuotaRecord>('QuotaRecord', quotaRecordSchema)
 export default QuotaRecord

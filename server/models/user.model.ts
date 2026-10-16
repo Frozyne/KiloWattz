@@ -1,6 +1,19 @@
-import mongoose from "mongoose";
+import mongoose, {Document, Types} from "mongoose";
 
-const userSchema = new mongoose.Schema({
+export interface IUser extends Document {
+  fullName: string;
+  email: string;
+  password?: string; // Optional if you decide to hide it dynamically using select: false
+  avatarUrl: {
+    url: string | null;
+    publicId: string | null;
+  };
+  household: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const userSchema = new mongoose.Schema<IUser>({
     fullName: {
         type: String,
         required: [true, 'Please enter your Name'],
@@ -24,7 +37,7 @@ const userSchema = new mongoose.Schema({
         url: {type: String, default: null},
         publicId: {type: String, default: null}
     },
-    houseHold: {
+    household: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Household',
         required: true,
@@ -33,5 +46,5 @@ const userSchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model<IUser>('User', userSchema)
 export default User

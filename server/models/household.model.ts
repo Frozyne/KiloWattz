@@ -1,6 +1,18 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
-const householdSchema = new mongoose.Schema({
+export interface IHousehold extends Document {
+  plotNumber: string;
+  street: string;
+  dailyKWHQuota: number;
+  connectionStatus: 'Active' | 'Suspended' | 'Disconnected';
+  meterSerialNumber?: string; // Optional since it has no required: true validator
+  phaseConnection: 'Phase 1' | 'Phase 2' | 'Phase 3';
+  user: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const householdSchema = new mongoose.Schema<IHousehold>({
     plotNumber: {
         type: String,
         required: [true, 'Please enter your plot'],
@@ -37,6 +49,10 @@ const householdSchema = new mongoose.Schema({
         enum: ['Phase 1', 'Phase 2', 'Phase 3'],
         default: 'Phase 1'
     },
+    createdAt:{
+        type:Date,
+        default:Date.now
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -46,5 +62,5 @@ const householdSchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const Household = mongoose.model('Household', householdSchema)
+const Household = mongoose.model<IHousehold>('Household', householdSchema)
 export default Household

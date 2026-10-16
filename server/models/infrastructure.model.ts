@@ -1,6 +1,19 @@
-import mongoose from "mongoose";
+import mongoose, {Document} from "mongoose";
 
-const infrastructureSchema = new mongoose.Schema({
+export interface IInfrastructure extends Document {
+  assetName: string;
+  type: 'SolarArray' | 'Inverter' | 'BatteryBank';
+  operatingTempC: number;
+  efficiencyRating: number;
+  degradationPercent: number;
+  capacityKworKWh: number;
+  status: 'Optimal' | 'Degraded' | 'MaintainanceRequired';
+  lastMaintenanceDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const infrastructureSchema = new mongoose.Schema<IInfrastructure>({
     assetName: {
         type: String,
         required: [true, 'Please enter a name for your asset'],
@@ -53,5 +66,5 @@ const infrastructureSchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const Infrastructure = mongoose.model('Infrastruture', infrastructureSchema)
+const Infrastructure = mongoose.model<IInfrastructure>('Infrastruture', infrastructureSchema)
 export default Infrastructure

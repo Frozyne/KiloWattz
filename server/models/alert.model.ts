@@ -1,6 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { Document, Types } from "mongoose";
 
-const alertSchema = new mongoose.Schema({
+export interface IAlert extends Document {
+  severity: 'Info' | 'Warning' | 'Critical';
+  category: 'Hardware' | 'QuotaBreach' | 'SOS' | 'GridDeficit';
+  message: string;
+  source: string;
+  resolved: boolean;
+  resolvedBy: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const alertSchema = new mongoose.Schema<IAlert>({
+    createdAt:{
+        type:Date,
+        default:Date.now
+    },
     severity: {
         type: String,
         enum: ['Info', 'Warning', 'Critical'],
@@ -36,5 +51,5 @@ const alertSchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const Alert = mongoose.model('Alert', alertSchema)
+const Alert = mongoose.model<IAlert>('Alert', alertSchema)
 export default Alert

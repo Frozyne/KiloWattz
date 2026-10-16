@@ -1,6 +1,15 @@
-import mongoose from "mongoose";
+import mongoose, {Document} from "mongoose";
 
-const enviromentSchema = new mongoose.Schema({
+export interface IEnvironment extends Document {
+  cloudCoverPercent: number;
+  tempratureC: number;
+  solarIrradiance: number;
+  expectedYieldKW: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const enviromentSchema = new mongoose.Schema<IEnvironment>({
     cloudCoverPercent: {
         type: Number,
         required: true,
@@ -28,5 +37,5 @@ const enviromentSchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const Enviroment = mongoose.model('Enviroment', enviromentSchema)
+const Enviroment = mongoose.model<IEnvironment>('Enviroment', enviromentSchema)
 export default Enviroment

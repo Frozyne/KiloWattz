@@ -1,20 +1,28 @@
-import mongoose from "mongoose";
+import mongoose, {Document, Types} from "mongoose";
 
-const telementrySchema = new mongoose.Schema({
-    timestamp: {
-        type: Date,
-        required: true,
-        validate: {
-            validator: (date: Date) => date <= new Date(),
-            message: 'Timestamp is set to future date'
-        }
+export interface ITelemetry extends Document {
+  timestamp: Date;
+  scope: 'Community' | 'Household';
+  household: Types.ObjectId;
+  solarGeneratedKW: number;
+  powerConsumedKW: number;
+  batteryLevelPercent: number;
+  gridVoltage: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const telementrySchema = new mongoose.Schema<ITelemetry>({
+    timestamp:{
+        type:Date,
+        default:Date.now
     },
     scope: {
         type: String,
         enum: ['Community', 'Household'],
         default: 'Community'
     },
-    houseHold: {
+    household: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Household',
         required: true,
@@ -47,5 +55,5 @@ const telementrySchema = new mongoose.Schema({
 },
 {timestamps: true})
 
-const Telementry = mongoose.model('Telementry', telementrySchema)
+const Telementry = mongoose.model<ITelemetry>('Telementry', telementrySchema)
 export default Telementry
