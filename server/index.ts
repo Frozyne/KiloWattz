@@ -12,12 +12,12 @@ import authRouter from './routes/auth.route.ts'
 const app: Express = express();
 app.set('trust proxy', 1)
 
-const allowedOrigins = (CLIENT_URL || 'http:localhost:3000').split(',').map((url) => url.trim()).filter(Boolean)
+const allowedOrigins = new Set((CLIENT_URL || 'http:localhost:3000').split(',').map((url) => url.trim()).filter(Boolean))
 
 app.use(
   cors({
     origin(origin, callback) {
-      if(!origin || allowedOrigins.includes(origin)) {
+      if(!origin || allowedOrigins.has(origin)) {
         return callback(null, true)
       }
       return callback(new Error(`CORS blocked for origin ${origin}`))
