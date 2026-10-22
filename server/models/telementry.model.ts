@@ -1,9 +1,10 @@
-import mongoose, {Document, Types} from "mongoose";
+import mongoose, {Document, Types, PopulatedDoc} from "mongoose";
+import { IHousehold } from "./household.model.ts";
 
 export interface ITelemetry extends Document {
   timestamp: Date;
   scope: 'Community' | 'Household';
-  household: Types.ObjectId;
+  household: Types.ObjectId | PopulatedDoc<IHousehold>; // Reference to Household model
   solarGeneratedKW: number;
   powerConsumedKW: number;
   batteryLevelPercent: number;

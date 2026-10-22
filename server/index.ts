@@ -9,6 +9,7 @@ import { errorHandler } from "./middlewares/error.middleware.ts";
 import authRouter from './routes/auth.route.ts'
 import userRouter from './routes/user.route.ts'
 import householdRouter from './routes/household.route.ts'
+import telemetryRouter from './routes/telementry.route.ts'
 
 
 const app: Express = express();
@@ -40,6 +41,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
 app.use('/household', householdRouter)
+app.use('/stats', telemetryRouter)
 
 app.use(errorHandler)
 
