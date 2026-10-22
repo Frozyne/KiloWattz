@@ -7,6 +7,8 @@ import connectToDB from "./config/db_config.ts";
 import cookieParser from 'cookie-parser'
 import { errorHandler } from "./middlewares/error.middleware.ts";
 import authRouter from './routes/auth.route.ts'
+import userRouter from './routes/user.route.ts'
+import householdRouter from './routes/household.route.ts'
 
 
 const app: Express = express();
@@ -36,6 +38,8 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.use('/auth', authRouter)
+app.use('/user', userRouter)
+app.use('/household', householdRouter)
 
 app.use(errorHandler)
 

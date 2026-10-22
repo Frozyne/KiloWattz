@@ -1,4 +1,4 @@
-import mongoose, {Document, Types} from "mongoose";
+import mongoose, {Document, Types, PopulatedDoc} from "mongoose";
 import { IHousehold } from "./household.model.ts";
 
 export interface IUser extends Document {
@@ -10,7 +10,7 @@ export interface IUser extends Document {
     url: string | null;
     publicId: string | null;
   };
-  households: Types.ObjectId | IHousehold[]; // Reference to Household model
+  households: Types.ObjectId[] | PopulatedDoc<IHousehold>[]; // Reference to Household model
   createdAt: Date;
   updatedAt: Date;
 }
