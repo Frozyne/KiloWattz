@@ -1,51 +1,22 @@
-import { Request, Response, NextFunction } from 'express'
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import User from '../models/user.model.ts'
-import Session from '../models/session.model.ts'
-import { ServerError } from '../utils/server.error.ts'
+import { Response, NextFunction } from 'express'
+import { AuthenticatedRequest } from '../types/auth.type.ts'
 
-// Type definition for JWT Payload
-interface DecodedToken extends JwtPayload {
-    userId: string
-}
-
-export const protectRoute = async (req: Request, res: Response, next: NextFunction) => {
+export const authorizeUser = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        // 1. Extract token from HttpOnly Cookie first, fallback to Bearer header
-        let token = req.cookies?.token
-
-        if (!token && req.headers.authorization?.startsWith('Bearer ')) {
-            token = req.headers.authorization.split(' ')[1]
+        
+        // 1. Ensure user is attached to the request (should be done by protectRoute middleware)
+        if (!req.user) {
+            return res.status(401).json({ message: 'User not authenticated' })
         }
 
-        if (!token) {
-            throw new ServerError('No token provided, please log in', 401)
+        // 2. Check if the user has the required role (e.g., 'admin')
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'User not authorized' })
         }
 
-        // 2. Verify JWT signature
-        const secret = process.env.JWT_SECRET
-        if (!secret) {
-            throw new ServerError('JWT_SECRET is missing in environment variables', 500)
-        }
-
-        const decoded = jwt.verify(token, secret) as DecodedToken
-
-        // 3. Check if active session exists in MongoDB (Handles revoked/logged-out sessions)
-        const activeSession = await Session.findOne({ token })
-        if (!activeSession) {
-            throw new ServerError('Session ended, please log in again', 401)
-        }
-
-        // 4. Verify user exists in DB (Excludes password field for security)
-        const user = await User.findById(decoded.userId).select('-password')
-        if (!user) {
-            throw new ServerError('User no longer exists', 404)
-        }
-
-        // 5. Attach full user object to the request
-        req.user = user
+        // 3. If user is authenticated and authorized, proceed to the next middleware/controller
         next()
-
+        
     } catch (error) {
         next(error)
     }

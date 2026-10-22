@@ -1,14 +1,16 @@
 import mongoose, {Document, Types} from "mongoose";
+import { IHousehold } from "./household.model.ts";
 
 export interface IUser extends Document {
   fullName: string;
   email: string;
   password?: string; // Optional if you decide to hide it dynamically using select: false
+  role: string;
   avatarUrl: {
     url: string | null;
     publicId: string | null;
   };
-  household: Types.ObjectId;
+  households: Types.ObjectId | IHousehold[]; // Reference to Household model
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,16 +35,21 @@ const userSchema = new mongoose.Schema<IUser>({
         type: String,
         match: [/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d]).{6,}$/]
     },
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    },
     avatarUrl: {
         url: {type: String, default: null},
         publicId: {type: String, default: null}
     },
-    household: {
+    households: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Household',
         required: true,
         index: true
-    }
+    }]
 },
 {timestamps: true})
 
