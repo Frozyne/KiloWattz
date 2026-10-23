@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express'
 import mongoose from 'mongoose'
-import Alert, {IAlert} from '../models/alert.model'
+import Alert from '../models/alert.model'
 import Household from '../models/household.model'
 import { AuthenticatedRequest } from '../types/auth.type'
 import { ApiResponse } from '../utils/server.success'

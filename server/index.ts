@@ -13,6 +13,9 @@ import telemetryRouter from './routes/telemetry.route.ts'
 import quotaRouter from './routes/quota.route.ts'
 import infrastructureRouter from "./routes/infrastructure.route.ts";
 import alertRouter from "./routes/alert.route.ts";
+import apiRouter from "./routes/api.route.ts";
+
+import { startAllCronJobs } from "./jobs/index.ts";
 
 
 const app: Express = express();
@@ -37,8 +40,14 @@ app.use(morgan(NODE_ENV === 'production' ? 'combined' : 'dev'))
 app.use(express.json())
 app.use(cookieParser())
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello World!');
+app.get('/health', (req: Request, res: Response) => {
+  res
+    .status(200)
+    .json({
+        status: 'Operational',
+        timestamp: new Date().toISOString(),
+        uptimeSeconds: Math.floor(process.uptime())
+    })
 });
 
 app.use('/auth', authRouter)
@@ -48,6 +57,7 @@ app.use('/telemetry', telemetryRouter)
 app.use('/quota', quotaRouter)
 app.use('/infrastructure', infrastructureRouter)
 app.use('/alert', alertRouter)
+app.use('/api', apiRouter)
 app.use(errorHandler)
 
 await connectToDB()
@@ -63,6 +73,12 @@ const startServer = () => {
   }
 }
 
+startAllCronJobs()
+
 startServer()
+
+process.on('unhandledRejection', (reason: Error) => {
+    console.error('❌ Unhandled Rejection:', reason.message || reason)
+})
 
 export default app
