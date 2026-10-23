@@ -1,70 +1,69 @@
 import mongoose, {Document} from "mongoose";
 
-export interface IInfrastructure extends Document {
-  assetName: string;
-  type: 'SolarArray' | 'Inverter' | 'BatteryBank';
-  operatingTempC: number;
-  efficiencyRating: number;
-  degradationPercent: number;
-  capacityKworKWh: number;
-  status: 'Optimal' | 'Degraded' | 'MaintainanceRequired';
-  lastMaintenanceDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
+export interface IMaintenanceLog {
+    performedAt: Date
+    performedBy: string
+    notes: string
+    statusAfter: 'Operational' | 'MaintenanceRequired' | 'UnderMaintenance' | 'Offline'
 }
 
-const infrastructureSchema = new mongoose.Schema<IInfrastructure>({
-    assetName: {
-        type: String,
-        required: [true, 'Please enter a name for your asset'],
-        trim: true,
-        minLength: [2, 'Asset name must be at least 2 characters long'],
-        maxLength: [50, 'Asset name cannot exceed 50 characters']
-    },
-    type: {
-        type: String,
-        enum: ['SolarArray', 'Inverter', 'BatteryBank'],
-        default: 'Inverter'
-    },
-    operatingTempC: {
-        type: Number,
-        required: true,
-        min: [-100, 'Temprature must be more than -100C'],
-        max: [100, 'Temprature must not exceed 100C']
-    },
-    efficiencyRating: {
-        type: Number,
-        required: true,
-        min: [0, 'Efficiency Rating is invalid'],
-        max: [100, 'Efficiency rating is invalid']
-    },
-    degradationPercent: {
-        type: Number,
-        required: true,
-        min: [0, 'Degradation Percent is invalid'],
-        max: [100, 'Degradation Percent is invalid']
-    },
-    capacityKworKWh: {
-        type: Number,
-        required: true,
-        min: [0, 'Capacity must be more than 0'],
-        max: [24, 'Capacity must not exceed 24']
-    },
-    status: {
-        type: String,
-        enum: ['Optimal', 'Degraded', 'MaintainanceRequired'],
-        default: 'Optimal'
-    },
-    lastMaintenanceDate: {
-        type: Date,
-        required: true,
-        validate: {
-            validator: (date: Date) => date <= new Date(),
-            message: 'Last maintainance date cannot be set to a future date'
-        }
+export interface IInfrastructure extends Document {
+    name: string
+    type: 'SolarArray' | 'Inverter' | 'BatteryBank' | 'Transformer' | 'Gateway'
+    capacityKW?: number
+    capacityKWh?: number
+    status: 'Operational' | 'MaintenanceRequired' | 'UnderMaintenance' | 'Offline'
+    healthPercent: number
+    lastMaintenanceDate?: Date
+    diagnostics: {
+        voltageV?: number
+        temperatureC?: number
+        efficiencyPercent?: number
+        currentOutputKW?: number
+        stateOfChargePercent?: number
     }
-},
-{timestamps: true})
+    maintenanceLogs: IMaintenanceLog[]
+}
 
-const Infrastructure = mongoose.model<IInfrastructure>('Infrastruture', infrastructureSchema)
+const maintenanceLogSchema = new mongoose.Schema<IMaintenanceLog>({
+        performedAt: { type: Date, default: Date.now },
+        performedBy: { type: String, required: true },
+        notes: { type: String, required: true },
+        statusAfter: { 
+            type: String, 
+            enum: ['Operational', 'MaintenanceRequired', 'UnderMaintenance', 'Offline'], 
+            required: true 
+        }
+    },
+    { _id: false }
+)
+
+const infrastructureSchema = new mongoose.Schema<IInfrastructure>({
+        name: { type: String, required: true },
+        type: { 
+            type: String, 
+            enum: ['SolarArray', 'Inverter', 'BatteryBank', 'Transformer', 'Gateway'], 
+            required: true 
+        },
+        capacityKW: { type: Number },
+        capacityKWh: { type: Number },
+        status: { 
+            type: String, 
+            enum: ['Operational', 'MaintenanceRequired', 'UnderMaintenance', 'Offline'], 
+            default: 'Operational' 
+        },
+        healthPercent: { type: Number, default: 100, min: 0, max: 100 },
+        lastMaintenanceDate: { type: Date },
+        diagnostics: {
+            voltageV: Number,
+            temperatureC: Number,
+            efficiencyPercent: Number,
+            currentOutputKW: Number,
+            stateOfChargePercent: Number
+        },
+        maintenanceLogs: [maintenanceLogSchema]
+    },
+    { timestamps: true })
+
+const Infrastructure = mongoose.model<IInfrastructure>('Infrastructure', infrastructureSchema)
 export default Infrastructure

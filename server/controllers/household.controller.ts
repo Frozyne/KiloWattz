@@ -13,9 +13,12 @@ export const getMyHouseholds = async (req: AuthenticatedRequest, res: Response, 
         }
         const userId = req.user._id;
 
-        const households = await Household.find({ user: userId }).populate('user', 'fullName email');
+        const households = await Household
+            .find({ user: userId })
+            .populate('user', 'fullName email')
+            .populate('quotaRecord', 'allocatedQuotaKWh consumedKWh quotaBreached');
 
-        ApiResponse.success({
+        return ApiResponse.success({
             res,
             message: 'Households retrieved successfully',
             data: { households }
@@ -29,7 +32,13 @@ export const getHouseholdById = async (req: AuthenticatedRequest, res: Response,
     try {
         const householdId = req.params.id;
 
-        const household = await Household.findById(householdId).populate('user', 'fullName email');
+        const household = await Household.findById(householdId)
+            .populate('user', 'fullName email')
+            .populate('quotaRecord', 'allocatedQuotaKWh consumedKWh quotaBreached');
+
+        if(!household?.user) {
+            return next(new ServerError(`Household with ID ${householdId} not found`, 404));
+        }
 
         const ownerId = household?.user._id ? household.user._id.toString() : household?.user.toString();
 
@@ -45,7 +54,7 @@ export const getHouseholdById = async (req: AuthenticatedRequest, res: Response,
             return next(new ServerError(`Household with ID ${householdId} not found`, 404));
         }
 
-        ApiResponse.success({
+        return ApiResponse.success({
             res,
             message: 'Household retrieved successfully',
             data: { household }
@@ -73,13 +82,18 @@ export const getAllHouseholds = async (req: AuthenticatedRequest, res: Response,
         if (search) {
             const searchRegex = new RegExp(search, 'i');
             filterQuery.$or = [
-                { name: { $regex: searchRegex } },
-                { address: { $regex: searchRegex } }
+                { plotNumber: { $regex: searchRegex } },
+                { street: { $regex: searchRegex } },
+                { meterSerialNumber: { $regex: searchRegex } },
             ];
         }
 
         const [households, totalHouseholds] = await Promise.all([
-            Household.find(filterQuery).skip(skip).limit(limit).populate('user', 'fullName email avatarUrl'),
+            Household.find(filterQuery)
+                .skip(skip)
+                .limit(limit)
+                .populate('user', 'fullName email avatarUrl')
+                .populate('quotaRecord', 'allocatedQuotaKWh consumedKWh quotaBreached'),
             Household.countDocuments(filterQuery)
         ]);
 
@@ -124,7 +138,7 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
             meterSerialNumber,
             phaseConnection,
             user: existingUser._id
-        });
+        }, { session });
 
         await household.save();
 
@@ -134,7 +148,7 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
         await session.commitTransaction();
         await session.endSession();
 
-        ApiResponse.success({
+        return ApiResponse.success({
             res,
             statusCode: 201,
             message: 'Household created successfully',
@@ -180,7 +194,7 @@ export const updateHousehold = async (req: AuthenticatedRequest, res: Response, 
             return next(new ServerError('Household not found', 404));
         }
 
-        ApiResponse.success({
+        return ApiResponse.success({
             res,
             message: 'Household updated successfully',
             data: { household }

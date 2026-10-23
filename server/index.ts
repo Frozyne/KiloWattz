@@ -9,7 +9,10 @@ import { errorHandler } from "./middlewares/error.middleware.ts";
 import authRouter from './routes/auth.route.ts'
 import userRouter from './routes/user.route.ts'
 import householdRouter from './routes/household.route.ts'
-import telemetryRouter from './routes/telementry.route.ts'
+import telemetryRouter from './routes/telemetry.route.ts'
+import quotaRouter from './routes/quota.route.ts'
+import infrastructureRouter from "./routes/infrastructure.route.ts";
+import alertRouter from "./routes/alert.route.ts";
 
 
 const app: Express = express();
@@ -41,8 +44,10 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/auth', authRouter)
 app.use('/user', userRouter)
 app.use('/household', householdRouter)
-app.use('/stats', telemetryRouter)
-
+app.use('/telemetry', telemetryRouter)
+app.use('/quota', quotaRouter)
+app.use('/infrastructure', infrastructureRouter)
+app.use('/alert', alertRouter)
 app.use(errorHandler)
 
 await connectToDB()
