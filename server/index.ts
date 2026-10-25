@@ -1,5 +1,5 @@
 import express, { type Express, type Request, type Response } from "express"
-import cors from "cors"
+import cors from "cors";
 import morgan from "morgan"
 import helmet from "helmet"
 import { CLIENT_URL, NODE_ENV, PORT } from "./config/config.ts";
@@ -58,6 +58,8 @@ app.use('/quota', quotaRouter)
 app.use('/infrastructure', infrastructureRouter)
 app.use('/alert', alertRouter)
 app.use('/api', apiRouter)
+
+
 app.use(errorHandler)
 
 await connectToDB()

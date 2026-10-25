@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router";
+import LoginPage from "./pages/public/LoginPage";
+import ResidentHome from "./pages/resident/ResidentHome";
 
 // 1. Temporary Placeholder Components 
 // (Your UI team will eventually move these into their own separate files)
 const LandingPage = () => <h1>KiloWatz Community Solar</h1>;
-const LoginPage = () => <h1>Login to your Dashboard</h1>;
 const AdminCommandCenter = () => <h1>Admin: Command Center</h1>;
-const ResidentHome = () => <h1>Resident: My Home Overview</h1>;
+
 
 // 2. The Router Setup
 export default function App() {
