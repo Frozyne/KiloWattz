@@ -1,5 +1,5 @@
-
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
+import type { SubmitEvent } from "react";
 import { Zap, Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { apiRequest } from "../../lib/api";
 
@@ -23,7 +23,9 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const handleSubmit = async (
+    event: SubmitEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
 
     setErrorMessage("");
