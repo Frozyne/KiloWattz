@@ -1,0 +1,20 @@
+
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
+
+
+// This enables strict type checking and tells TypeScript to compile files from src into dist.
+// Because we're using NodeNext, we'll use .js extensions in relative imports in our TypeScript files.
