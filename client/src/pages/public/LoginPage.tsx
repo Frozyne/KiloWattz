@@ -121,7 +121,7 @@ export default function LoginPage() {
       </section>
 
       {/* Login Form */}
-      <section className="flex w-full items-center justify-center px-6 py-12 sm:px-10 lg:w-[520px] lg:flex-none xl:w-[580px]">
+      <section className="flex w-full items-center justify-center px-6 py-12 sm:px-10 lg:w-130 lg:flex-none xl:w-145px">
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="mb-10 flex items-center gap-3 lg:hidden">
