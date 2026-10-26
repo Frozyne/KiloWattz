@@ -80,7 +80,7 @@ startAllCronJobs()
 startServer()
 
 process.on('unhandledRejection', (reason: Error) => {
-    console.error('❌ Unhandled Rejection:', reason.message || reason)
+    console.error('Unhandled Rejection:', reason.message || reason)
 })
 
 export default app
