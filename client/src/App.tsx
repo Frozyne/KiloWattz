@@ -10,6 +10,8 @@ import AdminLiveStat from "./components/ui/AdminLiveStatsRow";
 import LoginPage from "./pages/public/LoginPage";
 import ResidentHome from "./pages/resident/ResidentHome";
 import { LandingPage } from "./pages/public/LandingPage";
+import { Button } from "./components/ui/button";
+import { ArrowDownToLineIcon, PlusIcon } from "lucide-react";
 
 
 const AdminCommandCenter = () => <h1>Admin: Command Center</h1>;
@@ -19,6 +21,16 @@ function Overview() {
   return (
     <div className="flex flex-col gap-3">
       <NavBar />
+      <div> 
+        <div className="text-sm text-teal-600 mt-3"><small>TUESDAY, JUNE 25. CLEAR SKIES</small>
+          <p className="flex text-black text-2xl">Solar Operations Overview</p>
+          <small className="text-gray-600">Live generation and performance across your entire portfolio.</small>
+          <div className="flex justify-end">
+            <Button className="bg-white text-black"><ArrowDownToLineIcon/>Export report</Button>
+            <Button className="bg-teal-600 text-white ml-2"><PlusIcon/>Add site</Button>
+            </div>
+        </div>
+      </div>
       <AdminLiveStat />
       <Solar />
       <Analytics />

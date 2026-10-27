@@ -19,7 +19,7 @@ const navItems = [
   { path: "/admin/devices", label: "Devices", icon: Cpu },
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/admin/alertlist", label: "Alerts", icon: Bell },
-  { path: "/amdin/solar", label: "Solar-sites", icon: Zap},
+  { path: "/admin/solar", label: "Solar-sites", icon: Zap},
   { path: "/admin/weather", label: "Weather", icon: Sun },
   { path: "/setting", label: "Setting", icon: Settings },
 ];
