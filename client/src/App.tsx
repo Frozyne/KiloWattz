@@ -15,11 +15,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Zone 1: Public Pages */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Zone 2: Admin Pages (your dashboard lives here) */}
         <Route path="/admin" element={<Dashboard />}>
           <Route path="dashboard" element={<OverviewPage />} />
           <Route path="devices" element={<Devices />} />
@@ -28,7 +26,6 @@ export default function App() {
           <Route path="analytics" element={<AnalyticsPage />} />
         </Route>
 
-        {/* Zone 3: Resident Pages */}
         <Route path="/resident/dashboard" element={<ResidentHome />} />
       </Routes>
     </BrowserRouter>
