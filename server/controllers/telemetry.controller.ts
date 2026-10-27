@@ -3,7 +3,7 @@ import { Response, NextFunction } from "express";
 import { ServerError } from "../utils/server.error";
 import { ApiResponse } from "../utils/server.success";
 import Setting from "../models/setting.model";
-import Telemetry from "../models/telementry.model";
+import Telemetry from "../models/telemetry.model";
 import Household from "../models/household.model";
 import mongoose from "mongoose";
 
@@ -63,6 +63,11 @@ export const getHouseholdTelemetry = async (req: AuthenticatedRequest, res: Resp
         }
 
         const isAdmin = req.user?.role === 'admin';
+
+        if (!household?.user) {
+            return next(new ServerError(`Household with ID ${householdId} does not have an associated user`, 404));
+        }
+
         const isOwner = household.user.toString() === req.user?._id.toString();
 
         if (!isAdmin && !isOwner) {
@@ -99,6 +104,11 @@ export const getHouseholdSavings = async (req: AuthenticatedRequest, res: Respon
         }
 
         const isAdmin = req.user?.role === 'admin';
+
+        if (!household?.user) {
+            return next(new ServerError(`Household with ID ${householdId} does not have an associated user`, 404));
+        }
+
         const isOwner = household.user.toString() === req.user?._id.toString();
 
         if (!isAdmin && !isOwner) {
@@ -168,3 +178,88 @@ export const getHouseholdSavings = async (req: AuthenticatedRequest, res: Respon
         next(error);
     }
 }
+
+export const recordTelemetry = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const { householdId, powerConsumedKWh, powerConsumedKW, batteryLevelPercent, solarGeneratedKW, gridVoltage } = req.body;
+
+        const household = await Household.findById(householdId);
+        if (!household) {
+            throw new ServerError('Household not found', 404);
+        }
+
+        const newTelemetry = await Telemetry.create({
+            household: householdId,
+            scope: 'Household',
+            powerConsumedKWh: powerConsumedKWh || 0,
+            powerConsumedKW: powerConsumedKW || 0,
+            batteryLevelPercent: batteryLevelPercent || 0,
+            solarGeneratedKW: solarGeneratedKW || 0,
+            gridVoltage: gridVoltage || 0,
+            timestamp: new Date()
+        });
+
+        
+        const startOfDay = new Date();
+        startOfDay.setHours(0, 0, 0, 0); // Midnight today
+
+        // Sum all interval deltas recorded since midnight today
+        const todayUsage = await Telemetry.aggregate([
+            {
+                $match: {
+                    household: household._id,
+                    scope: 'Household',
+                    timestamp: { $gte: startOfDay }
+                }
+            },
+            {
+                $group: {
+                    _id: '$household',
+                    minReading: { $min: '$energyConsumedKWh' },
+                    maxReading: { $max: '$energyConsumedKWh' }
+                }
+            },
+            {
+                $project: {
+                    totalTodayKWh: { $subtract: ['$maxReading', '$minReading'] }
+                }
+            }
+        ]);
+
+        const currentConsumptionKWh = todayUsage[0]?.totalTodayKWh || 0;
+
+        let isSuspendedNow = false;
+
+        if (currentConsumptionKWh >= household.dailyKWHQuota && household.connectionStatus === 'Active') {
+            household.connectionStatus = 'Suspended'
+
+            household.quotaBreaches.push({
+                breachedAt: new Date(),
+                consumedKWh: Math.round(currentConsumptionKWh * 100) / 100,
+                dailyQuotaKWh: household.dailyKWHQuota
+            })
+
+            await household.save()
+            isSuspendedNow = true
+        }
+
+        return ApiResponse.success({
+            res,
+            statusCode: 201,
+            message: isSuspendedNow 
+                ? 'Telemetry recorded: Household daily quota breached and status changed to Suspended' 
+                : 'Telemetry recorded successfully',
+            data: {
+                telemetry: newTelemetry,
+                todayMetrics: {
+                    currentConsumptionKWh: Math.round(currentConsumptionKWh * 100) / 100,
+                    dailyQuotaKWh: household.dailyKWHQuota,
+                    connectionStatus: household.connectionStatus
+                }
+            }
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};

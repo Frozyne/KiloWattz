@@ -1,16 +1,39 @@
-import mongoose, { Document, Types } from "mongoose";
+import mongoose, { Document, Types, PopulatedDoc } from "mongoose";
+import { IUser } from "./user.model.ts";
+
+export interface IQuotaBreach {
+    breachedAt: Date
+    consumedKWh: number
+    dailyQuotaKWh: number
+}
 
 export interface IHousehold extends Document {
   plotNumber: string;
   street: string;
   dailyKWHQuota: number;
   connectionStatus: 'Active' | 'Suspended' | 'Disconnected';
+  quotaBreaches: IQuotaBreach[]; // Array of quota breach records
   meterSerialNumber?: string; // Optional since it has no required: true validator
   phaseConnection: 'Phase 1' | 'Phase 2' | 'Phase 3';
-  user: Types.ObjectId;
+  user: Types.ObjectId | PopulatedDoc<IUser>; // Reference to User model
   createdAt: Date;
   updatedAt: Date;
 }
+
+const quotaBreachSchema = new mongoose.Schema<IQuotaBreach>({
+    breachedAt: { 
+        type: Date, 
+        default: Date.now 
+    },
+    consumedKWh: { 
+        type: Number, 
+        required: true 
+    },
+    dailyQuotaKWh: { 
+        type: Number, 
+        required: true 
+    }
+}, { _id: false })
 
 const householdSchema = new mongoose.Schema<IHousehold>({
     plotNumber: {
@@ -30,17 +53,19 @@ const householdSchema = new mongoose.Schema<IHousehold>({
     dailyKWHQuota: {
         type: Number,
         required: true,
-        min: [0, 'Daily Quota must be more than 0kwh'],
-        max: [15, 'Daily Quota must not exceed 15kwh']
+        min: [0, 'Allocated Quota must be more than 0kwh'],
+        max: [15, 'Allocated Quota must not exceed 15kwh']
     },
     connectionStatus: {
         type: String,
         enum: ['Active', 'Suspended', 'Disconnected'],
         default: 'Disconnected'
     },
+    quotaBreaches: [quotaBreachSchema],
     meterSerialNumber: {
         type: String,
         trim: true,
+        unique: true,
         minLength: [10, 'Please enter a valid serial number'],
         maxLength: [15, 'Serial number is invalid']
     },

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // or "react-router", see below
+import { BrowserRouter, Routes, Route } from "react-router"; // or "react-router", see below
 import Dashboard from "./DashBoard/page";
 import Devices from "./DashBoard/Devices/page";
 import Analytics from "./components/ui/Analytics";
@@ -12,6 +12,15 @@ import AdminLiveStat from "./components/ui/AdminLiveStatsRow";
 const LandingPage = () => <h1>KiloWatz Community Solar</h1>;
 const LoginPage = () => <h1>Login to your Dashboard</h1>;
 const ResidentHome = () => <h1>Resident: My Home Overview</h1>;
+
+import { BrowserRouter, Routes, Route } from "react-router";
+import LoginPage from "./pages/public/LoginPage";
+import ResidentHome from "./pages/resident/ResidentHome";
+import { LandingPage } from "./pages/public/LandingPage";
+
+// 1. Temporary Placeholder Components 
+// (Your UI team will eventually move these into their own separate files)
+const AdminCommandCenter = () => <h1>Admin: Command Center</h1>;
 
 // Your overview page
 function Overview() {
