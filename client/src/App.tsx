@@ -7,19 +7,11 @@ import Solar from "./DashBoard/Solar-sites/page";
 import NavBar from "./components/ui/NavBar";
 import WeatherCard from "./components/ui/WeatherCard";
 import AdminLiveStat from "./components/ui/AdminLiveStatsRow";
-
-// Placeholders from the leader's version (the UI team replaces these later)
-const LandingPage = () => <h1>KiloWatz Community Solar</h1>;
-const LoginPage = () => <h1>Login to your Dashboard</h1>;
-const ResidentHome = () => <h1>Resident: My Home Overview</h1>;
-
-import { BrowserRouter, Routes, Route } from "react-router";
 import LoginPage from "./pages/public/LoginPage";
 import ResidentHome from "./pages/resident/ResidentHome";
 import { LandingPage } from "./pages/public/LandingPage";
 
-// 1. Temporary Placeholder Components 
-// (Your UI team will eventually move these into their own separate files)
+
 const AdminCommandCenter = () => <h1>Admin: Command Center</h1>;
 
 // Your overview page
@@ -41,11 +33,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Zone 1: Public Pages */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Zone 2: Admin Pages (your dashboard lives here) */}
         <Route path="/admin" element={<Dashboard />}>
           <Route path="dashboard" element={<Overview />} />
           <Route path="live-stats" element={<AdminLiveStat />} />
@@ -56,7 +46,6 @@ export default function App() {
           <Route path="weather" element={<WeatherCard />} />
         </Route>
 
-        {/* Zone 3: Resident Pages */}
         <Route path="/resident/dashboard" element={<ResidentHome />} />
       </Routes>
     </BrowserRouter>
