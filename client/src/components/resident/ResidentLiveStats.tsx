@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Zap, BatteryCharging, Sun } from "lucide-react";
 import { apiRequest } from "../../lib/api";
@@ -90,7 +89,7 @@ export default function ResidentLiveStats() {
             }
         }
 
-        fetchTelemetry();
+        void fetchTelemetry();
     }, []);
 
     const stats = [
@@ -135,9 +134,11 @@ export default function ResidentLiveStats() {
             )}
 
             {!loading && error && (
-                <p className="text-sm text-destructive" role="status">
+                <output
+                   className="text-sm text-destructive"
+                   aria-live="polite" >
                     {error}
-                </p>
+                   </output>
             )}
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -20,20 +20,17 @@ export default function QuotaProgressBar() {
                     {used} / {quota} kWh
                 </span>
             </div>
-
-            <div
-            className="mt-5 h-3 overflow-hidden rounded-full bg-muted"
-            role="progressbar"
-            aria-label="Electricity quota used"
-            aria-valuemin={0}
-            aria-valuemax={quota}
-            aria-valuenow={used} >
-                <div
-                className="h-full rounded-full bg-primary transition-all"
-            style={{ width: `${percentage}%` }} />
+            
+            <div className="mt-5 h-3 overflow-hidden rounded-full bg-muted">
+                <progress
+                className="quota-progress h-full w-full"
+                value={used}
+                max={quota}
+                aria-label="Electricity quota used"
+                />
             </div>
 
-            <div className="mt-3 flex items-center justify-between text-sm">
+            <div className="mt-3 flex items-center justify-betweentext-sm">
                 <span className="text-muted-foreground">
                     {percentage}% used
                 </span>
@@ -41,7 +38,30 @@ export default function QuotaProgressBar() {
                     {remaining} kWh remaining
                 </span>
             </div>
-        </section>
 
+            <style>{`
+            .quota-progress {
+            appearance: none;
+            -webkit-appearance: none;
+            border: none;
+            background: transparent;
+            }
+            
+            .quota-progress::-webkit-progress-bar {
+            background: transparent;
+            }
+
+            .quota-progress::-webkit-progress-value {
+            background: hsl(var(--primary));
+            border-radius: 9999px;
+            transition: width 300ms ease;
+            }
+
+            .quota-progress::-moz-progress-bar {
+            background: hsl(var(--primary));
+            border-radius: 9999px;
+            }
+            `}</style>
+        </section>
     );
 }
