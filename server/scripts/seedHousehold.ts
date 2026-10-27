@@ -66,20 +66,29 @@ const seedHouseholds = async (): Promise<void> => {
                 ? "Disconnected"
                 : "Active",
           meterSerialNumber,
-          phaseConnection: `Phase ${((i - 1) % 3) + 1}`,
+          phaseConnection: (
+            ["Phase 1", "Phase 2", "Phase 3"] as const
+                )[(i - 1) % 3],
           user: user._id,
         });
 
         createdHouseholds++;
-      } else if (household.user.toString() !== user._id.toString()) {
+        } else if (
+        !household.user ||
+        household.user.toString() !== user._id.toString()
+        ) {
         household.user = user._id;
         await household.save();
-      }
+        }
 
-      const alreadyLinked = user.households.some(
-        (householdId: Types.ObjectId) =>
-          householdId.toString() === household._id.toString()
-      );
+      const alreadyLinked = user.households.some((householdId) => {
+        if (!householdId) return false;
+        const id =
+        householdId instanceof mongoose.Types.ObjectId
+        ? householdId.toString()
+        : householdId._id.toString();
+        return id === household._id.toString();
+      });
 
       if (!alreadyLinked) {
         user.households.push(household._id);
