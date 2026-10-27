@@ -8,20 +8,16 @@ import {
   Settings,
   PanelLeftClose,
   PanelLeftOpen,
-  Sun,
   Zap,
-  BarChartIcon,
 } from "lucide-react";
 
 const navItems = [
   { path: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
-   { path: "/admin/live-stats", label: "Admin", icon: BarChartIcon },
   { path: "/admin/devices", label: "Devices", icon: Cpu },
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/admin/alertlist", label: "Alerts", icon: Bell },
-  { path: "/amdin/solar", label: "Solar-sites", icon: Zap},
-  { path: "/admin/weather", label: "Weather", icon: Sun },
-  { path: "/setting", label: "Setting", icon: Settings },
+  { path: "/admin/sites", label: "Solar-sites", icon: Zap},
+  { path: "admin/setting", label: "Setting", icon: Settings },
 ];
 
 export default function Sidebar() {

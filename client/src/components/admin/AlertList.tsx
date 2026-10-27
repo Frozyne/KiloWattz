@@ -1,6 +1,6 @@
-import AllPage from "@/DashBoard/All/page"
-import { Button } from "./button"
-import { ArrowDownToLineIcon, PlusIcon, ArrowDownIcon, CheckIcon, Stars, SearchIcon, BellDotIcon } from "lucide-react"
+import AllPage from "@/pages/admin/AlertsPage"
+import { Button } from "../ui/button"
+import { ArrowDownToLineIcon, PlusIcon, ArrowDownIcon, CheckIcon, Stars, BellDotIcon } from "lucide-react"
 export default function AlertList(){
   const stats = [
     { label: "Open alerts", value: 12, icon: BellDotIcon},

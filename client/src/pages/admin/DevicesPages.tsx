@@ -1,7 +1,6 @@
-import { ArrowDownToLineIcon, ArrowUpIcon, ShapesIcon } from "lucide-react";
+import { ArrowDownToLineIcon, ArrowUpIcon, ShapesIcon, SearchIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { SearchIcon } from "lucide-react";
 
 
 export default function Devices() {

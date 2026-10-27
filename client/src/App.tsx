@@ -1,41 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router"; // or "react-router", see below
-import Dashboard from "./DashBoard/page";
-import Devices from "./DashBoard/Devices/page";
-import Analytics from "./components/ui/Analytics";
-import AlertList from "./components/ui/AlertList";
-import Solar from "./DashBoard/Solar-sites/page";
-import NavBar from "./components/ui/NavBar";
-import WeatherCard from "./components/ui/WeatherCard";
-import AdminLiveStat from "./components/ui/AdminLiveStatsRow";
 
-// Placeholders from the leader's version (the UI team replaces these later)
-const LandingPage = () => <h1>KiloWatz Community Solar</h1>;
-const LoginPage = () => <h1>Login to your Dashboard</h1>;
-const ResidentHome = () => <h1>Resident: My Home Overview</h1>;
-
-import { BrowserRouter, Routes, Route } from "react-router";
+import Dashboard from "./pages/admin/DashboardLayout";
 import LoginPage from "./pages/public/LoginPage";
 import ResidentHome from "./pages/resident/ResidentHome";
 import { LandingPage } from "./pages/public/LandingPage";
+import AlertPage from "./pages/admin/AlertsPage";
+import Devices from "./pages/admin/DevicesPages";
+import { OverviewPage } from "./pages/admin/OverviewPage";
+import SolarSites from "./pages/admin/SolarSites";
+import AnalyticsPage from "./pages/admin/AnalyticsPage";
 
-// 1. Temporary Placeholder Components 
-// (Your UI team will eventually move these into their own separate files)
-const AdminCommandCenter = () => <h1>Admin: Command Center</h1>;
-
-// Your overview page
-function Overview() {
-  return (
-    <div className="flex flex-col gap-3">
-      <NavBar />
-      <AdminLiveStat />
-      <Solar />
-      <Analytics />
-      <Devices />
-      <AlertList />
-      <WeatherCard />
-    </div>
-  );
-}
 
 export default function App() {
   return (
@@ -47,13 +21,11 @@ export default function App() {
 
         {/* Zone 2: Admin Pages (your dashboard lives here) */}
         <Route path="/admin" element={<Dashboard />}>
-          <Route path="dashboard" element={<Overview />} />
-          <Route path="live-stats" element={<AdminLiveStat />} />
+          <Route path="dashboard" element={<OverviewPage />} />
           <Route path="devices" element={<Devices />} />
-          <Route path="analytics" element={<Analytics />} />
-          <Route path="alertlist" element={<AlertList />} />
-          <Route path="solar" element={<Solar />} />
-          <Route path="weather" element={<WeatherCard />} />
+          <Route path="sites" element={<SolarSites />} />
+          <Route path="alertlist" element={<AlertPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
         </Route>
 
         {/* Zone 3: Resident Pages */}

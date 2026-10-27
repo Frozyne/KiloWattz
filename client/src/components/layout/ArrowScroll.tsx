@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react"
 
-export function ArrowScroll({ children, step = 240 }: { children: ReactNode; step?: number }) {
+export function ArrowScroll({ children, step = 240 }: { readonly children: ReactNode; readonly step?: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const [canLeft, setCanLeft] = useState(false)
   const [canRight, setCanRight] = useState(false)
