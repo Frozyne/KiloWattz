@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 
-export default function Solar(){
+export default function SolarSites(){
     const [query, setQuery] = useState("")
     const [region, setRegion] = useState("All")
     return(

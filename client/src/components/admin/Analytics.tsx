@@ -1,9 +1,9 @@
 import { useState } from "react";
-import Health from "../Health";
+import Health from "./Health";
 
 type Reading = { date: string; output: number };
 
-export default function Analytics({ data = [] }: { data?: Reading[] }) {
+export default function Analytics({ data = [] }: { readonly data?: Reading[] }) {
   const [mode, setMode] = useState<"day" | "month">("day");
   const [date, setDate] = useState(new Date().toLocaleDateString("en-CA")); // today, YYYY-MM-DD
 
@@ -16,6 +16,7 @@ export default function Analytics({ data = [] }: { data?: Reading[] }) {
     const t = new Date(iy, im - 1, id);
     return t >= start && t < end;
   });
+  const currentOutput = filteredData.at(-1)?.output ?? 18.42;
 
   return (
     <>
@@ -60,13 +61,13 @@ export default function Analytics({ data = [] }: { data?: Reading[] }) {
         <h2 className="mt-2 p-5 pb-0">Current output</h2>
 
         <div className="flex justify-between items-center text-sm font-extralight">
-          <p className="translate-x-6 pb-4">18.42MW</p>
+          <p className="translate-x-6 pb-4">{currentOutput}MW</p>
           --- Actual --- Forecast
         </div>
         <div className="translate-x-10/14 text-sm font-mono mt-1">NOW</div>
 
         <div className="flex">
-          <div className="shrink-0 w-14 flex flex-col justify-between text-sm text-gray-500 h-57.5 pt-1.25 pb-[3px] ml-2 leading-none">
+          <div className="shrink-0 w-14 flex flex-col justify-between text-sm text-gray-500 h-57.5 pt-1.25 pb-0.75 ml-2 leading-none">
             <span>24 MW</span>
             <span>18 MW</span>
             <span>12 MW</span>
@@ -75,7 +76,13 @@ export default function Analytics({ data = [] }: { data?: Reading[] }) {
           </div>
 
           <div className="flex-1 min-w-0">
-            <svg className="w-full block" preserveAspectRatio="none" viewBox="0 0 700 230">
+            <svg
+              className="w-full block"
+              preserveAspectRatio="none"
+              viewBox="0 0 700 230"
+              role="img"
+              aria-label="Energy output chart showing actual and forecast output"
+            >
               <defs>
                 <linearGradient id="areaFill" x1="0" x2="0" y1="0" y2="1">
                   <stop offset="0%" stopColor="#f4b63f" stopOpacity=".28" />

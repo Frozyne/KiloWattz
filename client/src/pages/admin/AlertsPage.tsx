@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { ArrowScroll } from "@/components/ArrowScroll"
+import { ArrowScroll } from "@/components/layout/ArrowScroll"
 import { useState } from "react"
 import { SearchIcon } from "lucide-react"
 
@@ -18,7 +18,7 @@ const alerts = [
   { id: "ALT-1043", name: "Canyon Peak", device: "Tracker roe 06", event: "Tracker deviation", date: "Jun 22, 14:30", severity: "Resolved", status: "Resolved", initials: "CP" },
 ]
 
-export default function AllPage() {
+export default function AlertPage() {
   const [page, setPage] = useState(0)
   const [filter, setFilter] = useState<Filter>("All")
 
@@ -43,19 +43,13 @@ export default function AllPage() {
               className="border rounded-lg outline-none" />
           </form>
           <div className="border-gray-400">
-            <a
-              href="src/Dashboard/All">
-              <Button className="bg-white text-black border-gray-300" onClick={() => changeFilter("All")}>All</Button>
-            </a>
-            <a>
-              <Button className="bg-white text-black" onClick={() => changeFilter("Open")}><small>Open</small></Button>
-            </a>
-            <a>
-              <Button className="bg-white text-black" onClick={() => changeFilter("Investigating")}><small>Investigating</small></Button>
-            </a>
-            <a>
-              <Button className="bg-white text-black" onClick={() => changeFilter("Resolved")}><small>Resolved</small></Button>
-            </a>
+            <Button className="bg-white text-black border-gray-300" onClick={() => changeFilter("All")}>All</Button>
+
+            <Button className="bg-white text-black" onClick={() => changeFilter("Open")}><small>Open</small></Button>
+
+            <Button className="bg-white text-black" onClick={() => changeFilter("Investigating")}><small>Investigating</small></Button>
+
+            <Button className="bg-white text-black" onClick={() => changeFilter("Resolved")}><small>Resolved</small></Button>
           </div>
         </div>
         <ArrowScroll>

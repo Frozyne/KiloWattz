@@ -1,4 +1,4 @@
-import { Button } from "./ui/button"
+import { Button } from "../ui/button"
 import { useState } from "react"
 import { ArrowRightIcon } from "lucide-react"
 export default function Health(){
