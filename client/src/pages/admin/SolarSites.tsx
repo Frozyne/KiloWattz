@@ -44,7 +44,7 @@ export default function SolarSites(){
                         <span className="p-12 flex items-center justify-center rounded-lg font-bold text-2xl bg-gray-600 text-purple-100">DB</span>
                         <div className="p-1 ml-4 text-gray-500 text-sm"><small>Phoenix, AZ</small></div>
                         <p className="flex justify-end pr-2">Desert Bloom</p>
-                        <span className="p-1 ml-4"><strong>12.8MW</strong></span>
+                        <span className="p-1 ml-4"><strong>12.8 MW</strong></span>
                         </div>
                         <span className="border-t border-gray-200 flex justify-between">
                         <p className="text-green-800 p-1 ml-2"><small>98% performance</small></p>

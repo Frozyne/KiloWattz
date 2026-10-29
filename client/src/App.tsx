@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router"; // or "react-router", see below
+import { BrowserRouter, Routes, Route } from "react-router";
 
 import Dashboard from "./pages/admin/DashboardLayout";
 import LoginPage from "./pages/public/LoginPage";
@@ -10,10 +10,10 @@ import { OverviewPage } from "./pages/admin/OverviewPage";
 import SolarSites from "./pages/admin/SolarSites";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
 
-
 export default function App() {
   return (
     <BrowserRouter>
+    
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />

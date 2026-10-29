@@ -9,20 +9,21 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Zap,
+  Sun,
 } from "lucide-react";
 
-const navItems = [
+export default function Sidebar() {
+
+    const [open, setOpen] = useState(true);
+  const navItems = [
   { path: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
   { path: "/admin/devices", label: "Devices", icon: Cpu },
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/admin/alertlist", label: "Alerts", icon: Bell },
-  { path: "/admin/sites", label: "Solar-sites", icon: Zap},
-  { path: "admin/setting", label: "Setting", icon: Settings },
-];
-
-export default function Sidebar() {
-  const [open, setOpen] = useState(true);
-
+  { path: "/admin/solar", label: "Solar-sites", icon: Zap},
+  { path: "/admin/weather", label: "Weather", icon: Sun },
+  { path: "/setting", label: "Setting", icon: Settings },
+  ]
   return (
     <aside
       className={`h-screen shrink-0 bg-gray-500 text-white flex flex-col p-3 transition-all duration-300 ${
