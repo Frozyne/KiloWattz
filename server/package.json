@@ -8,7 +8,9 @@
   "main": "index.ts",
   "scripts": {
     "start": "npm index.ts",
-    "dev": "tsx watch index.ts"
+    "dev": "tsx watch index.ts",
+    "seed": "tsx seed/admin.seed.ts",
+    "seed:fresh": "tsx seed/admin.seed.ts --fresh"
   },
   "dependencies": {
     "@types/node-cron": "^3.0.11",

@@ -7,7 +7,7 @@ export const initMeterHeartbeatJob = (): void => {
     cron.schedule('*/10 * * * *', async () => {
         try {
             const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000)
-
+            
             // Find households whose latest telemetry is older than 30 minutes
             const activeHouseholds = await Household.find({ connectionStatus: { $ne: 'Disconnected' } }).select('_id plotNumber street meterSerialNumber')
 

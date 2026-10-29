@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { SubmitEvent } from "react";
 import { Zap, Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { apiRequest } from "../../lib/api";
+import { apiRequest } from "../../services/api";
 
 type LoginResponse = {
   success: boolean;

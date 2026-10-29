@@ -156,7 +156,7 @@ export const createUserProfile = async (req: AuthenticatedRequest, res: Response
     }
 }
 
-export const updateUserProfile = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const updateUserProfile = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<any> => {
     try {
         if (!req.user) {
             return new ServerError('User not found', 404)
