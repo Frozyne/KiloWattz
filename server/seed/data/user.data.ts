@@ -1,5 +1,3 @@
-import type {IUser} from '../../models/user.model'
-
 export interface SeedUser {
     name: string,
     email: string,
