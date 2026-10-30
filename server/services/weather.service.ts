@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import axios from 'axios'
 import Environment from '../models/environment.model'
 
