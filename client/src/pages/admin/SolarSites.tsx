@@ -29,7 +29,7 @@ export default function SolarSites(){
                     <div className="translate-x-48">
                      <select value={region}
                         onChange={(e) => { setRegion(e.target.value); }}
-                        className="rounded-md border border-gary-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200">
+                        className="rounded-md border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200">
                             <option value="All">All regions</option>
                             <option value="North">North</option>
                             <option value="South">South</option>

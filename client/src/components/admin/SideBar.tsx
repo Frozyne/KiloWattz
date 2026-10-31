@@ -26,16 +26,17 @@ export default function Sidebar() {
   ]
   return (
     <aside
-      className={`h-screen shrink-0 bg-gray-500 text-white flex flex-col p-3 transition-all duration-300 ${
-        open ? "w-60" : "w-16"
+      className={`shrink-0 bg-zinc-900/80 text-gray-300 flex flex-col p-3 transition-all duration-300 ${
+        open ? "w-40" : "w-15"
       }`}
     >
       <div className="flex items-center justify-between mb-6">
-        {open && <span className="font-bold text-lg pl-2">KiloWattz</span>}
+        <Sun className="flex items-center"/>
+        {open && <span className="font-bold text-sm pl-2">KiloWattz</span>}
         <button
           onClick={() => setOpen(!open)}
           aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-          className="p-2 rounded-lg hover:bg-gray-300 mx-auto"
+          className="p-2 rounded-lg hover:bg-zinc-900/70 mx-auto"
         >
           {open ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
         </button>
@@ -51,7 +52,7 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg text-sm transition-colors ${
                 open ? "" : "justify-center"
-              } ${isActive ? "bg-gray-600" : "hover:bg-gray-300"}`
+              } ${isActive ? "bg-gray-600" : "hover:bg-zinc-900/70"}`
             }
           >
             <Icon size={20} className="shrink-0" />
