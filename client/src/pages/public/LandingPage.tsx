@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '@base-ui/react';
-import { ArrowRightIcon, Sun } from 'lucide-react'
+import { ArrowRightIcon, Sun, Zap } from 'lucide-react'
 import "../../index.css";
 import { useState } from 'react';
 import { StatsOverview } from '@/components/common/StatsOverview'
@@ -60,13 +60,17 @@ export const LandingPage: React.FC = () => {
       Premium solar, designed around your life. Cut energy costs, protect your
       home from rising rates, and control at your convenience.
     </p>
-
     <Button className="mt-10 w-fit rounded-lg flex items-center border-black p-1 bg-amber-900 text-white">
       Explore how it works
       <ArrowRightIcon className="ml-2 h-4 w-4 text-black"/>
     </Button>
   </div>
 </div>
+<div className='overflow-hidden whitespace-nowrap flex justify-around gap-10'>
+  <span className='flex w-max animate-marquee tracking-widest'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+  <span className='flex w-max animate-marquee tracking-widest'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+  <span className='flex w-max animate-marquee tracking-widest'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+    </div>
       <StatsOverview />
       <FeaturesSection />
       <ArchitectureSection />

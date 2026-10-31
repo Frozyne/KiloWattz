@@ -138,3 +138,11 @@
   width: 20px;
   border-top: 2px solid #de9446;
 }
+@theme {
+  --animate-marquee: marquee 12s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(100%); }
+    to   { transform: translateX(-100%); }
+  }
+}
