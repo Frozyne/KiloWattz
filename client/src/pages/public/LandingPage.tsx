@@ -48,13 +48,13 @@ export const LandingPage: React.FC = () => {
   />
   <div className="absolute inset-0 bg-black/50"/>
   <div className="relative z-10 flex min-h-125 flex-col justify-center p-6 md:p-12">
-    <small className="text-green-400 tracking-widest">
+    <small className="text-green-100 tracking-widest">
       CLEAN ENERGY, MADE AT CONVENIENCE
     </small>
 
     <h1 className="mt-3 text-4xl font-extrabold font-serif text-white">
       Power your home.
-      <span className="block font-mono text-green-100">Own your future.</span>
+      <span className="block font-mono text-green-600">Own your future.</span>
     </h1>
 
     <p className="mt-4 max-w-xl text-sm text-gray-200">
