@@ -6,7 +6,7 @@ export const Navbar = () => {
     <nav className="sticky top-0 z-50 backdrop-blur-md bg-zinc-950/80 border-b border-zinc-800/80 px-6 py-4 transition-all">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
+          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-green-700 to-green-100 flex items-center justify-center shadow-lg shadow-amber-500/20">
             <Zap className="h-6 w-6 text-zinc-950 stroke-[2.5]" />
           </div>
           <span className="text-xl font-bold tracking-tight text-white">

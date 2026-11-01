@@ -20,13 +20,13 @@ export default function Sidebar() {
   { path: "/admin/devices", label: "Devices", icon: Cpu },
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/admin/alertlist", label: "Alerts", icon: Bell },
-  { path: "/admin/solar", label: "Solar-sites", icon: Zap},
+  { path: "/admin/sites", label: "Solar-sites", icon: Zap},
   { path: "/admin/weather", label: "Weather", icon: Sun },
   { path: "/setting", label: "Setting", icon: Settings },
   ]
   return (
     <aside
-      className={`shrink-0 bg-zinc-900/80 text-gray-300 flex flex-col p-3 transition-all duration-300 ${
+      className={`shrink-0 bg-green-900 text-green-100 flex flex-col p-3 transition-all duration-300 ${
         open ? "w-40" : "w-15"
       }`}
     >

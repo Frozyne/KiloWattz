@@ -10,11 +10,11 @@ export const OverviewPage: React.FC = () => {
     <div className="bg-primary border-zinc-800/80 rounded-lg">
       <NavBar />
       <div> 
-        <div className="text-sm text-teal-900 mt-3 border-t-2"><small>TUESDAY, JUNE 25. CLEAR SKIES</small>
-          <p className="flex text-black text-2xl">Solar Operations Overview</p>
-          <small className="text-gray-600">Live generation and performance across your entire portfolio.</small>
-          <div className="flex justify-end">
-            <Button className="bg-white text-black"><ArrowDownToLineIcon/>Export report</Button>
+        <div className="text-sm text-blue-200 mt-3 border-t-2 ml-2 p-3"><small>TUESDAY, JUNE 25. CLEAR SKIES</small>
+          <p className="flex text-white text-2xl">Solar Operations Overview</p>
+          <small className="text-blue-100">Live generation and performance across your entire portfolio.</small>
+          <div className="flex justify-end mt-2">
+            <Button className="bg-blue-200 text-blue-100"><ArrowDownToLineIcon/>Export report</Button>
             <Button className="bg-green-900 text-white ml-2"><PlusIcon/>Add site</Button>
             </div>
         </div>
