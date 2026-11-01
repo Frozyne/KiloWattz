@@ -3,7 +3,6 @@ import { Button } from '@base-ui/react';
 import { ArrowRightIcon, Sun, Zap } from 'lucide-react'
 import "../../index.css";
 import { useState } from 'react';
-import { StatsOverview } from '@/components/common/StatsOverview'
 import { FeaturesSection } from '@/components/common/FeaturesSection'
 import { ArchitectureSection } from '@/components/common/ArchitectureSection'
 import { Footer } from '@/components/common/Footer'
@@ -22,7 +21,8 @@ export const LandingPage: React.FC = () => {
             Kilo<span className="text-gray-800">Wattz</span>
           </span>
           <div className='z-10 relative flex ml-30 mt-3 gap-30 sm:flex-row'>
-        <Button className="text-black hover:bg-gray-500 rounded-lg p-1 pl-5">Our system</Button>
+        <a 
+        href='/admin/Dashboard'><Button className="text-black hover:bg-gray-500 rounded-lg p-1 pl-5 mt-3">DashBoard</Button></a>
         <Button className="text-black hover:bg-gray-500 rounded-lg p-1 pl-5">Sign in</Button>
         <Button className="text-black hover:bg-gray-500 rounded-lg p-1 pl-5">Customers</Button>
         <Button className="text-black border-black hover:bg-gray-500 rounded-lg p-1 pl-5">Get an estimate</Button>
@@ -60,20 +60,21 @@ export const LandingPage: React.FC = () => {
       Premium solar, designed around your life. Cut energy costs, protect your
       home from rising rates, and control at your convenience.
     </p>
-    <Button className="mt-10 w-fit rounded-lg flex items-center border-black p-1 bg-amber-900 text-white">
+    <Button className="mt-10 w-fit rounded-lg flex items-center border-black p-1 bg-green-300 text-white">
       Explore how it works
-      <ArrowRightIcon className="ml-2 h-4 w-4 text-black"/>
+      <ArrowRightIcon className="ml-2 h-4 w-4 text-white"/>
     </Button>
   </div>
 </div>
-<div className='overflow-hidden whitespace-nowrap flex justify-around gap-10'>
-  <span className='flex w-max animate-marquee tracking-widest'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
-  <span className='flex w-max animate-marquee tracking-widest'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
-  <span className='flex w-max animate-marquee tracking-widest'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+<div className='overflow-hidden whitespace-nowrap flex justify-around gap-10 p-2'>
+  <span className='flex w-max animate-marquee tracking-widest gap-3'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+  <span className='flex w-max animate-marquee tracking-widest gap-3'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+  <span className='flex w-max animate-marquee tracking-widest gap-3'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+  <span className='flex w-max animate-marquee tracking-widest gap-3'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
+  <span className='flex w-max animate-marquee tracking-widest gap-3'><Zap className='text-amber-600'/> CLEAN POWER, DAY AND NIGHT</span>
     </div>
-      <StatsOverview />
+     <ArchitectureSection />
       <FeaturesSection />
-      <ArchitectureSection />
       <Footer />
     </nav>
   )

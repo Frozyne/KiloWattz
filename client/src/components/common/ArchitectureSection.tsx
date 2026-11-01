@@ -8,7 +8,7 @@ export const ArchitectureSection: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h2 className="text-xs font-semibold text-amber-400 uppercase tracking-widest mb-3">
+            <h2 className="text-xs text-black font-bold uppercase tracking-widest mb-3">
               Robust Microgrid Blueprint
             </h2>
             <h3 className="text-3xl font-bold text-white mb-6">
@@ -17,30 +17,30 @@ export const ArchitectureSection: React.FC = () => {
 
             <div className="space-y-4">
               <div className="flex gap-4">
-                <CheckCircle2 className="h-6 w-6 text-amber-400 shrink-0 mt-1" />
+                <CheckCircle2 className="h-6 w-6 text-gray-400 shrink-0 mt-1" />
                 <div>
                   <h4 className="text-white font-semibold">Emergency Load Shedding (ELS)</h4>
-                  <p className="text-zinc-400 text-sm mt-1">
+                  <p className="text-gray-800 text-sm mt-1">
                     Instant admin trigger option to shed non-essential household loads during battery reserve or grid frequency emergencies.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <CheckCircle2 className="h-6 w-6 text-amber-400 shrink-0 mt-1" />
+                <CheckCircle2 className="h-6 w-6 text-gray-400 shrink-0 mt-1" />
                 <div>
                   <h4 className="text-white font-semibold">Weather-Driven Yield Prediction</h4>
-                  <p className="text-zinc-400 text-sm mt-1">
+                  <p className="text-gray-800 text-sm mt-1">
                     Hourly background synchronization with Open-Meteo API to calculate theoretical solar yield based on irradiance and cloud cover.
                   </p>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <CheckCircle2 className="h-6 w-6 text-amber-400 shrink-0 mt-1" />
+                <CheckCircle2 className="h-6 w-6 text-gray-400 shrink-0 mt-1" />
                 <div>
                   <h4 className="text-white font-semibold">Heartbeat & Hardware Diagnostics</h4>
-                  <p className="text-zinc-400 text-sm mt-1">
+                  <p className="text-gray-800 text-sm mt-1">
                     Continuous background monitoring logs warnings for offline meters, thermal spikes, and inverter efficiency drops.
                   </p>
                 </div>
@@ -48,7 +48,7 @@ export const ArchitectureSection: React.FC = () => {
             </div>
           </div>
 
-          <Card className="rounded-2xl bg-zinc-900 border-zinc-800 p-2">
+          <Card className="rounded-2xl bg-green-900 border-zinc-800 p-2">
             <CardHeader className="flex flex-row items-center justify-between border-b border-zinc-800 pb-4 space-y-0">
               <CardTitle className="text-sm font-semibold text-white">Central System Capabilities</CardTitle>
               <span className="text-xs text-amber-400 font-mono">24/7 Monitoring</span>

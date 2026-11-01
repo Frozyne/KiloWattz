@@ -139,7 +139,7 @@
   border-top: 2px solid #de9446;
 }
 @theme {
-  --animate-marquee: marquee 12s linear infinite;
+  --animate-marquee: marquee 15s linear infinite;
 
   @keyframes marquee {
     from { transform: translateX(100%); }

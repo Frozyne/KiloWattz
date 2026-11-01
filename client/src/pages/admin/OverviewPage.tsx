@@ -7,10 +7,10 @@ import { ArrowDownToLineIcon, PlusIcon } from "lucide-react";
 
 export const OverviewPage: React.FC = () => {
   return (
-    <div>
+    <div className="bg-primary border-zinc-800/80 rounded-lg">
       <NavBar />
       <div> 
-        <div className="text-sm text-teal-900 mt-3"><small>TUESDAY, JUNE 25. CLEAR SKIES</small>
+        <div className="text-sm text-teal-900 mt-3 border-t-2"><small>TUESDAY, JUNE 25. CLEAR SKIES</small>
           <p className="flex text-black text-2xl">Solar Operations Overview</p>
           <small className="text-gray-600">Live generation and performance across your entire portfolio.</small>
           <div className="flex justify-end">

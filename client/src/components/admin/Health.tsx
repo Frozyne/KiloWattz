@@ -4,7 +4,7 @@ import { ArrowRightIcon } from "lucide-react"
 export default function Health(){
     const [activeNav, setActiveNav] = useState("Overview")
     return(
-        <div className="border rounded-2xl bg-white py-1 p-2 mt-2">
+        <div className="border-zinc-800/80 rounded-2xl bg-zinc-900/20 py-1 p-2 mt-2">
           <span className="flex justify-between font-bold">Assets Health
             <span><Button onClick={() => setActiveNav("Assets")} className="bg-white text-black border-3">View all assets<ArrowRightIcon/></Button></span>
           </span>
