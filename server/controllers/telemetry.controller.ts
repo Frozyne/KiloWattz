@@ -7,6 +7,7 @@ import Telemetry from "../models/telemetry.model";
 import Household from "../models/household.model";
 import mongoose from "mongoose";
 import { isAdmin } from "../utils/server.authorizer";
+import { io } from "../index";
 
 export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -196,6 +197,12 @@ export const recordTelemetry = async (req: AuthenticatedRequest, res: Response, 
             timestamp: new Date()
         });
 
+        io.emit('telemetry:new', {
+            householdId: household._id,
+            phaseConnection: household.phaseConnection,
+            telemetry: newTelemetry
+        });
+
         
         const startOfDay = new Date();
         startOfDay.setHours(0, 0, 0, 0); // Midnight today
@@ -238,6 +245,14 @@ export const recordTelemetry = async (req: AuthenticatedRequest, res: Response, 
 
             await household.save()
             isSuspendedNow = true
+
+            io.emit('household:quota_breached', {
+                householdId: household._id,
+                phaseConnection: household.phaseConnection,
+                consumedKWh: household.quotaBreaches[household.quotaBreaches.length - 1].consumedKWh,
+                dailyQuotaKWh: household.dailyKWHQuota,
+                connectionStatus: 'Suspended'
+            });
         }
 
         return ApiResponse.success({

@@ -14,6 +14,9 @@ import quotaRouter from './routes/quota.route.ts'
 import infrastructureRouter from "./routes/infrastructure.route.ts";
 import alertRouter from "./routes/alert.route.ts";
 import apiRouter from "./routes/api.route.ts";
+import { createServer } from 'node:http'
+import { Server } from 'socket.io'
+import { createAdapter } from '@socket.io/cluster-adapter';
 
 import { startAllCronJobs } from "./jobs/index.ts";
 
@@ -62,11 +65,34 @@ app.use('/api', apiRouter)
 
 app.use(errorHandler)
 
+const server = createServer(app)
+
+export const io = new Server(server, {
+  connectionStateRecovery: {
+    maxDisconnectionDuration: 2 * 60 * 1000, // 2 minutes
+    skipMiddlewares: true
+  },
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  }
+})
+
+io.adapter(createAdapter())
+
+io.on('connection', (socket) => {
+  console.log('A client connected:', socket.id)
+
+  socket.on('disconnect', () => {
+      console.log(`[SOCKET] Client disconnected: ${socket.id}`)
+  })
+})
+
 await connectToDB()
 
 const startServer = () => {
   try {
-    app.listen(PORT, () => {
+    server.listen(PORT || 3000, () => {
       console.log(`Server is running on port ${PORT}`)
     });
   } catch (error) {

@@ -1,6 +1,7 @@
 import cron from 'node-cron'
 import Infrastructure from '../models/infrastructure.model'
 import Environment from '../models/environment.model'
+import { io } from '../index'
 
 export const startInfrastructureSimulatorCron = () => {
     // Runs every 1 minute
@@ -46,6 +47,13 @@ export const startInfrastructureSimulatorCron = () => {
                 // 3. Update the individual asset in MongoDB
                 asset.diagnostics = updatedDiagnostics
                 await asset.save()
+
+                io.emit('infrastructure:updated', {
+                    assetId: asset._id,
+                    serialNumber: asset.serialNumber,
+                    status: asset.status,
+                    diagnostics: asset.diagnostics
+                })
             }
 
             console.log(`[CRON] Updated diagnostics for ${assets.length} infrastructure assets.`)

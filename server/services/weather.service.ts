@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import axios from 'axios'
 import Environment from '../models/environment.model'
+import { io } from '../index'
 
 // Coordinates for Ibadan, Nigeria: 7.3775° N, 3.9470° E
 const ESTATE_LATITUDE = process.env.ESTATE_LAT || '7.3775'
@@ -32,13 +33,15 @@ export const fetchAndSaveEnvironmentMetrics = async (): Promise<void> => {
         const expectedYieldKW = Math.max(0, Math.round(rawYieldKW * 100) / 100)
 
         // Save environmental snapshot
-        await Environment.create({
+        const newEnvRecord = await Environment.create({
             cloudCoverPercent,
             temperatureC,
             solarIrradiance,
             expectedYieldKW,
             timestamp: new Date()
         })
+
+        io.emit('environment:updated', newEnvRecord)
 
         console.log(`[WEATHER CRON] Recorded: Irradiance=${solarIrradiance} W/m², Temp=${temperatureC}°C, ExpectedYield=${expectedYieldKW} kW`)
     } catch (error) {
