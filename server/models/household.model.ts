@@ -10,6 +10,7 @@ export interface IQuotaBreach {
 export interface IHousehold extends Document {
   plotNumber: string;
   street: string;
+  consumedKWh: number
   dailyKWHQuota: number;
   connectionStatus: 'Active' | 'Suspended' | 'Disconnected';
   quotaBreaches: IQuotaBreach[]; // Array of quota breach records
@@ -49,6 +50,11 @@ const householdSchema = new mongoose.Schema<IHousehold>({
         trim: true,
         minLength: [2, 'Street name must be at least 2 characters long'],
         maxLength: [50, 'Street name cannot exceed 50 characters']
+    },
+    consumedKWh: {
+        type: Number,
+        default: 0,
+        min: [0, 'Consumed KWh cannot be negative']
     },
     dailyKWHQuota: {
         type: Number,

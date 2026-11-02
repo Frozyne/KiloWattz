@@ -6,6 +6,7 @@ import Setting from "../models/setting.model";
 import Telemetry from "../models/telemetry.model";
 import Household from "../models/household.model";
 import mongoose from "mongoose";
+import { isAdmin } from "../utils/server.authorizer";
 
 export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -62,15 +63,13 @@ export const getHouseholdTelemetry = async (req: AuthenticatedRequest, res: Resp
             return next(new ServerError(`Household with ID ${householdId} not found`, 404));
         }
 
-        const isAdmin = req.user?.role === 'admin';
-
         if (!household?.user) {
             return next(new ServerError(`Household with ID ${householdId} does not have an associated user`, 404));
         }
 
         const isOwner = household.user.toString() === req.user?._id.toString();
 
-        if (!isAdmin && !isOwner) {
+        if (!isAdmin(req) && !isOwner) {
             return next(new ServerError('Unauthorized access to this household telemetry data', 403));
         }
 
@@ -103,15 +102,13 @@ export const getHouseholdSavings = async (req: AuthenticatedRequest, res: Respon
             return next(new ServerError(`Household with ID ${householdId} not found`, 404));
         }
 
-        const isAdmin = req.user?.role === 'admin';
-
         if (!household?.user) {
             return next(new ServerError(`Household with ID ${householdId} does not have an associated user`, 404));
         }
 
         const isOwner = household.user.toString() === req.user?._id.toString();
 
-        if (!isAdmin && !isOwner) {
+        if (!isAdmin(req) && !isOwner) {
             return next(new ServerError('Unauthorized access to this household savings data', 403));
         }
 

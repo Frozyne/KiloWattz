@@ -4,7 +4,8 @@ import Infrastructure from '../models/infrastructure.model'
 import { AuthenticatedRequest } from '../types/auth.type'
 import { ApiResponse } from '../utils/server.success'
 import { ServerError } from '../utils/server.error'
-
+import { getInfrastructureModelData } from '../utils/infrastructure.helper'
+import { generateAssetSerialNumber } from '../utils/asset.helper'
 
 export const getInfrastructureStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -62,7 +63,7 @@ export const updateInfrastructureMaintenance = async (req: AuthenticatedRequest,
         }
 
         const asset = await Infrastructure.findById(id)
-        if (!asset) {
+        if (!asset?.maintenanceLogs) {
             throw new ServerError(`Infrastructure asset with ID ${id} not found`, 404)
         }
 
@@ -89,6 +90,69 @@ export const updateInfrastructureMaintenance = async (req: AuthenticatedRequest,
             res,
             statusCode: 200,
             message: 'Hardware maintenance log recorded successfully',
+            data: { asset }
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getInfrastructureByType = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const { type } = req.params as { type: 'SolarArray' | 'Inverter' | 'BatteryBank' | 'Transformer' | 'Gateway' }
+
+        const validTypes = ['SolarArray', 'Inverter', 'BatteryBank', 'Transformer', 'Gateway']
+        if (!validTypes.includes(type)) {
+            throw new ServerError(`Type must be one of: ${validTypes.join(', ')}`, 400)
+        }
+        
+        const assets = await Infrastructure.find({ type })
+        return ApiResponse.success({
+            res,
+            statusCode: 200,
+            message: 'Infrastructure assets retrieved successfully',
+            data: { assets }
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const addNewInfrastructureAsset = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const { modelNumber, status, notes } = req.body
+
+        if (!modelNumber || !status || !notes) {
+            throw new ServerError('Missing required fields (modelNumber, status, notes)', 400)
+        }
+
+        const modelData = getInfrastructureModelData(modelNumber)
+        if (!modelData) {
+            throw new ServerError(`Model number ${modelNumber} is not recognized`, 400)
+        }
+
+        const serialNumber = await generateAssetSerialNumber(modelNumber)
+
+        const asset = new Infrastructure({
+            name: modelData.name,
+            modelNumber: modelNumber,
+            serialNumber: serialNumber,
+            type: modelData.type,
+            capacityKW: modelData.capacityKW,
+            capacityKWh: modelData.capacityKWh,
+            status: status,
+            healthPercent: 100,
+            lastMaintenanceDate: new Date(),
+            diagnostics: {},
+            maintenanceLogs: []
+        })
+
+        await asset.save()
+
+        return ApiResponse.success({
+            res,
+            statusCode: 201,
+            message: 'Infrastructure asset created successfully',
             data: { asset }
         })
     } catch (error) {

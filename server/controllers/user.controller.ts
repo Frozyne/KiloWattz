@@ -114,7 +114,7 @@ export const createUserProfile = async (req: AuthenticatedRequest, res: Response
             password: hashedPassword,
             role: role || 'Resident',
             avatarUrl, 
-            households: [] 
+            households: []
         }], { session })
 
         const newUser = newUsers[0]

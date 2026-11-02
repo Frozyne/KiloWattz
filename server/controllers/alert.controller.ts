@@ -5,6 +5,7 @@ import Household from '../models/household.model'
 import { AuthenticatedRequest } from '../types/auth.type'
 import { ApiResponse } from '../utils/server.success'
 import { ServerError } from '../utils/server.error'
+import { isAdmin } from '../utils/server.authorizer'
 
 export const getAlerts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -16,7 +17,7 @@ export const getAlerts = async (req: AuthenticatedRequest, res: Response, next: 
         if (scope) filterQuery.scope = scope as string
         if (isResolved !== undefined) filterQuery.isResolved = isResolved === 'true'
 
-        if (req.user?.role !== 'Admin') {
+        if (!isAdmin(req)) {
             const userHousehold = await Household.findOne({ user: req.user?._id })
             filterQuery.$or = [
                 { scope: 'System' },

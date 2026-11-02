@@ -10,7 +10,8 @@
     "start": "npm index.ts",
     "dev": "tsx watch index.ts",
     "seed": "tsx seed/admin.seed.ts",
-    "seed:fresh": "tsx seed/admin.seed.ts --fresh"
+    "seed:fresh": "tsx seed/admin.seed.ts --fresh",
+    "seed-inf": "tsx seed/infrastructure.seed.ts"
   },
   "dependencies": {
     "@types/node-cron": "^3.0.11",

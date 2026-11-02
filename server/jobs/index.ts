@@ -4,6 +4,9 @@ import { initMeterHeartbeatJob } from './metermonitor.job'
 import { initBatteryGuardJob } from './batterymonitor.job'
 import { initTelemetryArchiveJob } from './archivecleaner.job'
 import { initWeatherCronJob } from './weatherfetch.job'
+import { startInfrastructureSimulatorCron } from './infrastructuresimulator.job'
+import { startEnvironmentCleanupCron } from './environmentcleaner.job'
+import { startHouseholdTelemetryCron } from './telementry.job'
 
 export const startAllCronJobs = (): void => {
     console.log('Initializing Microgrid Background Task Schedulers...')
@@ -14,6 +17,9 @@ export const startAllCronJobs = (): void => {
     initBatteryGuardJob()
     initTelemetryArchiveJob()
     initWeatherCronJob()
+    startInfrastructureSimulatorCron()
+    startEnvironmentCleanupCron()
+    startHouseholdTelemetryCron()
 
-    console.log('All 6 microgrid cron schedulers running successfully.')
+    console.log('All 9 microgrid cron schedulers running successfully.')
 }

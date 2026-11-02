@@ -8,7 +8,9 @@ export interface IMaintenanceLog {
 }
 
 export interface IInfrastructure extends Document {
+    serialNumber: string
     name: string
+    modelNumber: string
     type: 'SolarArray' | 'Inverter' | 'BatteryBank' | 'Transformer' | 'Gateway'
     capacityKW?: number
     capacityKWh?: number
@@ -22,7 +24,7 @@ export interface IInfrastructure extends Document {
         currentOutputKW?: number
         stateOfChargePercent?: number
     }
-    maintenanceLogs: IMaintenanceLog[]
+    maintenanceLogs?: IMaintenanceLog[]
 }
 
 const maintenanceLogSchema = new mongoose.Schema<IMaintenanceLog>({
@@ -39,7 +41,9 @@ const maintenanceLogSchema = new mongoose.Schema<IMaintenanceLog>({
 )
 
 const infrastructureSchema = new mongoose.Schema<IInfrastructure>({
+        serialNumber: { type: String, required: true, unique: true, index: true, trim: true },
         name: { type: String, required: true },
+        modelNumber: { type: String, required: true },
         type: { 
             type: String, 
             enum: ['SolarArray', 'Inverter', 'BatteryBank', 'Transformer', 'Gateway'], 

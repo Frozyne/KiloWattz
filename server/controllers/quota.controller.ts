@@ -5,6 +5,7 @@ import Telemetry from '../models/telemetry.model'
 import { AuthenticatedRequest } from '../types/auth.type'
 import { ApiResponse } from '../utils/server.success'
 import { ServerError } from '../utils/server.error'
+import { isAdmin } from '../utils/server.authorizer'
 
 export const getTodayQuotaStatus = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -15,10 +16,9 @@ export const getTodayQuotaStatus = async (req: AuthenticatedRequest, res: Respon
             throw new ServerError(`Household with ID ${householdId} not found`, 404)
         }
 
-        const isAdmin = req.user?.role === 'Admin'
         const isOwner = household.user?.toString() === req.user?._id.toString()
 
-        if (!isAdmin && !isOwner) {
+        if (!isAdmin(req) && !isOwner) {
             throw new ServerError('Unauthorized access to household quota details', 403)
         }
 
@@ -67,6 +67,36 @@ export const getTodayQuotaStatus = async (req: AuthenticatedRequest, res: Respon
             }
         })
 
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const setQuotaLimitByPhase = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const { phase, dailyKWHQuota } = req.body
+        
+        if (!phase || !dailyKWHQuota) {
+            throw new ServerError('Missing required fields (phase, dailyKWHQuota)', 400)
+        }
+
+        const validPhases = ['Phase 1' , 'Phase 2' , 'Phase 3']
+
+        if (!validPhases.includes(phase)) {
+            throw new ServerError('Invalid phase specified', 400)
+        }
+
+        const updateResult = await Household.updateMany(
+            { phaseConnection: phase },
+            { $set: { dailyKWHQuota } }
+        )
+
+        return ApiResponse.success({
+            res,
+            statusCode: 200,
+            message: "Quota limits updated successfully",
+            data: updateResult
+        })
     } catch (error) {
         next(error)
     }

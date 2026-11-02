@@ -11,7 +11,12 @@ export const initQuotaResetJob = (): void => {
                 // 1. Reactivate all suspended households
                 const householdResult = await Household.updateMany(
                     { connectionStatus: 'Suspended'},
-                    { $set: { connectionStatus: 'Active' } }
+                    { $set: { connectionStatus: 'Active'} }
+                )
+
+                await Household.updateMany(
+                    {},
+                    { $set: { consumedKWh: 0 } }
                 )
 
                 console.log(

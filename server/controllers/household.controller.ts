@@ -5,6 +5,8 @@ import User from "../models/user.model.ts";
 import mongoose from "mongoose";
 import { ServerError } from "../utils/server.error.ts";
 import { ApiResponse } from "../utils/server.success.ts";
+import { isAdmin } from "../utils/server.authorizer.ts";
+import { isValidMeterNumber } from "../utils/meter.helper.ts";
 
 export const getMyHouseholds = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -42,11 +44,9 @@ export const getHouseholdById = async (req: AuthenticatedRequest, res: Response,
 
         const ownerId = household?.user._id ? household.user._id.toString() : household?.user.toString();
 
-        const isAdmin = req.user?.role === 'admin';
-
         const isOwner = ownerId === req.user?._id.toString();
 
-        if (!isAdmin && !isOwner) {
+        if (!isAdmin(req) && !isOwner) {
             return next(new ServerError('Unauthorized access to this household', 403));
         }
 
@@ -114,16 +114,25 @@ export const getAllHouseholds = async (req: AuthenticatedRequest, res: Response,
 }
 
 export const createHousehold = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { plotNumber, street, dailyKWHQuota, connectionStatus, meterSerialNumber, phaseConnection, user } = req.body;
+    const { plotNumber, street, dailyKWHQuota, consumedKWh, connectionStatus, meterSerialNumber, phaseConnection, user } = req.body;
         
         
-    if (!plotNumber || !street || !dailyKWHQuota || !connectionStatus || !phaseConnection || !user) {
+    if (!plotNumber || !street || !dailyKWHQuota || !consumedKWh || !connectionStatus || !phaseConnection || !user) {
         return next(new ServerError('Missing required fields', 400));
     }
 
     const existingUser = await User.findById(user);
     if (!existingUser) {
         return next(new ServerError('User not found', 404));
+    }
+
+    const meterSerialNumberExists = await Household.findOne({ meterSerialNumber });
+    if (meterSerialNumberExists) {
+        return next(new ServerError('Meter serial number is already in use', 400));
+    }
+
+    if (!isValidMeterNumber(meterSerialNumber)) {
+        return next(new ServerError('Invalid meter serial number', 400));
     }
 
     const session = await mongoose.startSession();
@@ -134,6 +143,7 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
             plotNumber,
             street,
             dailyKWHQuota,
+            consumedKWh,
             connectionStatus,
             meterSerialNumber,
             phaseConnection,
@@ -166,9 +176,9 @@ export const updateHousehold = async (req: AuthenticatedRequest, res: Response, 
     try {
         const householdId = req.params.id;
 
-        const { plotNumber, street, dailyKWHQuota, connectionStatus, meterSerialNumber, phaseConnection } = req.body;
+        const { plotNumber, street,  connectionStatus, meterSerialNumber, phaseConnection } = req.body;
 
-        if (!plotNumber && !street && !dailyKWHQuota && !connectionStatus && !meterSerialNumber && !phaseConnection) {
+        if (!plotNumber && !street && !connectionStatus && !meterSerialNumber && !phaseConnection) {
             return next(new ServerError('No data provided for update', 400));
         }
 
@@ -186,7 +196,7 @@ export const updateHousehold = async (req: AuthenticatedRequest, res: Response, 
 
         const household = await Household.findByIdAndUpdate(
             householdId,
-            { plotNumber, street, dailyKWHQuota, connectionStatus, meterSerialNumber, phaseConnection },
+            { plotNumber, street, connectionStatus, meterSerialNumber, phaseConnection },
             { new: true, runValidators: true }
         ).populate('user', 'fullName email avatarUrl');
 
