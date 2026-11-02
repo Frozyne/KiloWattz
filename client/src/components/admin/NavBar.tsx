@@ -9,7 +9,7 @@ export default function NavBar(){
         <nav className="bg-primary rounded-3xl flex items-center justify-around gap-2">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-3 ml-2">
-          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-green-700 to-green-100 flex items-center justify-center shadow-lg shadow-amber-500/20">
+          <div className="h-10 w-10 rounded-xl bg-linear-to-br from-green-500 to-green-100 flex items-center justify-center shadow-lg shadow-amber-500/20">
             <Sun className="h-6 w-6 text-zinc-950 stroke-[2.5]" />
           </div>
           <span className="text-xl font-bold tracking-tight text-green-700">

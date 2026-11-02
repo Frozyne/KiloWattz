@@ -20,8 +20,9 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
 
   return (
     <>
+    <div className="bg-white">
       <div className="border rounded-4xl mt-4 p-5 bg-white">
-        <div className="flex justify-between items-center font-normal text-black text-3xl">
+        <div className="flex justify-between items-center font-normal text-green-400 text-3xl">
           <span>Analytics</span>
 
           <div className="flex items-center gap-2 text-base">
@@ -55,19 +56,19 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
           </div>
         </div>
 
-        <p className="text-sm text-gray-400">
+        <p className="text-sm text-primary">
           Analyze yield, availability, and environmental impact.
         </p>
-        <h2 className="mt-2 p-5 pb-0">Current output</h2>
+        <h2 className="mt-2 p-5 pb-0 text-primary">Current output</h2>
 
-        <div className="flex justify-between items-center text-sm font-extralight">
-          <p className="translate-x-6 pb-4">{currentOutput}MW</p>
+        <div className="flex justify-between items-center text-sm font-extralight text-primary">
+          <p className="translate-x-6 pb-4 text-primary">{currentOutput}MW</p>
           --- Actual --- Forecast
         </div>
-        <div className="translate-x-10/14 text-sm font-mono mt-1">NOW</div>
+        <div className="translate-x-10/14 text-sm font-mono mt-1 text-primary">NOW</div>
 
         <div className="flex">
-          <div className="shrink-0 w-14 flex flex-col justify-between text-sm text-gray-500 h-57.5 pt-1.25 pb-0.75 ml-2 leading-none">
+          <div className="shrink-0 w-14 flex flex-col justify-between text-sm text-primary h-57.5 pt-1.25 pb-0.75 ml-2 leading-none">
             <span>24 MW</span>
             <span>18 MW</span>
             <span>12 MW</span>
@@ -75,7 +76,7 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
             <span>0</span>
           </div>
 
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 text-primary">
             <svg
               className="w-full block"
               preserveAspectRatio="none"
@@ -126,7 +127,7 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
               <circle cx="489" cy="39" r="3.5" fill="#f4b63f" />
             </svg>
 
-            <div className="flex justify-between text-sm text-gray-500 mt-2">
+            <div className="flex justify-between text-sm text-primary mt-2">
               <span>Jan</span>
               <span>Feb</span>
               <span>Mar</span>
@@ -139,6 +140,7 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
       </div>
       <div className="border rounded-4xl mt-4 p-5 bg-white">
         <Health />
+        </div>
       </div>
     </>
   );

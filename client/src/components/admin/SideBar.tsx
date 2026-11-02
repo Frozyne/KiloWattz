@@ -26,7 +26,7 @@ export default function Sidebar() {
   ]
   return (
     <aside
-      className={`shrink-0 bg-green-900 text-green-100 flex flex-col p-3 transition-all duration-300 ${
+      className={`shrink-0 bg-primary text-green-100 flex flex-col p-3 transition-all duration-300 ${
         open ? "w-40" : "w-15"
       }`}
     >
@@ -36,7 +36,7 @@ export default function Sidebar() {
         <button
           onClick={() => setOpen(!open)}
           aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-          className="p-2 rounded-lg hover:bg-zinc-900/70 mx-auto"
+          className="p-2 rounded-lg hover:bg-green-400 mx-auto"
         >
           {open ? <PanelLeftClose size={20} /> : <PanelLeftOpen size={20} />}
         </button>
@@ -52,7 +52,7 @@ export default function Sidebar() {
             className={({ isActive }) =>
               `flex items-center gap-3 p-2 rounded-lg text-sm transition-colors ${
                 open ? "" : "justify-center"
-              } ${isActive ? "bg-gray-600" : "hover:bg-zinc-900/70"}`
+              } ${isActive ? "bg-green-400" : "hover:bg-zinc-900/70"}`
             }
           >
             <Icon size={20} className="shrink-0" />
