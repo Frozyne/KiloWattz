@@ -23,7 +23,7 @@ export default function NavBar(){
              className="absolute left-3 top-1/2 -translate-y-1/2  text-green-100 pointer-events-none" />
             <input
             type="type"
-            className="w-full py-2 border border-green-800 rounded-lg pl-10 pr-3 text-sm ouline-none focus:ring-2 focus:ring-gray-200 text-black"
+            className="w-full py-2 border border-green-800 rounded-lg pl-10 pr-3 text-sm ouline-none focus:ring-2 focus:ring-gray-200 text-primary"
             placeholder="Search..."/>
           </div>
           <div>

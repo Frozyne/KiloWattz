@@ -22,7 +22,7 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
     <>
     <div className="bg-white">
       <div className="border rounded-4xl mt-4 p-5 bg-white">
-        <div className="flex justify-between items-center font-normal text-green-400 text-3xl">
+        <div className="flex justify-between items-center font-normal text-primary text-3xl">
           <span>Analytics</span>
 
           <div className="flex items-center gap-2 text-base">
@@ -31,7 +31,7 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
                 <button
                   key={v}
                   onClick={() => setMode(v)}
-                  className={`px-1 ${mode === v ? "bg-orange-200 text-white" : ""}`}
+                  className={`px-1 ${mode === v ? "bg-emerald-600 text-white" : ""}`}
                 >
                   {v === "day" ? "Daily" : "Monthly"}
                 </button>
