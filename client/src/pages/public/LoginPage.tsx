@@ -129,7 +129,7 @@ export default function LoginPage() {
               <Zap className="size-6" />
             </div>
 
-            <span className="text-2xl font-bold">KiloWattz</span>
+            <span className="text-2xl font-bold text-primary">KiloWattz</span>
           </div>
 
           {/* Heading */}
@@ -142,7 +142,7 @@ export default function LoginPage() {
               Welcome back
             </h2>
 
-            <p className="mt-3 text-muted-foreground">
+            <p className="mt-3 text-primary">
               Sign in to access your energy dashboard.
             </p>
           </div>
@@ -153,7 +153,7 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="mb-2 block text-sm font-medium"
+                className="mb-2 block text-sm font-medium text-primary"
               >
                 Email address
               </label>
@@ -166,7 +166,7 @@ export default function LoginPage() {
                   name="email"
                   type="email"
                   autoComplete="email"
-                  placeholder="you@example.com"
+                  placeholder="youremail@gmail.com"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
                   required
@@ -177,7 +177,7 @@ export default function LoginPage() {
 
             {/* Password */}
             <div>
-              <div className="mb-2 flex items-center justify-between gap-3">
+              <div className="mb-2 flex items-center justify-between gap-3 text-primary">
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium"
@@ -229,7 +229,7 @@ export default function LoginPage() {
             </div>
 
             {/* Remember Me */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-primary">
               <input
                 id="remember"
                 name="remember"
@@ -239,7 +239,7 @@ export default function LoginPage() {
 
               <label
                 htmlFor="remember"
-                className="text-sm font-medium text-foreground"
+                className="text-sm font-medium text-primary"
               >
                 Remember me
               </label>
@@ -276,7 +276,7 @@ export default function LoginPage() {
             </a>
           </p>
 
-          <p className="mt-10 text-center text-xs text-muted-foreground">
+          <p className="mt-10 text-center text-xs text-primary">
             Secure access to your community energy.
           </p>
         </div>
