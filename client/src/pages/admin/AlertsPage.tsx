@@ -35,26 +35,26 @@ export default function AlertPage() {
   }
   return (
     <div className="mt-7 border-t">
-      <div className="border-gray-400 h-10 p-1 rounded-xl mt-2 mb-90">
+      <div className="border-primary h-10 p-1 rounded-xl mt-2 mb-90">
         <div className="flex justify-between">
           <form className="flex h-8 item-start">
-            <SearchIcon className="h-8 w-4 shrink-0 translate-x-52 font-extralight text-gray-500" />
+            <SearchIcon className="h-8 w-4 shrink-0 translate-x-52 font-extralight text-primary border-primary"/>
             <input type="text" name="Enter code" placeholder="Search alerts...."
-              className="border rounded-lg outline-none" />
+              className="border rounded-lg outline-none text-primary" />
           </form>
           <div className="border-gray-400">
-            <Button className="bg-white text-black border-gray-300" onClick={() => changeFilter("All")}>All</Button>
+            <Button className="bg-white text-primary border-gray-300" onClick={() => changeFilter("All")}>All</Button>
 
-            <Button className="bg-white text-black" onClick={() => changeFilter("Open")}><small>Open</small></Button>
+            <Button className="bg-white text-primary" onClick={() => changeFilter("Open")}><small>Open</small></Button>
 
-            <Button className="bg-white text-black" onClick={() => changeFilter("Investigating")}><small>Investigating</small></Button>
+            <Button className="bg-white text-primary" onClick={() => changeFilter("Investigating")}><small>Investigating</small></Button>
 
-            <Button className="bg-white text-black" onClick={() => changeFilter("Resolved")}><small>Resolved</small></Button>
+            <Button className="bg-white text-primary" onClick={() => changeFilter("Resolved")}><small>Resolved</small></Button>
           </div>
         </div>
         <ArrowScroll>
           <div className="min-w-[760] whitespace-nowrap border-t p-1">
-            <div className={`${cols} text-gray-500`}>
+            <div className={`${cols} text-primary`}>
               <small>Alert ID</small>
               <small>Site / Device</small>
               <small>Event</small>
@@ -64,7 +64,7 @@ export default function AlertPage() {
             </div>
 
             {visible.length === 0 && (
-              <div className="border-t py-6 text-center text-gray-500">
+              <div className="border-t py-6 text-center text-primary">
                 <small>No {filter.toLowerCase()} alerts</small></div>
             )
 
@@ -74,12 +74,12 @@ export default function AlertPage() {
                 <small>{a.id}</small>
 
                 <div className="flex items-center gap-3">
-                  <span className="flex h-8 w-8 items-center justify-center rounded-full border bg-orange-100 text-xs text-gray-500">
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border bg-orange-100 text-xs text-primary">
                     {a.initials}
                   </span>
                   <div className="flex flex-col leading-tight">
                     <small className="font-semibold">{a.name}</small>
-                    <small className="font-extralight text-gray-500">{a.device}</small>
+                    <small className="font-extralight text-primary">{a.device}</small>
                   </div>
                 </div>
 
@@ -87,7 +87,7 @@ export default function AlertPage() {
                 <small>{a.date}</small>
                 <small>{a.severity}</small>
 
-                <span className="w-fit rounded-xl border bg-orange-100 px-2 py-1 text-orange-300">
+                <span className="w-fit rounded-xl border bg-orange-100 px-2 py-1 text-primary">
                   <small>⏺ {a.status}</small>
                 </span>
               </div>
@@ -97,10 +97,10 @@ export default function AlertPage() {
         <div className="flex items-center justify-between border p-2 rounded-2xl">
           <small>Showing {filtered.length === 0 ? 0 : start + 1}-{end} of {filtered.length} alerts</small>
           <div className="flex gap-2">
-            <Button variant="outline" className="text-gray-500"
+            <Button variant="outline" className="text-primary"
               disabled={page === 0}
               onClick={() => setPage((p) => p - 1)}>Previous</Button>
-            <Button variant="outline" className="text-gray-500" disabled={page >= totalPages - 1} onClick={() => setPage((p) => p + 1)}>Next</Button>
+            <Button variant="outline" className="text-primary" disabled={page >= totalPages - 1} onClick={() => setPage((p) => p + 1)}>Next</Button>
           </div>
         </div>
       </div>

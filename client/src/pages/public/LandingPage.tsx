@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { FeaturesSection } from '@/components/common/FeaturesSection'
 import { ArchitectureSection } from '@/components/common/ArchitectureSection'
 import { Footer } from '@/components/common/Footer'
-
+import { Link } from 'react-router';
 export const LandingPage: React.FC = () => {
   const [client, setClient] = useState("All")
   return (
@@ -22,11 +22,11 @@ export const LandingPage: React.FC = () => {
           </span>
           <div className='z-10 relative flex ml-30 mt-4 gap-20 sm:flex-row'>
         <a 
-        href='/admin/Dashboard'><Button className="text-green-100 hover:bg-gray-500 rounded-lg p-1 pl-5">DashBoard</Button></a>
-        <a 
-        href='/pages/public/LoginPage'> <Button className="text-green-100 hover:bg-gray-500 rounded-lg p-2 pl-5">Sign in</Button></a>
-        <Button className="text-green-100 hover:bg-gray-500 rounded-lg p-1 pl-5">Customers</Button>
-        <Button className="text-green-100 border-green-900 hover:bg-gray-500 rounded-lg p-1 pl-5">Get an estimate</Button>
+        href='/admin/Dashboard'><Button className="text-green-100 hover:bg-primary rounded-lg p-1 pl-5">DashBoard</Button></a>
+        
+       <Button render={<Link to="/login"/> } nativeButton={false} className="text-green-100 hover:bg-primary rounded-lg p-2 pl-5">Sign in</Button>
+        <Button className="text-green-100 hover:bg-primary rounded-lg p-1 pl-5">Customers</Button>
+        <Button className="text-green-100 border-green-900 hover:bg-primary rounded-lg p-1 pl-5">Get an estimate</Button>
         </div>
          <div className='relative z-10 ml-28 mt-3 text-green-100'>
             <select value={client}
