@@ -16,7 +16,6 @@ import alertRouter from "./routes/alert.route.ts";
 import apiRouter from "./routes/api.route.ts";
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
-import { createAdapter } from '@socket.io/cluster-adapter';
 
 import { startAllCronJobs } from "./jobs/index.ts";
 
@@ -78,7 +77,6 @@ export const io = new Server(server, {
   }
 })
 
-io.adapter(createAdapter())
 
 io.on('connection', (socket) => {
   console.log('A client connected:', socket.id)

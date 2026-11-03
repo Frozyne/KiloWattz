@@ -32,14 +32,16 @@ export const fetchAndSaveEnvironmentMetrics = async (): Promise<void> => {
         const rawYieldKW = SYSTEM_CAPACITY_KW * (solarIrradiance / 1000) * tempCoeff
         const expectedYieldKW = Math.max(0, Math.round(rawYieldKW * 100) / 100)
 
-        // Save environmental snapshot
-        const newEnvRecord = await Environment.create({
-            cloudCoverPercent,
-            temperatureC,
-            solarIrradiance,
-            expectedYieldKW,
+        const newEnvRecord = {
+            cloudCoverPercent: cloudCoverPercent,
+            temperatureC: temperatureC,
+            solarIrradiance: solarIrradiance,
+            expectedYieldKW: expectedYieldKW,
             timestamp: new Date()
-        })
+        }
+
+        // Save environmental snapshot
+        await Environment.create(newEnvRecord)
 
         io.emit('environment:updated', newEnvRecord)
 

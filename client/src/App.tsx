@@ -10,6 +10,7 @@ import SolarSites from "./pages/admin/SolarSites";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
 
 export default function App() {
+  
   return (
     <BrowserRouter>
     

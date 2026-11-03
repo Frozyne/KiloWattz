@@ -235,6 +235,7 @@ export const recordTelemetry = async (req: AuthenticatedRequest, res: Response, 
         let isSuspendedNow = false;
 
         if (currentConsumptionKWh >= household.dailyKWHQuota && household.connectionStatus === 'Active') {
+            
             household.connectionStatus = 'Suspended'
 
             household.quotaBreaches.push({
@@ -249,7 +250,7 @@ export const recordTelemetry = async (req: AuthenticatedRequest, res: Response, 
             io.emit('household:quota_breached', {
                 householdId: household._id,
                 phaseConnection: household.phaseConnection,
-                consumedKWh: household.quotaBreaches[household.quotaBreaches.length - 1].consumedKWh,
+                consumedKWh: household?.quotaBreaches.at(-1)?.consumedKWh,
                 dailyQuotaKWh: household.dailyKWHQuota,
                 connectionStatus: 'Suspended'
             });
