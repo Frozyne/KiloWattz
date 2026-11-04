@@ -73,11 +73,11 @@ export default function LoginPage() {
             Smarter energy. Stronger communities.
           </p>
 
-          <h1 className="text-5xl font-bold leading-tight">
+          <h1 className="text-5xl font-bold leading-tight text-emerald-700">
             Powering a brighter, more sustainable future.
           </h1>
 
-          <p className="mt-6 max-w-md text-base leading-7 opacity-80">
+          <p className="mt-6 max-w-md text-base leading-7 opacity-80 text-green-100">
             Monitor energy usage, track your electricity quota, and stay
             connected to your community&apos;s energy system. KiloWattz empowers
             residents to make informed decisions about their energy consumption,
@@ -88,9 +88,9 @@ export default function LoginPage() {
             <div className="rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5">
               <Zap className="mb-3 size-6" />
 
-              <p className="font-semibold">Live Monitoring</p>
+              <p className="font-semibold text-emerald-700">Live Monitoring</p>
 
-              <p className="mt-1 text-sm opacity-75">
+              <p className="mt-1 text-sm opacity-75 text-green-100">
                 Stay informed with insights into your energy consumption,
                 battery levels, and solar generation. Make informed decisions
                 to optimize your energy usage and reduce costs.
@@ -100,9 +100,9 @@ export default function LoginPage() {
             <div className="rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5">
               <Lock className="mb-3 size-6" />
 
-              <p className="font-semibold">Resident Access</p>
+              <p className="font-semibold text-emerald-700">Resident Access</p>
 
-              <p className="mt-1 text-sm opacity-75">
+              <p className="mt-1 text-sm opacity-75 text-green-100">
                 Access your electricity quota, monitor your energy usage, and
                 stay connected to your community&apos;s energy system through
                 a secure, user-friendly platform.
@@ -111,7 +111,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <p className="text-sm opacity-70">
+        <p className="text-sm opacity-70 text-primary">
           &copy; {new Date().getFullYear()} KiloWattz. All rights reserved.
         </p>
 
