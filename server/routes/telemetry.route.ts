@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getCommunityTelemetry, getHouseholdTelemetry, getHouseholdSavings, recordTelemetry } from "../controllers/telemetry.controller.ts";
+import { getCommunityTelemetry, getHouseholdTelemetry, getHouseholdSavings } from "../controllers/telemetry.controller.ts";
 import { protectRoute } from "../middlewares/protect.middleware.ts";
 import { authorizeUser } from "../middlewares/auth.middleware.ts";
 

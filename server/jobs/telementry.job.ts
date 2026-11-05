@@ -25,11 +25,11 @@ export const startHouseholdTelemetryCron = () => {
                 const mockReq = {
                     body: {
                         householdId: household._id.toString(),
-                        powerConsumedKWh,
-                        powerConsumedKW,
-                        batteryLevelPercent,
-                        solarGeneratedKW,
-                        gridVoltage
+                        powerConsumedKWh: powerConsumedKWh,
+                        powerConsumedKW: powerConsumedKW,
+                        batteryLevelPercent: batteryLevelPercent,
+                        solarGeneratedKW: solarGeneratedKW,
+                        gridVoltage: gridVoltage
                     }
                 } as any
 
