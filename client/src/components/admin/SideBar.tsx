@@ -5,7 +5,6 @@ import {
   Cpu,
   BarChart3,
   Bell,
-  Settings,
   PanelLeftClose,
   PanelLeftOpen,
   Zap,
@@ -21,8 +20,6 @@ export default function Sidebar() {
   { path: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { path: "/admin/alertlist", label: "Alerts", icon: Bell },
   { path: "/admin/sites", label: "Solar-sites", icon: Zap},
-  { path: "/admin/weather", label: "Weather", icon: Sun },
-  { path: "/setting", label: "Setting", icon: Settings },
   ]
   return (
     <aside

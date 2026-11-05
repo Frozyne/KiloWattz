@@ -1,10 +1,8 @@
 import { Button } from "@base-ui/react";
 import { Search } from "lucide-react";
 import { UserIcon, MessageSquareDotIcon, BellDotIcon, Sun } from "lucide-react" 
-import { useState } from "react";
 
 export default function NavBar(){
-  const [client, setClient] = useState("All")
     return(
         <nav className="bg-primary rounded-3xl flex items-center justify-around gap-2">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -26,21 +24,7 @@ export default function NavBar(){
             className="w-full py-2 border border-green-800 rounded-lg pl-10 pr-3 text-sm ouline-none focus:ring-2 focus:ring-gray-200 text-primary"
             placeholder="Search..."/>
           </div>
-          <div>
-            <select value={client}
-                        onChange={(e) => { setClient(e.target.value); }}
-                        className="rounded-md border border-green-800 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-gray-200 text-green-100">
-                            <option value="All">Client Swicher: Individual</option>
-                            <option value="North">North</option>
-                            <option value="South">South</option>
-                            <option value="East">East</option>
-                            <option value="West">West</option>
-                        </select>
-          </div>
         <div className="flex items-center justify-end translate-y-1 gap-4 p-5 ml-25">
-          <Button className=" text-green-100 border-green-700 font-thin text-sm rounded-2xl mt-1 p-1 animate-pulse">
-            🔴 LIVE
-          </Button>
           <Button className=" text-green-100 icon-button">
             <BellDotIcon/>
           </Button>
