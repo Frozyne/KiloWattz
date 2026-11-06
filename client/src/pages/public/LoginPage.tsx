@@ -1,5 +1,4 @@
 import {useState, type SubmitEvent } from "react";
-import { Eye, EyeOff, Mail, Lock } from "lucide-react";
 import { useNavigate, useLocation } from 'react-router'
 import { useAuthStore } from '../../storage/useAuthStorage'
 import { authService } from '../../services/auth'
@@ -15,20 +14,7 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Zap, Loader2, AlertCircle } from 'lucide-react'
-
-type LoginResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    token: string;
-    user: {
-      _id: string;
-      email: string;
-      role?: string;
-    };
-  };
-};
+import { Zap, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -41,7 +27,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const from = location.state?.from?.pathname || '/overview'
+  const from = location.state?.from?.pathname || '/dashboard/overview'
 
   const handleSubmit = async (
     event: SubmitEvent<HTMLFormElement>
@@ -70,75 +56,12 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="flex min-h-screen bg-background text-foreground">
-      {/* Left Panel */}
-      <section className="relative hidden flex-1 flex-col justify-between overflow-hidden bg-primary p-12 text-primary-foreground lg:flex">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-primary-foreground/10 p-3">
-            <Zap className="size-7" />
-          </div>
-
-          <span className="text-2xl font-bold tracking-tight">
-            KiloWattz
-          </span>
-        </div>
-
-        <div className="relative z-10 max-w-lg">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] opacity-80">
-            Smarter energy. Stronger communities.
-          </p>
-
-          <h1 className="text-5xl font-bold leading-tight text-emerald-300">
-            Powering a brighter, more sustainable future.
-          </h1>
-
-          <p className="mt-6 max-w-md text-base leading-7 opacity-80 text-green-100">
-            Monitor energy usage, track your electricity quota, and stay
-            connected to your community&apos;s energy system. KiloWattz empowers
-            residents to make informed decisions about their energy consumption,
-            contributing to a greener and more efficient future.
-          </p>
-
-          <div className="mt-10 grid grid-cols-2 gap-4">
-            <div className="rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5">
-              <Zap className="mb-3 size-6" />
-
-              <p className="font-semibold text-emerald-300">Live Monitoring</p>
-
-              <p className="mt-1 text-sm opacity-75 text-green-100">
-                Stay informed with insights into your energy consumption,
-                battery levels, and solar generation. Make informed decisions
-                to optimize your energy usage and reduce costs.
-              </p>
-            </div>
-
-            <div className="rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5">
-              <Lock className="mb-3 size-6" />
-
-              <p className="font-semibold text-emerald-300">Resident Access</p>
-
-              <p className="mt-1 text-sm opacity-75 text-green-100">
-                Access your electricity quota, monitor your energy usage, and
-                stay connected to your community&apos;s energy system through
-                a secure, user-friendly platform.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <p className="text-sm opacity-70 text-primary">
-          &copy; {new Date().getFullYear()} KiloWattz. All rights reserved.
-        </p>
-
-        <div className="pointer-events-none absolute -bottom-32 -right-24 size-96 rounded-full border border-primary-foreground/10" />
-
-        <div className="pointer-events-none absolute -bottom-20 -right-12 size-72 rounded-full border border-primary-foreground/10" />
-      </section>
-
+    <main className="flex min-h-screen bg-background text-foreground justify-center ">
+      
       {/* Login Form */}
-      <section className="flex w-full items-center justify-center px-6 py-12 sm:px-10 lg:w-130 lg:flex-none xl:w-145px">
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-            <Card className="w-full max-w-md bg-slate-900 border-slate-800 text-slate-100 shadow-2xl">
+      
+      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4 sm:p-8 w-full">
+            <Card className="w-full max-w-md bg-zinc-900 border-zinc-800 text-zinc-100 shadow-2xl">
                 <CardHeader className="space-y-1 text-center">
                     <div className="flex justify-center mb-2">
                         <div className="p-3 bg-emerald-500/10 rounded-full border border-emerald-500/20">
@@ -146,12 +69,12 @@ export default function LoginPage() {
                         </div>
                     </div>
                     <CardTitle className="text-2xl font-bold tracking-tight">KiloWattz System Access</CardTitle>
-                    <CardDescription className="text-slate-400">
+                    <CardDescription className="text-zinc-400">
                         Enter your credentials to access the grid telemetry dashboard
                     </CardDescription>
                 </CardHeader>
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} autoComplete="on">
                     <CardContent className="space-y-4">
                         {errorMessage && (
                             <Alert variant="destructive" className="bg-rose-950/50 border-rose-800 text-rose-300">
@@ -160,36 +83,54 @@ export default function LoginPage() {
                             </Alert>
                         )}
 
+                        {/* Email Input with Autocomplete */}
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-slate-300">
+                            <Label htmlFor="email" className="text-zinc-300">
                                 Email Address
                             </Label>
                             <Input
                                 id="email"
+                                name="username"
                                 type="email"
+                                autoComplete="username"
                                 placeholder="operator@kilowattz.io"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="bg-slate-950 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                                className="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-emerald-500"
                             />
                         </div>
 
+                        {/* Password Input with Visibility Toggle & Autocomplete */}
                         <div className="space-y-2">
-                            <div className="flex justify-between items-center">
-                                <Label htmlFor="password" className="text-slate-300">
-                                    Password
-                                </Label>
+                            <Label htmlFor="password" className="text-zinc-300">
+                                Password
+                            </Label>
+                            <div className="relative">
+                                <Input
+                                    id="password"
+                                    name="password"
+                                    type={showPassword ? 'text' : 'password'}
+                                    autoComplete="current-password"
+                                    placeholder="••••••••"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    className="bg-zinc-950 border-zinc-800 text-zinc-100 placeholder:text-zinc-600 focus-visible:ring-emerald-500 pr-10"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 focus:outline-none"
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff className="h-4 w-4" />
+                                    ) : (
+                                        <Eye className="h-4 w-4" />
+                                    )}
+                                </button>
                             </div>
-                            <Input
-                                id="password"
-                                type="password"
-                                placeholder="••••••••"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                className="bg-slate-950 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-emerald-500"
-                            />
                         </div>
                     </CardContent>
 
@@ -205,14 +146,13 @@ export default function LoginPage() {
                                     Authenticating...
                                 </>
                             ) : (
-                                'Sign In to Command Center'
+                                'Sign In to Dashboard'
                             )}
                         </Button>
                     </CardFooter>
                 </form>
             </Card>
         </div>
-      </section>
     </main>
   );
 }

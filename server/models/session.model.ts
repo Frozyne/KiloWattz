@@ -1,11 +1,14 @@
 import mongoose, {Document, Types} from "mongoose";
 
 export interface ISession extends Document {
-  userId: Types.ObjectId;
-  token: string;
-  expiresAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
+    userId: Types.ObjectId;
+    token: string;
+    ipAddress?: string
+    userAgent?: string
+    isRevoked: boolean
+    expiresAt: Date;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 const sessionSchema = new mongoose.Schema<ISession>({
@@ -17,6 +20,12 @@ const sessionSchema = new mongoose.Schema<ISession>({
     token:{
         type: String,
         required: true
+    },
+    ipAddress: { type: String },
+    userAgent: { type: String },
+    isRevoked: {
+        type: Boolean,
+        default: false,
     },
     createdAt:{
         type:Date,

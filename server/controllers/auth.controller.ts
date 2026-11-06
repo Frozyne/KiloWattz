@@ -1,9 +1,14 @@
 import { NextFunction, Request, Response } from "express"
 import bcrypt from 'bcryptjs'
-import jwt, { SignOptions } from 'jsonwebtoken'
 import User from "../models/user.model"
 import Session from "../models/session.model"
 import { ServerError } from '../utils/server.error.ts'
+import { 
+    generateAccessToken,
+    generateRefreshToken,
+    hashToken,
+    verifyRefreshToken 
+} from "../utils/jwt.helper.ts"
 
 const COOKIE_OPTIONS = {
     httpOnly: true, // Shields token from XSS attacks (JS cannot read it)
@@ -34,36 +39,34 @@ export const signIn = async(req: Request, res: Response, next: NextFunction) => 
             const error = new ServerError('Invalid Credential', 401)
             throw error
         }
-        
-        const secret = process.env.JWT_SECRET
-        const expiresInSetting = (process.env.JWT_EXPIRES_IN || '1d') as SignOptions['expiresIn']
 
-        if(!secret) {
-            const error =  new ServerError('JWT SECRET is missing in enviroment variables', 404)
-            throw error
-        }
-
-        const token = jwt.sign(
-            {userId: user._id}, 
-            secret, 
-            {expiresIn: expiresInSetting}
-        )
+        const accessToken = generateAccessToken(user._id.toString(), user.role)
+        const refreshToken = generateRefreshToken(user._id.toString())
+        const refreshTokenHash = hashToken(refreshToken)
 
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        await Session.create(
-            [{userId: user._id, token, expiresAt}]
-        )
-
-        const userToReturn = user.toObject()
-        delete userToReturn.password
+        await Session.create({
+            userId: user._id,
+            token: refreshTokenHash,
+            ipAddress: req.ip,
+            userAgent: req.get('user-agent'),
+            expiresAt,
+        })
 
         res
-        .cookie('token', token, COOKIE_OPTIONS)
+        .cookie('token', refreshToken, COOKIE_OPTIONS)
         .status(200)
         .json({
             success: true,
             message: 'User created successfully',
-            data: {token, user: userToReturn}
+            data: {
+                accessToken, 
+                user: {
+                    id: user._id,
+                    name: user.fullName,
+                    email: user.email,
+                    role: user.role,
+                }}
         })
 
     } catch (error) {
@@ -99,6 +102,81 @@ export const signOut =  async(req: Request, res: Response, next: NextFunction) =
             message: 'User signed out successfully'
         })
 
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const handleRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const incomingRefreshToken = req.cookies?.refreshToken
+
+        if (!incomingRefreshToken) {
+            return res.status(401).json({ message: 'Refresh token missing' })
+        }
+
+        // 1. Verify token signature
+        let payload: { userId: string }
+        try {
+            payload = verifyRefreshToken(incomingRefreshToken)
+        } catch (err) {
+            return res.status(401).json({ message: 'Invalid or expired refresh token' })
+        }
+
+        const tokenHash = hashToken(incomingRefreshToken)
+
+        // 2. Query session in database
+        const session = await Session.findOne({
+            userId: payload.userId,
+            refreshTokenHash: tokenHash,
+        })
+
+        // Reuse Attack Guard: If token signature is valid but no matching active session exists,
+        // invalidate ALL sessions for this user for security.
+        if (!session || session.isRevoked) {
+            await Session.updateMany({ userId: payload.userId }, { isRevoked: true })
+            res.clearCookie('refreshToken', { httpOnly: true, secure: true, sameSite: 'strict' })
+            return res.status(403).json({ message: 'Security alert: Invalid session context. Please log in again.' })
+        }
+
+        // 3. Retrieve User Data
+        const user = await User.findById(payload.userId).select('-password')
+        if (!user) {
+            return res.status(401).json({ message: 'User no longer exists' })
+        }
+
+        // 4. Generate new Token Pair (Token Rotation)
+        const newAccessToken = generateAccessToken(user._id.toString(), user.role)
+        const newRefreshToken = generateRefreshToken(user._id.toString())
+        const newRefreshTokenHash = hashToken(newRefreshToken)
+
+        // 5. Update session in MongoDB with rotated hash
+        session.token = newRefreshTokenHash
+        session.ipAddress = req.ip
+        session.userAgent = req.get('user-agent')
+        await session.save()
+
+        // 6. Set rotated refresh token in secure HTTP-Only cookie
+        res.cookie('refreshToken', newRefreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        })
+
+        // 7. Send back new short-lived access token
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                accessToken: newAccessToken,
+                user: {
+                    id: user._id,
+                    name: user.fullName,
+                    email: user.email,
+                    role: user.role,
+                },
+            },
+        })
     } catch (error) {
         next(error)
     }

@@ -22,7 +22,6 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-
         {/* These routes are protected and require authentication (All Roles)*/}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />}>
@@ -40,7 +39,8 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />}>
 
             <Route path="devices" element={<Devices />} />
-            <Route path="sites" element={<SolarSites />} />
+            <Route path="users" element={<SolarSites />} />
+            <Route path="reports" />
 
           </Route>
         </Route>
