@@ -73,6 +73,7 @@ export const signIn = async(req: Request, res: Response, next: NextFunction) => 
 
 export const signOut =  async(req: Request, res: Response, next: NextFunction) => {
     try {
+        
         const authHeader = req.headers.authorization
 
         if(!authHeader?.startsWith('Bearer ')) {

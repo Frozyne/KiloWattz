@@ -1,30 +1,22 @@
+
+import axios from "axios";
+
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-export async function apiRequest<T>(
-  endpoint: string,
-  options: RequestInit = {}
-): Promise<T> {
-  if (!API_BASE_URL) {
-    throw new Error("Backend URL is missing. Check your frontend .env file.");
-  }
-
-  const response = await fetch(
-    `${API_BASE_URL.replace(/\/+$/, "")}/${endpoint.replace(/^\/+/, "")}`,
-    {
-      ...options,
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
-    }
+if (!API_BASE_URL) {
+  throw new Error(
+    "Backend URL is missing. Check your frontend .env file."
   );
-
-  const result = await response.json();
-
-  if (!response.ok) {
-    throw new Error(result.message || "Request failed.");
-  }
-
-  return result as T;
 }
+
+const api = axios.create({
+  baseURL: API_BASE_URL.replace(/\/+$/, ""),
+  timeout: 10000,
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
+});
+
+export default api;

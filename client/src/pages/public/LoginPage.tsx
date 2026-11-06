@@ -1,7 +1,8 @@
 import { useState } from "react";
 import type { SubmitEvent } from "react";
 import { Zap, Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { apiRequest } from "@/services/api";
+import api from "../../services/api";
+import axios from "axios";
 
 type LoginResponse = {
   success: boolean;
@@ -32,10 +33,13 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const result = await apiRequest<LoginResponse>("auth/sign-in", {
-        method: "POST",
-        body: JSON.stringify({ email, password }),
+      const response = await api.post<LoginResponse>("/auth/sign-in", {
+        email,
+        password,
+
       });
+
+      const result = response.data;
 
       if (!result.success) {
         throw new Error(result.message || "Login failed.");
@@ -44,15 +48,22 @@ export default function LoginPage() {
       // Redirect after successful login
       window.location.href = "/resident/dashboard";
     } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "Unable to sign in. Please try again."
-      );
+      if (axios.isAxiosError(error)) {
+        setErrorMessage(
+          error.response?.data?.message ||
+          "Unable to sign in. Please try again."
+        );
+      } else {
+        setErrorMessage(
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred."
+        );
+      }
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   return (
     <main className="flex min-h-screen bg-background text-foreground">

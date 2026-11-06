@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Zap, BatteryCharging, Sun } from "lucide-react";
-import { apiRequest } from "../../services/api";
+import api from "../../services/api";
 
 interface Household {
     _id: string;
@@ -50,11 +50,11 @@ export default function ResidentLiveStats() {
 
                 // Step 1: Get the logged-in user's profile.
                 const profileResponse =
-                    await apiRequest<ProfileResponse>("user");
+                    await api.get<ProfileResponse>("/user");
 
                 // Step 2: Get the household linked to that user.
                 const householdId =
-                    profileResponse.data.user.households?.[0]?._id;
+                    profileResponse.data.data.user.households?.[0]?._id;
 
                 if (!householdId) {
                     throw new Error(
@@ -64,12 +64,12 @@ export default function ResidentLiveStats() {
 
                 // Step 3: Fetch the household's telemetry records.
                 const telemetryResponse =
-                    await apiRequest<TelemetryResponse>(
-                        `telemetry/household/${householdId}`
+                    await api.get<TelemetryResponse>(
+                        `/telemetry/household/${householdId}`
                     );
 
                 // The backend sorts records newest first.
-                const latestRecord = telemetryResponse.data?.[0] ?? null;
+                const latestRecord = telemetryResponse.data.data?.[0] ?? null;
 
                 if (!latestRecord) {
                     throw new Error(

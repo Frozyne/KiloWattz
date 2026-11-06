@@ -23,7 +23,7 @@ import { startAllCronJobs } from "./jobs/index.ts";
 const app: Express = express();
 app.set('trust proxy', 1)
 
-const allowedOrigins = new Set((CLIENT_URL || 'http:localhost:3000').split(',').map((url) => url.trim()).filter(Boolean))
+const allowedOrigins = new Set((CLIENT_URL || 'http://localhost:3000').split(',').map((url) => url.trim()).filter(Boolean))
 
 app.use(
   cors({
