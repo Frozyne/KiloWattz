@@ -1,5 +1,6 @@
 import { Button } from "@base-ui/react";
 import { Search } from "lucide-react";
+import { Link } from "react-router";
 import { UserIcon, MessageSquareDotIcon, BellDotIcon, Sun } from "lucide-react" 
 
 export default function NavBar(){
@@ -24,12 +25,13 @@ export default function NavBar(){
             className="w-full py-2 border border-green-800 rounded-lg pl-10 pr-3 text-sm ouline-none focus:ring-2 focus:ring-gray-200 text-primary"
             placeholder="Search..."/>
           </div>
-        <div className="flex items-center justify-end translate-y-1 gap-4 p-5 ml-25">
+        <div className="flex items-center justify-around translate-y-1 gap-4 p-5 ml-25">
           <Button className=" text-green-100 icon-button">
             <BellDotIcon/>
           </Button>
           <Button className="text-green-100"><MessageSquareDotIcon/></Button>
-          <Button className=" text-green-100">
+          
+          <Button render={<Link to="/profile"/> } nativeButton={false}className=" text-green-100">
             <UserIcon/>
           </Button>
         </div>

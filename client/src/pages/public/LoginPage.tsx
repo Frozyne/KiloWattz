@@ -88,7 +88,7 @@ export default function LoginPage() {
             Smarter energy. Stronger communities.
           </p>
 
-          <h1 className="text-5xl font-bold leading-tight text-emerald-700">
+          <h1 className="text-5xl font-bold leading-tight text-emerald-300">
             Powering a brighter, more sustainable future.
           </h1>
 
@@ -103,7 +103,7 @@ export default function LoginPage() {
             <div className="rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5">
               <Zap className="mb-3 size-6" />
 
-              <p className="font-semibold text-emerald-700">Live Monitoring</p>
+              <p className="font-semibold text-emerald-300">Live Monitoring</p>
 
               <p className="mt-1 text-sm opacity-75 text-green-100">
                 Stay informed with insights into your energy consumption,
@@ -115,7 +115,7 @@ export default function LoginPage() {
             <div className="rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 p-5">
               <Lock className="mb-3 size-6" />
 
-              <p className="font-semibold text-emerald-700">Resident Access</p>
+              <p className="font-semibold text-emerald-300">Resident Access</p>
 
               <p className="mt-1 text-sm opacity-75 text-green-100">
                 Access your electricity quota, monitor your energy usage, and

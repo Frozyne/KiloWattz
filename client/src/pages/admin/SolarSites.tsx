@@ -32,9 +32,6 @@ export default function SolarSites(){
                         className="rounded-md border border-primary px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary text-primary">
                             <option value="All">All regions</option>
                             <option value="North">North</option>
-                            <option value="South">South</option>
-                            <option value="East">East</option>
-                            <option value="West">West</option>
                         </select>
                         </div>
                     </div>
