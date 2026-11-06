@@ -20,7 +20,7 @@ export function getSeedUser(): SeedUser[] {
             name: process.env.ADMIN_NAME ?? 'Super Admin',
             email: requireEnv('ADMIN_EMAIL'),
             password: requireEnv('ADMIN_PASSWORD'),
-            role: 'admin'
+            role: 'Admin'
         },
     ]
 }

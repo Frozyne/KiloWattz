@@ -21,7 +21,7 @@ export const isAdmin = (req: AuthenticatedRequest): boolean => {
             return false
         }
 
-    if (req.user.role !== 'admin') {
+    if (req.user.role.toUpperCase() !== 'ADMIN') {
         return false
     }
 

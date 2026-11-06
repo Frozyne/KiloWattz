@@ -30,6 +30,10 @@ export const getInfrastructureStats = async (req: AuthenticatedRequest, res: Res
             inverters: {
                 count: assets.filter(a => a.type === 'Inverter').length,
                 totalCapacityKW: assets.filter(a => a.type === 'Inverter').reduce((acc, a) => acc + (a.capacityKW || 0), 0)
+            },
+            transformers: {
+                count: assets.filter(a => a.type === 'Transformer').length,
+                totalCapacityKW: assets.filter(a => a.type === 'Transformer').reduce((acc, a) => acc + (a.capacityKW || 0), 0)
             }
         }
 

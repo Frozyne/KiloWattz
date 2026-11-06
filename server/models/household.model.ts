@@ -37,6 +37,25 @@ export interface IHousehold extends Document {
   updatedAt: Date;
 }
 
+const terminalSchema = new mongoose.Schema<ITerminal>({
+    name: {type: String},
+    consumedKWh: {type: Number},
+    connectionStatus: {
+        type: String,
+        enum: ['On', 'Off', 'Fault'],
+        default: 'On'
+    }
+})
+
+const meterSchema = new mongoose.Schema<IMeter>({
+    terminal1: terminalSchema, 
+    terminal2: terminalSchema,
+    terminal3: terminalSchema,
+    terminal4: terminalSchema,
+    terminal5: terminalSchema,
+    terminal6: terminalSchema,
+})
+
 const quotaBreachSchema = new mongoose.Schema<IQuotaBreach>({
     breachedAt: { 
         type: Date, 
@@ -91,10 +110,7 @@ const householdSchema = new mongoose.Schema<IHousehold>({
         minLength: [10, 'Please enter a valid serial number'],
         maxLength: [15, 'Serial number is invalid']
     },
-    meter: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Meter'
-    },
+    meter: meterSchema,
     phaseConnection: {
         type: String,
         enum: ['Phase 1', 'Phase 2', 'Phase 3'],

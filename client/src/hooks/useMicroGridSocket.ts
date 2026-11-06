@@ -61,7 +61,7 @@ export const useMicrogridSocket = (options: UseMicrogridSocketsProps = {}) => {
 
         const handleQuotaBreach = (data: QuotaBreachPayload) => {
             options.onQuotaBreached?.(data)
-            void queryClient.invalidateQueries({queryKey: ['households']})
+            void queryClient.invalidateQueries({queryKey: ['household']})
         }
 
         const handleTelemetry = (data: TelemetryPayload) => {

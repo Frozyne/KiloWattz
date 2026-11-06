@@ -270,6 +270,7 @@ export const ToggleTerminalConnection = async (req: AuthenticatedRequest, res: R
 
         household.meter[terminalKey].connectionStatus = connectionStatus;
         await household.save();
+        
         return ApiResponse.success({
             res,
             message: 'Terminal connection status updated successfully',
