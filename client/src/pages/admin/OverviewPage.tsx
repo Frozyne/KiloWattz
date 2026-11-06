@@ -2,7 +2,7 @@ import NavBar from "../../components/admin/NavBar";
 import AdminLiveStat from "../../components/admin/AdminLiveStatsRow";
 import { Button } from "@/components/ui/button";
 import { ArrowDownToLineIcon, PlusIcon } from "lucide-react";
-import SolarSites from "./SolarSites";
+import Profile from "@/components/common/ProfilePage";
 
 export const OverviewPage: React.FC = () => {
   return (
@@ -19,7 +19,7 @@ export const OverviewPage: React.FC = () => {
         </div>
         </div>
       <AdminLiveStat />
-      <SolarSites />
+      <Profile/>
     </div>
   );
 }
