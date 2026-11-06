@@ -4,7 +4,7 @@ import { IHousehold } from "./household.model.ts";
 export interface ITelemetry extends Document {
   timestamp: Date;
   scope: 'Community' | 'Household';
-  household: Types.ObjectId | PopulatedDoc<IHousehold>; // Reference to Household model
+  household?: Types.ObjectId | PopulatedDoc<IHousehold>; // Reference to Household model
   solarGeneratedKW: number;
   powerConsumedKW: number;
   batteryLevelPercent: number;

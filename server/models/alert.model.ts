@@ -8,8 +8,8 @@ export interface IAlert extends Document {
     message: string
     severity: 'Info' | 'Warning' | 'Critical' | 'Emergency'
     scope: 'System' | 'Household' | 'Infrastructure'
-    household?: PopulatedDoc<IHousehold>
-    infrastructure?: PopulatedDoc<IInfrastructure>
+    household?: Types.ObjectId | PopulatedDoc<IHousehold>
+    infrastructure?: Types.ObjectId | PopulatedDoc<IInfrastructure>
     isResolved: boolean
     resolvedAt?: Date
     resolvedBy?: Types.ObjectId | PopulatedDoc<IUser>
