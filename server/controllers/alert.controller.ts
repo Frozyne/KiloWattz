@@ -107,6 +107,55 @@ export const triggerEmergencyLoadShedding = async (req: AuthenticatedRequest, re
     }
 }
 
+export const resolveEmergencyLoadShedding = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try{
+        const startDay = new Date()
+        startDay.setHours(0, 0, 0, 0)
+
+        const bulkResult = await Household.updateMany(
+            { connectionStatus: 'Suspended', quotaBreaches: { $not: { $elemMatch: { breachDate: { $gte: startDay } } } } },
+            { $set: { connectionStatus: 'Active' } },
+            { session }
+        )
+
+        const [resolveAlert] = await Alert.create(
+            [{
+                title: 'INFO: Emergency Load-Shedding Resolved',
+                message: `Grid load-shedding sequence resolved by ${req.user?.fullName || 'Admin'}`,
+                severity: 'Info',
+                scope: 'System',
+                isResolved: true,
+                metadata: {
+                    resolvedBy: req.user?._id,
+                    affectedHouseholdsCount: bulkResult.modifiedCount
+                }
+            }],
+            { session }
+        )
+
+        await session.commitTransaction()
+        await session.endSession()
+
+        return ApiResponse.success({
+            res,
+            statusCode: 200,
+            message: 'Emergency load-shedding sequence resolved successfully',
+            data: {
+                alert: resolveAlert,
+                householdsReactivated: bulkResult.modifiedCount
+            }
+        })
+    } catch (error) {
+        await session.abortTransaction()
+        await session.endSession()
+        next(error)
+    }
+
+}
+
 export const resolveAlert = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params as { id: string }
