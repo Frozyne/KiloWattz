@@ -112,7 +112,7 @@ export interface IUser extends Document {
     url: string | null;
     publicId: string | null;
     };
-    households: string[]; // Reference to Household model
+    households: IHousehold[]; // Reference to Household model
     createdAt: Date;
     updatedAt: Date;
 }

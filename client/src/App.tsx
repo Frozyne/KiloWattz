@@ -26,9 +26,9 @@ export default function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />}>
 
-            <Route path="/overview" element={<OverviewPage />} />
-            <Route path="/alerts" element={<AlertPage />} />
-            <Route path="/analytics" element={<AnalyticsPage />} />
+            <Route path="overview" element={<OverviewPage />} />
+            <Route path="alerts" element={<AlertPage />} />
+            <Route path="analytics" element={<AnalyticsPage />} />
             
           </Route>
         </Route>
@@ -37,8 +37,8 @@ export default function App() {
         <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
           <Route path="/dashboard" element={<Dashboard />}>
 
-            <Route path="/devices" element={<Devices />} />
-            <Route path="/sites" element={<SolarSites />} />
+            <Route path="devices" element={<Devices />} />
+            <Route path="sites" element={<SolarSites />} />
 
           </Route>
         </Route>

@@ -1,8 +1,21 @@
-import { useState } from "react";
-import type { SubmitEvent } from "react";
-import { Zap, Eye, EyeOff, Mail, Lock } from "lucide-react";
-import api from "../../services/api";
-import axios from "axios";
+import {useState, type SubmitEvent } from "react";
+import { Eye, EyeOff, Mail, Lock } from "lucide-react";
+import { useNavigate, useLocation } from 'react-router'
+import { useAuthStore } from '../../storage/useAuthStorage'
+import { authService } from '../../services/auth'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Zap, Loader2, AlertCircle } from 'lucide-react'
 
 type LoginResponse = {
   success: boolean;
@@ -24,6 +37,12 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  const setAuth = useAuthStore((state) => state.setAuth)
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const from = location.state?.from?.pathname || '/overview'
+
   const handleSubmit = async (
     event: SubmitEvent<HTMLFormElement>
   ) => {
@@ -33,33 +52,18 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await api.post<LoginResponse>("/auth/sign-in", {
-        email,
-        password,
 
-      });
+      const { user, token } = await authService.login({ email, password })
 
-      const result = response.data;
+      setAuth(user, token)
 
-      if (!result.success) {
-        throw new Error(result.message || "Login failed.");
-      }
+      await navigate(from, { replace: true })
 
-      // Redirect after successful login
-      window.location.href = "/resident/dashboard";
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrorMessage(
-          error.response?.data?.message ||
-          "Unable to sign in. Please try again."
-        );
-      } else {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred."
-        );
-      }
+    } catch (error: any) {
+      setErrorMessage(
+        error.message ||
+        "Failed to authenticate. Please check your credentials."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -133,163 +137,80 @@ export default function LoginPage() {
 
       {/* Login Form */}
       <section className="flex w-full items-center justify-center px-6 py-12 sm:px-10 lg:w-130 lg:flex-none xl:w-145px">
-        <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <div className="mb-10 flex items-center gap-3 lg:hidden">
-            <div className="rounded-xl bg-primary p-3 text-primary-foreground">
-              <Zap className="size-6" />
-            </div>
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+            <Card className="w-full max-w-md bg-slate-900 border-slate-800 text-slate-100 shadow-2xl">
+                <CardHeader className="space-y-1 text-center">
+                    <div className="flex justify-center mb-2">
+                        <div className="p-3 bg-emerald-500/10 rounded-full border border-emerald-500/20">
+                            <Zap className="h-8 w-8 text-emerald-400 animate-pulse" />
+                        </div>
+                    </div>
+                    <CardTitle className="text-2xl font-bold tracking-tight">KiloWattz System Access</CardTitle>
+                    <CardDescription className="text-slate-400">
+                        Enter your credentials to access the grid telemetry dashboard
+                    </CardDescription>
+                </CardHeader>
 
-            <span className="text-2xl font-bold text-primary">KiloWattz</span>
-          </div>
+                <form onSubmit={handleSubmit}>
+                    <CardContent className="space-y-4">
+                        {errorMessage && (
+                            <Alert variant="destructive" className="bg-rose-950/50 border-rose-800 text-rose-300">
+                                <AlertCircle className="h-4 w-4" />
+                                <AlertDescription>{errorMessage}</AlertDescription>
+                            </Alert>
+                        )}
 
-          {/* Heading */}
-          <div>
-            <p className="text-sm font-semibold text-primary">
-              RESIDENT PORTAL
-            </p>
+                        <div className="space-y-2">
+                            <Label htmlFor="email" className="text-slate-300">
+                                Email Address
+                            </Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="operator@kilowattz.io"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                                className="bg-slate-950 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                            />
+                        </div>
 
-            <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
-              Welcome back
-            </h2>
+                        <div className="space-y-2">
+                            <div className="flex justify-between items-center">
+                                <Label htmlFor="password" className="text-slate-300">
+                                    Password
+                                </Label>
+                            </div>
+                            <Input
+                                id="password"
+                                type="password"
+                                placeholder="••••••••"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                className="bg-slate-950 border-slate-800 text-slate-100 placeholder:text-slate-600 focus-visible:ring-emerald-500"
+                            />
+                        </div>
+                    </CardContent>
 
-            <p className="mt-3 text-primary">
-              Sign in to access your energy dashboard.
-            </p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-primary"
-              >
-                Email address
-              </label>
-
-              <div className="flex items-center gap-3 rounded-xl border bg-background px-4 focus-within:ring-2 focus-within:ring-ring">
-                <Mail className="size-5 shrink-0 text-muted-foreground" />
-
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="youremail@gmail.com"
-                  value={email}
-                  onChange={(event) => setEmail(event.target.value)}
-                  required
-                  className="h-12 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <div className="mb-2 flex items-center justify-between gap-3 text-primary">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium"
-                >
-                  Password
-                </label>
-
-                <button
-                  type="button"
-                  className="text-sm font-medium text-primary hover:underline"
-                  onClick={() =>
-                    alert("Password recovery will be added later.")
-                  }
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              <div className="flex items-center gap-3 rounded-xl border bg-background px-4 focus-within:ring-2 focus-within:ring-ring">
-                <Lock className="size-5 shrink-0 text-muted-foreground" />
-
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  autoComplete="current-password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(event) => setPassword(event.target.value)}
-                  required
-                  className="h-12 w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-
-                <button
-                  type="button"
-                  aria-label={
-                    showPassword ? "Hide password" : "Show password"
-                  }
-                  onClick={() => setShowPassword((current) => !current)}
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  {showPassword ? (
-                    <EyeOff className="size-5" />
-                  ) : (
-                    <Eye className="size-5" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Remember Me */}
-            <div className="flex items-center gap-2 text-primary">
-              <input
-                id="remember"
-                name="remember"
-                type="checkbox"
-                className="size-4 rounded border-input accent-primary"
-              />
-
-              <label
-                htmlFor="remember"
-                className="text-sm font-medium text-primary"
-              >
-                Remember me
-              </label>
-            </div>
-
-            {/* Login Error */}
-            {errorMessage && (
-              <p
-                role="alert"
-                className="rounded-lg border border-destructive/30 bg-destructive/5 p-3 text-sm text-destructive"
-              >
-                {errorMessage}
-              </p>
-            )}
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="flex h-12 w-full items-center justify-center rounded-xl bg-primary px-4 font-semibold text-primary-foreground transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {isLoading ? "Signing in..." : "Sign in"}
-            </button>
-          </form>
-
-          {/* Support */}
-          <p className="mt-8 text-center text-sm text-muted-foreground">
-            Need help accessing your account?{" "}
-            <a
-              href="mailto:support@kilowattz.example"
-              className="font-semibold text-primary hover:underline"
-            >
-              Contact Support
-            </a>
-          </p>
-
-          <p className="mt-10 text-center text-xs text-primary">
-            Secure access to your community energy.
-          </p>
+                    <CardFooter className="pt-2">
+                        <Button
+                            type="submit"
+                            disabled={isLoading}
+                            className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-medium"
+                        >
+                            {isLoading ? (
+                                <>
+                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    Authenticating...
+                                </>
+                            ) : (
+                                'Sign In to Command Center'
+                            )}
+                        </Button>
+                    </CardFooter>
+                </form>
+            </Card>
         </div>
       </section>
     </main>
