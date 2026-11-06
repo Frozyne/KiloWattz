@@ -14,9 +14,29 @@ export const startHouseholdTelemetryCron = () => {
             console.log(`[CRON] Simulating telemetry ingestion for ${activeHouseholds.length} households...`)
 
             for (const household of activeHouseholds) {
+                //Simulate meter data for the household using the terminals
+                let calculatedHouseholdKWh = 0
+
+                // Loop through terminal1 to terminal6 dynamically
+                for (let i = 1; i <= 6; i++) {
+                    const key = `terminal${i}` as keyof typeof household.meter
+                    const terminal = household.meter[key]
+
+                    // If terminal is toggled OFF, set draw to 0
+                    if (terminal.connectionStatus === 'Off') {
+                        terminal.consumedKWh = 0
+                        continue
+                    }
+
+                    // Realistic draw range per active terminal: 0.02 to 0.20 kWh per interval
+                    const draw = Math.round((Math.random() * (0.20 - 0.02) + 0.02) * 100) / 100
+                    terminal.consumedKWh = draw
+                    calculatedHouseholdKWh += draw
+                }
+
                 // 2. Simulate realistic metrics for this specific household
                 const powerConsumedKW = Math.round((Math.random() * (3.2 - 0.8) + 0.8) * 100) / 100
-                const powerConsumedKWh = Math.round((powerConsumedKW / 60) * 1000) / 1000 // 1-minute fraction
+                const powerConsumedKWh = Math.round(calculatedHouseholdKWh * 100) / 100 // 1-minute fraction
                 const gridVoltage = Math.floor(Math.random() * (242 - 220 + 1) + 220)
                 const batteryLevelPercent = Math.floor(Math.random() * (95 - 40 + 1) + 40)
                 const solarGeneratedKW = Math.round((Math.random() * (2.5 - 0.5) + 0.5) * 100) / 100

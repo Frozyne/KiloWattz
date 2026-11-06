@@ -7,6 +7,21 @@ export interface IQuotaBreach {
     dailyQuotaKWh: number
 }
 
+export interface ITerminal {
+    name: string,
+    consumedKWh: number,
+    connectionStatus: 'On' | 'Off' | 'Fault'
+}
+
+export interface IMeter {
+    terminal1: ITerminal,
+    terminal2: ITerminal,
+    terminal3: ITerminal,
+    terminal4: ITerminal,
+    terminal5: ITerminal,
+    terminal6: ITerminal
+}
+
 export interface IHousehold extends Document {
   plotNumber: string;
   street: string;
@@ -15,6 +30,7 @@ export interface IHousehold extends Document {
   connectionStatus: 'Active' | 'Suspended' | 'Disconnected';
   quotaBreaches: IQuotaBreach[]; // Array of quota breach records
   meterSerialNumber?: string; // Optional since it has no required: true validator
+  meter: IMeter; // Optional since it has no required: true validator  
   phaseConnection: 'Phase 1' | 'Phase 2' | 'Phase 3';
   user: Types.ObjectId | PopulatedDoc<IUser>; // Reference to User model
   createdAt: Date;
@@ -74,6 +90,10 @@ const householdSchema = new mongoose.Schema<IHousehold>({
         unique: true,
         minLength: [10, 'Please enter a valid serial number'],
         maxLength: [15, 'Serial number is invalid']
+    },
+    meter: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Meter'
     },
     phaseConnection: {
         type: String,

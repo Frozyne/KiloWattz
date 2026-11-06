@@ -246,3 +246,36 @@ export const deleteHousehold = async (req: AuthenticatedRequest, res: Response, 
         next(error);
     }
 }
+
+export const ToggleTerminalConnection = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const householdId = req.params.id;
+        const { terminalNumber, connectionStatus } = req.body;
+
+        if (!terminalNumber || !connectionStatus) {
+            return next(new ServerError('Missing required fields', 400));
+        }
+
+        const household = await Household.findById(householdId);
+
+        if (!household) {
+            return next(new ServerError('Household not found', 404));
+        }
+
+        const terminalKey = `terminal${terminalNumber}` as keyof typeof household.meter;
+
+        if (!household.meter[terminalKey]) {
+            return next(new ServerError(`Terminal ${terminalNumber} does not exist`, 400));
+        }
+
+        household.meter[terminalKey].connectionStatus = connectionStatus;
+        await household.save();
+        return ApiResponse.success({
+            res,
+            message: 'Terminal connection status updated successfully',
+            data: { household }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
