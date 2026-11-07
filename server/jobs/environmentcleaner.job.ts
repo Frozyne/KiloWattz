@@ -1,9 +1,7 @@
-import cron from 'node-cron'
+import { CronJob } from 'cron'
 import Environment from '../models/environment.model'
 
-export const startEnvironmentCleanupCron = () => {
-    // Runs every 30 minutes to purge old weather records
-    cron.schedule('*/30 * * * *', async () => {
+export const startEnvironmentCleanupCron = new CronJob('*/30 * * * *', async () => {
         try {
             // Calculate the threshold timestamp (1 hour ago)
             const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000)
@@ -19,5 +17,8 @@ export const startEnvironmentCleanupCron = () => {
         } catch (error) {
             console.error('[CRON ERROR] Failed to clean up environment data:', error)
         }
-    })
-}
+    },
+    null,
+    false,
+    'Africa/Lagos'
+)

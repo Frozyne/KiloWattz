@@ -1,10 +1,9 @@
-import cron from 'node-cron'
+import { CronJob } from 'cron'
 import Infrastructure from '../models/infrastructure.model'
 import Alert from '../models/alert.model'
 import Household from '../models/household.model'
 
-export const initBatteryGuardJob = (): void => {
-    cron.schedule('*/15 * * * *', async () => {
+export const initBatteryGuardJob = new CronJob('*/15 * * * *', async () => {
         try {
             const batteryBanks = await Infrastructure.find({ type: 'BatteryBank', status: 'Operational' })
 
@@ -49,5 +48,8 @@ export const initBatteryGuardJob = (): void => {
         } catch (error) {
             console.error('[CRON ERROR] Battery guard scanner failed:', error)
         }
-    })
-}
+    },
+    null,
+    false,
+    'Africa/Lagos'
+)

@@ -1,10 +1,9 @@
-import cron from 'node-cron'
 import Household from '../models/household.model'
 import Telemetry from '../models/telemetry.model'
 import Alert from '../models/alert.model'
+import { CronJob } from 'cron'
 
-export const initMeterHeartbeatJob = (): void => {
-    cron.schedule('*/10 * * * *', async () => {
+export const initMeterHeartbeatJob = new CronJob('*/10 * * * *', async () => {
         try {
             const thirtyMinutesAgo = new Date(Date.now() - 30 * 60 * 1000)
             
@@ -39,5 +38,8 @@ export const initMeterHeartbeatJob = (): void => {
         } catch (error) {
             console.error('[CRON ERROR] Meter heartbeat scan failed:', error)
         }
-    })
-}
+    },
+    null,
+    false,
+    'Africa/Lagos'
+)

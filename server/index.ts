@@ -86,8 +86,6 @@ io.on('connection', (socket) => {
   })
 })
 
-await connectToDB()
-
 const startServer = () => {
   try {
     server.listen(PORT || 3000, () => {
@@ -99,9 +97,9 @@ const startServer = () => {
   }
 }
 
-startAllCronJobs()
-
-startServer()
+await connectToDB()
+  .then(() => startAllCronJobs(io))
+  .finally(() => startServer())
 
 process.on('unhandledRejection', (reason: Error) => {
     console.error('Unhandled Rejection:', reason.message || reason)
