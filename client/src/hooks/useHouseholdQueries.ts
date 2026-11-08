@@ -32,8 +32,8 @@ export const useCreateHouseholdMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (payload: CreateHouseholdPayload) => householdsService.create(payload),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
         },
     })
 }
@@ -43,9 +43,9 @@ export const useUpdateHouseholdMutation = () => {
     return useMutation({
         mutationFn: ({ id, payload }: { id: string; payload: CreateHouseholdPayload }) =>
             householdsService.update(id, payload),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.detail(variables.id) })
+        onSuccess: async (_, variables) => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.detail(variables.id) })
         },
     })
 }
@@ -54,8 +54,8 @@ export const useDeleteHouseholdMutation = () => {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: (id: string) => householdsService.delete(id),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+        onSuccess: async() => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
         },
     })
 }
@@ -70,9 +70,9 @@ export const useUpdateHouseholdStatusMutation = () => {
             id: string
             status: 'Active' | 'Suspended' | 'Disconnected'
         }) => householdsService.updateStatus(id, status),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.detail(variables.id) })
+        onSuccess: async (_, variables) => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.detail(variables.id) })
         },
     })
 }
@@ -87,9 +87,9 @@ export const useToggleTerminalMutation = () => {
             householdId: string
             payload: ToggleTerminalPayload
         }) => householdsService.toggleTerminal(householdId, payload),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
-            queryClient.invalidateQueries({
+        onSuccess: async (_, variables) => {
+            await queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            await queryClient.invalidateQueries({
                 queryKey: queryKeys.household.detail(variables.householdId),
             })
         },
