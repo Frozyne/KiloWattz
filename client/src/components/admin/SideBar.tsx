@@ -8,10 +8,10 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   User,
-  Users,
   ClipboardList,
   Sun,
   type LucideIcon,
+  UsersIcon,
 } from "lucide-react";
 import { useAuthStore, type UserRole } from "../../storage/useAuthStorage";
 
@@ -24,12 +24,45 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { path: "/dashboard/overview", label: "Overview", icon: LayoutDashboard },
-  { path: "/dashboard/profile", label: "Profile", icon: User },
-  { path: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
-  { path: "/dashboard/alerts", label: "Alerts", icon: Bell },
-  { path: "/dashboard/users", label: "Users", icon: Users, allowedRoles: ["Admin"] },
-  { path: "/dashboard/devices", label: "Devices", icon: Cpu, allowedRoles: ["Admin"] },
-  { path: "/dashboard/reports", label: "Reports", icon: ClipboardList, allowedRoles: ["Admin"] },
+  
+  {
+    path: "/admin/dashboard",
+    label: "Overview",
+    icon: LayoutDashboard
+  },
+  { 
+    path: "/admin/profile", 
+    label: "Profile", 
+    icon: User 
+  },
+  {
+    path: "/admin/analytics",
+    label: "Analytics",
+    icon: BarChart3
+  },
+  {
+    path: "/admin/alertList",
+    label: "Alerts",
+    icon: Bell,
+  },
+  {
+    path: "/dashboard/users",
+    label: "Users",
+    icon: UsersIcon,
+    allowedRoles: ["Admin"],
+  },
+  {
+    path: "/dashboard/devices",
+    label: "Devices",
+    icon: Cpu,
+    allowedRoles: ["Admin"],
+  },
+  {
+    path: "/dashboard/reports",
+    label: "Reports",
+    icon: ClipboardList,
+    allowedRoles: ["Admin"],
+  },
 ];
 
 export default function Sidebar() {
@@ -55,8 +88,7 @@ export default function Sidebar() {
         <button
           onClick={() => setOpen(!open)}
           aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-          className="p-2 rounded-lg hover:bg-zinc-800/10 mx-auto"
-        >
+          className="p-2 rounded-lg hover:bg-zinc-800/10 mx-auto"       >
           {open ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
         </button>
       </div>
@@ -74,8 +106,7 @@ export default function Sidebar() {
                 isActive
                   ? "bg-emerald-600 text-white"
                   : "text-slate-400 hover:bg-emerald-600 hover:text-slate-200"
-              }`
-            }
+              }`}
           >
             <Icon size={20} className="shrink-0" />
             {open && <span>{label}</span>}
