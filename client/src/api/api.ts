@@ -1,4 +1,4 @@
-import axios, { AxiosError, type InternalAxiosRequestConfig } from "axios";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 import { useAuthStore } from "@/storage/useAuthStorage";
 
 interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {

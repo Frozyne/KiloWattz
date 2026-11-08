@@ -71,7 +71,7 @@ export default function Sidebar() {
   // Filter navigation items based on the active user's role
   const visibleNavItems = navItems.filter((item) => {
     if (!item.allowedRoles) return true;
-    return user ? item.allowedRoles.includes(user.role ) : false;
+    return user ? item.allowedRoles.includes(user.role) : false;
   });
 
   return (

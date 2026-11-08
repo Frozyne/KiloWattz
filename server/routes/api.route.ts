@@ -6,6 +6,6 @@ const apiRouter : Router = Router()
 
 apiRouter.use(protectRoute)
 
-apiRouter.use('/enviroment/latest', getLatestEnvironment)
+apiRouter.get('/enviroment/latest', getLatestEnvironment)
 
 export default apiRouter

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Zap, BatteryCharging, Sun } from "lucide-react";
-import api from "../../services/api";
+import api from "../../api/api";
 
 interface Household {
     _id: string;

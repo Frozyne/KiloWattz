@@ -61,7 +61,6 @@ app.use('/infrastructure', infrastructureRouter)
 app.use('/alert', alertRouter)
 app.use('/api', apiRouter)
 
-
 app.use(errorHandler)
 
 const server = createServer(app)

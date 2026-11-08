@@ -106,12 +106,8 @@ export interface IUser extends Document {
     _id: string
     fullName: string;
     email: string;
-    password?: string; // Optional if you decide to hide it dynamically using select: false
-    role: string;
-    avatarUrl: {
-    url: string | null;
-    publicId: string | null;
-    };
+    password?: string; // Optional
+    role: 'User' | 'Admin';
     households: IHousehold[]; // Reference to Household model
     createdAt: Date;
     updatedAt: Date;

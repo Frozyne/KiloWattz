@@ -9,7 +9,7 @@ const infrastructureRouter: Router = Router()
 infrastructureRouter.use(protectRoute)
 
 infrastructureRouter.get('/', authorizeUser, getInfrastructureStats) // Admin only
-infrastructureRouter.put('/:id', authorizeUser, updateInfrastructureMaintenance) // Admin only
+infrastructureRouter.patch('/:id', authorizeUser, updateInfrastructureMaintenance) // Admin only
 infrastructureRouter.get('/type/:type', authorizeUser, getInfrastructureByType) // Admin only
 infrastructureRouter.post('/', authorizeSuperUser, addNewInfrastructureAsset) // Super Admin only
 

@@ -5,11 +5,7 @@ export interface IUser extends Document {
   fullName: string;
   email: string;
   password?: string; // Optional if you decide to hide it dynamically using select: false
-  role: string;
-  avatarUrl: {
-    url: string | null;
-    publicId: string | null;
-  };
+  role: 'User' | 'Admin';
   households: Types.ObjectId[] | PopulatedDoc<IHousehold>[]; // Reference to Household model
   createdAt: Date;
   updatedAt: Date;
@@ -37,12 +33,8 @@ const userSchema = new mongoose.Schema<IUser>({
     },
     role: {
         type: String,
-        enum: ['user', 'admin'],
-        default: 'user'
-    },
-    avatarUrl: {
-        url: {type: String, default: null},
-        publicId: {type: String, default: null}
+        enum: ['User', 'Admin'],
+        default: 'User'
     },
     households: [{
         type: mongoose.Schema.Types.ObjectId,

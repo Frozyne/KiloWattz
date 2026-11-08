@@ -5,6 +5,6 @@ const authRouter: Router = Router()
 
 authRouter.post('/sign-in', signIn)
 authRouter.post('/sign-out', signOut)
-authRouter.post('/refresh', handleRefreshToken)
+authRouter.post('/refresh', handleRefreshToken) 
 
 export default authRouter

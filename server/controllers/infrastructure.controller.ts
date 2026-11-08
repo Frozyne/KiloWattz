@@ -6,6 +6,7 @@ import { ApiResponse } from '../utils/server.success'
 import { ServerError } from '../utils/server.error'
 import { getInfrastructureModelData } from '../utils/infrastructure.helper'
 import { generateAssetSerialNumber } from '../utils/asset.helper'
+import { recalculateAllHouseholdQuotas } from '../services/quota.service'
 
 export const getInfrastructureStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -77,7 +78,7 @@ export const updateInfrastructureMaintenance = async (req: AuthenticatedRequest,
         asset.maintenanceLogs.push({
             performedAt: now,
             performedBy: technicianName,
-            notes,
+            notes: notes,
             statusAfter: status
         })
 
@@ -94,7 +95,7 @@ export const updateInfrastructureMaintenance = async (req: AuthenticatedRequest,
             res,
             statusCode: 200,
             message: 'Hardware maintenance log recorded successfully',
-            data: { asset }
+            data: asset
         })
     } catch (error) {
         next(error)
@@ -124,10 +125,10 @@ export const getInfrastructureByType = async (req: AuthenticatedRequest, res: Re
 
 export const addNewInfrastructureAsset = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        const { modelNumber, status, notes } = req.body
+        const { modelNumber } = req.body
 
-        if (!modelNumber || !status || !notes) {
-            throw new ServerError('Missing required fields (modelNumber, status, notes)', 400)
+        if (!modelNumber) {
+            throw new ServerError('Missing required field (modelNumber)', 400)
         }
 
         const modelData = getInfrastructureModelData(modelNumber)
@@ -144,14 +145,18 @@ export const addNewInfrastructureAsset = async (req: AuthenticatedRequest, res: 
             type: modelData.type,
             capacityKW: modelData.capacityKW,
             capacityKWh: modelData.capacityKWh,
-            status: status,
             healthPercent: 100,
+            status: 'Operational',
             lastMaintenanceDate: new Date(),
             diagnostics: {},
             maintenanceLogs: []
         })
 
         await asset.save()
+
+        if (asset.type === 'SolarArray') {
+            await recalculateAllHouseholdQuotas()
+        }
 
         return ApiResponse.success({
             res,

@@ -1,53 +1,97 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { householdsService } from '../services/household'
-import { queryKeys } from './queryKeys'
+import { queryKeys } from '../api/queryKeys'
+import {
+    householdsService,
+    type CreateHouseholdPayload,
+    type ToggleTerminalPayload,
+} from '../services/household'
 
-export const useHouseholds = () => {
+export const useAllHouseholdsQuery = () => {
     return useQuery({
         queryKey: queryKeys.household.all,
-        queryFn: householdsService.getMyHouseholds,
-        staleTime: 1000 * 60 * 5
+        queryFn: householdsService.getAll,
     })
 }
 
-export const useAllHouseholds = () => {
+export const useMyHouseholdsQuery = () => {
     return useQuery({
-        queryKey: queryKeys.household.all,
-        queryFn: householdsService.getAllHouseholds,
-        staleTime: 1000 * 60 * 5
+        queryKey: queryKeys.household.mine,
+        queryFn: householdsService.getAllMine,
     })
 }
 
-export const useHouseholdDetails = (id: string) => {
+export const useHouseholdDetailQuery = (id: string) => {
     return useQuery({
         queryKey: queryKeys.household.detail(id),
-        queryFn: () => householdsService.getHouseholdById(id),
-        enabled: Boolean(id)
+        queryFn: () => householdsService.getById(id),
+        enabled: Boolean(id),
     })
 }
 
-export const useToggleTerminal = () => {
+export const useCreateHouseholdMutation = () => {
     const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (payload: CreateHouseholdPayload) => householdsService.create(payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+        },
+    })
+}
 
+export const useUpdateHouseholdMutation = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: ({ id, payload }: { id: string; payload: CreateHouseholdPayload }) =>
+            householdsService.update(id, payload),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.detail(variables.id) })
+        },
+    })
+}
+
+export const useDeleteHouseholdMutation = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: (id: string) => householdsService.delete(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+        },
+    })
+}
+
+export const useUpdateHouseholdStatusMutation = () => {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: ({
+            id,
+            status,
+        }: {
+            id: string
+            status: 'Active' | 'Suspended' | 'Disconnected'
+        }) => householdsService.updateStatus(id, status),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.detail(variables.id) })
+        },
+    })
+}
+
+export const useToggleTerminalMutation = () => {
+    const queryClient = useQueryClient()
     return useMutation({
         mutationFn: ({
             householdId,
-            terminalNumber,
-            connectionStatus,
+            payload,
         }: {
             householdId: string
-            terminalNumber: number
-            connectionStatus: 'On' | 'Off' | 'Fault'
-        }) => householdsService.toggleTerminal(householdId, terminalNumber, connectionStatus),
-        
-        onSuccess: async (updatedHousehold) => {
-            // Update single household query cache
-            queryClient.setQueryData(
-                queryKeys.household.detail(updatedHousehold._id),
-                updatedHousehold
-            )
-            // Invalidate directory cache to re-render UI badges
-            await queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            payload: ToggleTerminalPayload
+        }) => householdsService.toggleTerminal(householdId, payload),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.household.all })
+            queryClient.invalidateQueries({
+                queryKey: queryKeys.household.detail(variables.householdId),
+            })
         },
     })
 }

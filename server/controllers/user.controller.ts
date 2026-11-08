@@ -23,7 +23,7 @@ export const getUserProfile = async (req: AuthenticatedRequest, res: Response, n
         ApiResponse.success({
             res,
             message: 'User profile retrieved successfully',
-            data: { user: userProfile }
+            data: userProfile
         })
 
     } catch (error) {
@@ -46,7 +46,7 @@ export const getUserProfileById = async (req: AuthenticatedRequest, res: Respons
         ApiResponse.success({
             res,
             message: 'User profile retrieved successfully',
-            data: { user: userProfile }
+            data: userProfile
         })
     } catch (error) {
         next(error)
@@ -76,7 +76,7 @@ export const getAllUserProfiles = async (req: AuthenticatedRequest, res: Respons
             res,
             statusCode: 200,
             message: 'Users retrieved successfully',
-            data: { users },
+            data: users,
             meta: {
                 total: totalUsers,
                 page,
@@ -94,7 +94,7 @@ export const createUserProfile = async (req: AuthenticatedRequest, res: Response
     session.startTransaction()
     
     try {
-        const { fullName, email, password, role, avatarUrl, households } = req.body
+        const { fullName, email, password, role, households=[] } = req.body
 
         if (!fullName || !email || !password) {
             return new ServerError('Missing required fields', 400)
@@ -113,7 +113,6 @@ export const createUserProfile = async (req: AuthenticatedRequest, res: Response
             email,
             password: hashedPassword,
             role: role || 'Resident',
-            avatarUrl, 
             households: []
         }], { session })
 
@@ -146,7 +145,7 @@ export const createUserProfile = async (req: AuthenticatedRequest, res: Response
             res,
             statusCode: 201,
             message: 'User profile created successfully',
-            data: { user: userProfile }
+            data: userProfile
         })
 
     } catch (error) {
@@ -162,9 +161,9 @@ export const updateUserProfile = async (req: AuthenticatedRequest, res: Response
             return new ServerError('User not found', 404)
         }
 
-        const { fullName, email, password, avatarUrl } = req.body
+        const { fullName, email, password, role } = req.body
 
-        if (!fullName && !email && !password && !avatarUrl) {
+        if (!fullName && !email && !password && !role) {
             return new ServerError('No data provided for update', 400)
         }
 
@@ -177,7 +176,7 @@ export const updateUserProfile = async (req: AuthenticatedRequest, res: Response
 
         const filter = { _id: req.user._id }
 
-        const userProfile = await User.findOneAndUpdate(filter, { fullName, email, password, avatarUrl }, { new: true, runValidators: true })
+        const userProfile = await User.findOneAndUpdate(filter, { fullName, email, password, role }, { new: true, runValidators: true })
             .select('-password')
             .populate('households')
 
@@ -189,7 +188,7 @@ export const updateUserProfile = async (req: AuthenticatedRequest, res: Response
         ApiResponse.success({
             res,
             message: 'User profile updated successfully',
-            data: { user: userProfile }
+            data: userProfile
         })
 
     } catch (error) {
@@ -198,7 +197,7 @@ export const updateUserProfile = async (req: AuthenticatedRequest, res: Response
 }
 
 export const deleteUserProfile = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const {id: targetUserId} = req.params
+    const { targetUserId } = req.params
 
     if (req.user?._id.toString() === targetUserId) {
         return next(new ServerError('You cannot delete your own account', 403))

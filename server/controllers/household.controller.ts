@@ -7,6 +7,7 @@ import { ServerError } from "../utils/server.error.ts";
 import { ApiResponse } from "../utils/server.success.ts";
 import { isAdmin } from "../utils/server.authorizer.ts";
 import { isValidMeterNumber } from "../utils/meter.helper.ts";
+import { recalculateAllHouseholdQuotas } from "../services/quota.service.ts";
 
 export const getMyHouseholds = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -23,7 +24,7 @@ export const getMyHouseholds = async (req: AuthenticatedRequest, res: Response, 
         return ApiResponse.success({
             res,
             message: 'Households retrieved successfully',
-            data: { households }
+            data: households
         });
     } catch (error) {
         next(error);
@@ -57,7 +58,7 @@ export const getHouseholdById = async (req: AuthenticatedRequest, res: Response,
         return ApiResponse.success({
             res,
             message: 'Household retrieved successfully',
-            data: { household }
+            data: household
         });
 
     } catch (error) {
@@ -100,7 +101,7 @@ export const getAllHouseholds = async (req: AuthenticatedRequest, res: Response,
         return ApiResponse.success({
             res,
             message: 'Households retrieved successfully',
-            data: { households },
+            data: households,
             meta: {
                 total: totalHouseholds,
                 page,
@@ -114,10 +115,12 @@ export const getAllHouseholds = async (req: AuthenticatedRequest, res: Response,
 }
 
 export const createHousehold = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { plotNumber, street, dailyKWHQuota, consumedKWh, connectionStatus, meterSerialNumber, phaseConnection, user } = req.body;
+    const { user } = req.params
+
+    const { plotNumber, street, meterSerialNumber, phaseConnection } = req.body;
         
         
-    if (!plotNumber || !street || !dailyKWHQuota || !consumedKWh || !connectionStatus || !phaseConnection || !user) {
+    if (!plotNumber || !street || !phaseConnection || !user) {
         return next(new ServerError('Missing required fields', 400));
     }
 
@@ -140,17 +143,16 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
 
     try {
         const household = new Household({
-            plotNumber,
-            street,
-            dailyKWHQuota,
-            consumedKWh,
-            connectionStatus,
-            meterSerialNumber,
-            phaseConnection,
+            plotNumber: plotNumber,
+            street: street,
+            meterSerialNumber: meterSerialNumber,
+            phaseConnection: phaseConnection,
             user: existingUser._id
         }, { session });
 
         await household.save();
+
+        await recalculateAllHouseholdQuotas()
 
         existingUser.households.push(household._id);
         await existingUser.save({session});
@@ -162,7 +164,7 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
             res,
             statusCode: 201,
             message: 'Household created successfully',
-            data: { household }
+            data: household
         });
 
     } catch (error) {
@@ -176,9 +178,9 @@ export const updateHousehold = async (req: AuthenticatedRequest, res: Response, 
     try {
         const householdId = req.params.id;
 
-        const { plotNumber, street,  connectionStatus, meterSerialNumber, phaseConnection } = req.body;
+        const { plotNumber, street, meterSerialNumber, phaseConnection } = req.body;
 
-        if (!plotNumber && !street && !connectionStatus && !meterSerialNumber && !phaseConnection) {
+        if (!plotNumber && !street && !meterSerialNumber && !phaseConnection) {
             return next(new ServerError('No data provided for update', 400));
         }
 
@@ -196,7 +198,7 @@ export const updateHousehold = async (req: AuthenticatedRequest, res: Response, 
 
         const household = await Household.findByIdAndUpdate(
             householdId,
-            { plotNumber, street, connectionStatus, meterSerialNumber, phaseConnection },
+            { plotNumber, street, meterSerialNumber, phaseConnection },
             { new: true, runValidators: true }
         ).populate('user', 'fullName email avatarUrl');
 
@@ -207,43 +209,70 @@ export const updateHousehold = async (req: AuthenticatedRequest, res: Response, 
         return ApiResponse.success({
             res,
             message: 'Household updated successfully',
-            data: { household }
+            data: household
         });
     } catch (error) {
         next(error);
     }
 }
 
-export const deleteHousehold = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const householdId = req.params.id;
-
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
+export const updateHouseholdStatus = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        const household = await Household.findById(householdId).session(session);
+        const { id } = req.params
+        const { connectionStatus } = req.body // 'Active' | 'Disconnected' | 'Suspended'
+
+        if (!['Active', 'Disconnected', 'Suspended'].includes(connectionStatus)) {
+            return res.status(400).json({ message: 'Invalid connection status value' })
+        }
+
+        const household = await Household.findByIdAndUpdate(
+            id,
+            { connectionStatus },
+            { new: true }
+        )
 
         if (!household) {
-            return next(new ServerError('Household not found', 404));
+            return res.status(404).json({ message: 'Household record not found' })
         }
 
-        const user = await User.findById(household.user).session(session);
+        // Trigger quota recalculation across the grid
+        const updatedQuota = await recalculateAllHouseholdQuotas()
 
-        if (!user) {
-            return next(new ServerError('Associated user not found', 404));
-        }
-
-        await User.findByIdAndUpdate(user._id, { $pull: { households: household._id } }, { session });
-
-        await Household.findByIdAndDelete(householdId, { session });
-
-        await session.commitTransaction();
-        await session.endSession();
-
+        return res.status(200).json({
+            status: 'success',
+            data: {
+                household,
+                gridDailyQuotaPerHousehold: updatedQuota,
+            },
+        })
     } catch (error) {
-        await session.abortTransaction();
-        await session.endSession();
-        next(error);
+        next(error)
+    }
+}
+
+export const deleteHousehold = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params
+
+        const household = await Household.findByIdAndDelete(id)
+
+        if (!household) {
+            return res.status(404).json({ message: 'Household record not found' })
+        }
+
+        // Redistribute capacity among remaining households
+        const updatedQuota = await recalculateAllHouseholdQuotas()
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Household deleted successfully',
+            data: {
+                deletedHouseholdId: id,
+                gridDailyQuotaPerHousehold: updatedQuota,
+            },
+        })
+    } catch (error) {
+        next(error)
     }
 }
 

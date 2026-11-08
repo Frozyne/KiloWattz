@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router";
+import { Routes, Route } from "react-router";
 
 import Dashboard from "./pages/admin/DashboardLayout";
 import LoginPage from "./pages/public/LoginPage";
@@ -15,37 +15,28 @@ import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 export default function App() {
   
   return (
-    <BrowserRouter>
-    
-      <Routes>
-        {/* Public Routes: No protection required */}
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/login" element={<LoginPage />} />
 
-        {/* These routes are protected and require authentication (All Roles)*/}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />}>
+      {/* Authenticated Dashboard Branch */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />}>
+          {/* Accessible to all authenticated roles */}
+          <Route path="overview" element={<OverviewPage />} />
+          <Route path="alerts" element={<AlertPage />} />
+          <Route path="analytics" element={<AnalyticsPage />} />
+          <Route path="profile" element={<Profile />} />
 
-            <Route path="overview" element={<OverviewPage />} />
-            <Route path="alerts" element={<AlertPage />} />
-            <Route path="analytics" element={<AnalyticsPage />} />
-            <Route path="profile" element={<Profile />} />
-            
-          </Route>
-        </Route>
-
-        {/* These routes are protected and require authentication (Admin Only)*/}
-        <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
-          <Route path="/dashboard" element={<Dashboard />}>
-
+          {/* Restricted to Admin only within the same layout */}
+          <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
             <Route path="devices" element={<Devices />} />
             <Route path="users" element={<SolarSites />} />
             <Route path="reports" />
-
           </Route>
         </Route>
-
-      </Routes>
-    </BrowserRouter>
+      </Route>
+    </Routes>
   );
 }

@@ -60,43 +60,13 @@ export const getTodayQuotaStatus = async (req: AuthenticatedRequest, res: Respon
             data: {
                 householdId: household._id,
                 connectionStatus: household.connectionStatus,
-                baseQuotaKWh,
+                baseQuotaKWh: baseQuotaKWh,
                 currentUsageKWh: Math.round(currentUsageKWh * 100) / 100,
                 remainingLimitKWh: Math.round(remainingLimitKWh * 100) / 100,
-                isQuotaBreached
+                isQuotaBreached: isQuotaBreached
             }
         })
 
-    } catch (error) {
-        next(error)
-    }
-}
-
-export const setQuotaLimitByPhase = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    try {
-        const { phase, dailyKWHQuota } = req.body
-        
-        if (!phase || !dailyKWHQuota) {
-            throw new ServerError('Missing required fields (phase, dailyKWHQuota)', 400)
-        }
-
-        const validPhases = ['Phase 1' , 'Phase 2' , 'Phase 3']
-
-        if (!validPhases.includes(phase)) {
-            throw new ServerError('Invalid phase specified', 400)
-        }
-
-        const updateResult = await Household.updateMany(
-            { phaseConnection: phase },
-            { $set: { dailyKWHQuota } }
-        )
-
-        return ApiResponse.success({
-            res,
-            statusCode: 200,
-            message: "Quota limits updated successfully",
-            data: updateResult
-        })
     } catch (error) {
         next(error)
     }

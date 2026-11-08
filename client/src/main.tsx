@@ -1,4 +1,5 @@
 import { StrictMode } from 'react'
+import { BrowserRouter } from 'react-router'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
@@ -17,9 +18,11 @@ const queryClient = new QueryClient({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      <SocketProvider>
-        <App />
-      </SocketProvider>
+      <BrowserRouter>
+        <SocketProvider>
+          <App />
+        </SocketProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   </StrictMode>,
 )

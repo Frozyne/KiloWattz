@@ -1,33 +1,71 @@
-import api from "./api";
-import { type IHousehold } from "../lib/types";
+import api from '../api/api'
+import { type IHousehold } from '../lib/types'
 
-export type TerminalConnectionStatus = 'On' | 'Off' | 'Fault';
+export interface CreateHouseholdPayload {
+    plotNumber: string
+    street: string
+    meterSerialNumber: string
+    phaseConnection: 'Phase 1' | 'Phase 2' | 'Phase 3'
+}
+
+export interface ToggleTerminalPayload {
+    terminalNumber: number // 1 to 6
+    connectionStatus: 'On' | 'Off' | 'Fault'
+}
 
 export const householdsService = {
-    getAllHouseholds: async (): Promise<IHousehold[]> => {
-        const { data } = await api.get<{ data: IHousehold[] }>('/household/all')
-        return data.data
+    getAllMine: async (): Promise<IHousehold[]> => {
+        const res = await api.get<{ data: IHousehold[] }>('/household')
+        return res.data.data
     },
 
-    getMyHouseholds: async (): Promise<IHousehold[]> => {
-        const { data } = await api.get<{ data: IHousehold[] }>('/household')
-        return data.data
+    getAll: async (): Promise<IHousehold[]> => {
+        const res = await api.get<{ data: IHousehold[] }>('/household/all')
+        return res.data.data
     },
 
-    getHouseholdById: async (id: string): Promise<IHousehold> => {
-        const { data } = await api.get<{ data: IHousehold }>(`/household/${id}`)
-        return data.data
+    getById: async (id: string): Promise<IHousehold> => {
+        const res = await api.get<{ data: IHousehold }>(`/household/${id}`)
+        return res.data.data
+    },
+
+    create: async (payload: CreateHouseholdPayload): Promise<IHousehold> => {
+        const reqData = JSON.stringify(payload)
+        const res = await api.post<{ data: IHousehold }>('/household', {reqData})
+        return res.data.data
+    },
+
+    update: async (id: string, payload: CreateHouseholdPayload): Promise<IHousehold> => {
+        const reqData = JSON.stringify(payload)
+        const res = await api.post<{ data: IHousehold }>(`/household/${id}`, {reqData})
+        return res.data.data
+    },
+
+    delete: async (id: string): Promise<any> => {
+        const res = await api.delete(`/households/${id}`)
+        return res
+    },
+
+    updateStatus: async (
+        id: string,
+        connectionStatus: 'Active' | 'Suspended' | 'Disconnected'
+    ): Promise<IHousehold> => {
+        const res = await api.patch<{ data: { household: IHousehold } }>(
+            `/households/${id}/status`, 
+            {connectionStatus}
+        )
+        return res.data.data.household
     },
 
     toggleTerminal: async (
         householdId: string,
-        terminalNumber: number,
-        connectionStatus: TerminalConnectionStatus
+        payload: ToggleTerminalPayload
     ): Promise<IHousehold> => {
-        const { data } = await api.patch<{ data: IHousehold }>(
+        const reqData = JSON.stringify(payload)
+        const res = await api.patch<{ data: { household: IHousehold } }>(
             `/households/${householdId}/toggle-terminal`,
-            { terminalNumber, connectionStatus }
+            {reqData}
         )
-        return data.data
+        return res.data.data.household
     },
 }

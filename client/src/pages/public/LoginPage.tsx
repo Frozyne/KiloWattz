@@ -23,7 +23,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const setAuth = useAuthStore((state) => state.setAuth)
   const navigate = useNavigate()
   const location = useLocation()
 
@@ -41,11 +40,16 @@ export default function LoginPage() {
 
       const { user, token } = await authService.login({ email, password })
 
-      setAuth(user, token)
+      if (!token) {
+        setErrorMessage('No authentication token returned from server.')
+      }
+
+      useAuthStore.getState().setAuth(user, token)
 
       await navigate(from, { replace: true })
 
     } catch (error: any) {
+      console.error('[LOGIN ERROR]:', error)
       setErrorMessage(
         error.message ||
         "Failed to authenticate. Please check your credentials."
