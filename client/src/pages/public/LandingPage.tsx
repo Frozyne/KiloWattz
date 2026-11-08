@@ -13,16 +13,16 @@ export const LandingPage: React.FC = () => {
 <div className="relative min-h-125 w-full overflow-hidden rounded-lg border-t border-black">
   <div>
           <div className="flex items-center">
-          <div className="relative z-10 flex h-10 w-10 rounded-xl bg-linear-to-br from-green-700 to-green-100 items-center justify-center shadow-lg shadow-amber-500/20 mt-3 ml-2">
+          <div className="relative z-10 flex h-10 w-10 rounded-xl bg-linear-to-br from-primary to-accent items-center justify-center shadow-lg shadow-amber-500/20 mt-3 ml-2">
             <Sun className="h-6 w-6 text-zinc-950 stroke-[2.5]" />
           </div>
-          <span className="absolute z-10 pl-13 mt-3 text-xl font-bold tracking-tight text-green-700">
-            Kilo<span className="text-green-100">Wattz</span>
+          <span className="absolute z-10 pl-13 mt-3 text-xl font-bold tracking-tight text-accent">
+            Kilo<span className="text-secondary">Wattz</span>
           </span>
           <div className='z-10 relative flex ml-30 mt-4 gap-20 sm:flex-row'>
-       <Button render={<Link to="/login"/> } nativeButton={false} className="text-green-100 hover:bg-primary rounded-lg p-2 pl-5">Sign in</Button>
-        <Button className="text-green-100 hover:bg-primary rounded-lg p-1 pl-5">Customers</Button>
-        <Button className="text-green-100 border-green-900 hover:bg-primary rounded-lg p-1 pl-5">Get an estimate</Button>
+       <Button render={<Link to="/login"/> } nativeButton={false} className="text-secondary hover:bg-accent rounded-lg p-2 pl-5">Sign in</Button>
+        <Button className="text-secondcary hover:bg-accent rounded-lg p-1 pl-5">Customers</Button>
+        <Button className="text-secondary border-accent hover:bg-accent rounded-lg p-1 pl-5">Get an estimate</Button>
         </div>
         </div>
       </div>
@@ -33,22 +33,22 @@ export const LandingPage: React.FC = () => {
   />
   <div className="absolute inset-0 bg-black/50"/>
   <div className="relative z-10 flex min-h-125 flex-col justify-center p-6 md:p-12">
-    <small className="text-green-100 tracking-widest">
+    <small className="text-accent tracking-widest">
       CLEAN ENERGY, MADE AT CONVENIENCE
     </small>
 
     <h1 className="mt-3 text-4xl font-extrabold font-serif text-white">
       Power your home.
-      <span className="block font-mono text-green-600">Own your future.</span>
+      <span className="block font-mono text-accent">Own your future.</span>
     </h1>
 
-    <p className="mt-4 max-w-xl text-sm text-gray-200">
+    <p className="mt-4 max-w-xl text-sm text-accent">
       Premium solar, designed around your life. Cut energy costs, protect your
       home from rising rates, and control at your convenience.
     </p>
-    <Button className="mt-10 w-fit rounded-lg flex items-center border-black p-1 bg-green-600 text-green-100">
+    <Button className="mt-10 w-fit rounded-lg flex items-center border-black p-1 bg-secondary text-accent">
       Explore how it works
-      <ArrowRightIcon className="ml-2 h-4 w-4 text-green-100"/>
+      <ArrowRightIcon className="ml-2 h-4 w-4 text-accent"/>
     </Button>
   </div>
 </div>

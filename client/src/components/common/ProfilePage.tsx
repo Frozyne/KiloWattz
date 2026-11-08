@@ -2,7 +2,7 @@ import { UserIcon, Zap, ChevronDown, Mail, PhoneCall, Calendar, Pencil, Check, X
 import { Button } from "../ui/button";
 import { useState } from "react";
 
-export default function Profile() {
+export default function ProfilePage() {
   const [open, setOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [contact, setContact] = useState({
@@ -37,31 +37,31 @@ export default function Profile() {
 
   return (
     <main className="min-h-screen">
-      <section className="flex items-center justify-between p-4 bg-emerald-900 border rounded-lg mt-4 m-5">
+      <section className="flex items-center justify-between p-4 bg-primary border rounded-lg mt-4 m-5">
         <div>
           <div className="flex items-center gap-1">
             <Zap
-              className="size-13 bg-zinc-900/40 border-zinc-800 rounded-xl p-1 mt-2 text-gray-800 ml-2 font-bold"
+              className="size-13 bg-secondary border-zinc-800 rounded-xl p-1 mt-2 text-accent ml-2 font-bold"
               strokeWidth={0.6}
             />
-            <span className="-translate-y-1 text-2xl text-white font-mono ml-1">
+            <span className="-translate-y-1 text-2xl text-accent font-mono ml-1">
               Kilo<span>Wattz</span>
             </span>
-            <p className="translate-y-5 flex -translate-x-30 py-1 text-gray-800 text-sm">
+            <p className="translate-y-5 flex -translate-x-30 py-1 text-accent text-sm">
               <small>RESIDENT PROFILE</small>
             </p>
           </div>
         </div>
 
-        <div className="relative border rounded-full">
+        <div className="relative border rounded-full bg-white">
           <Button className="h-auto py-2" onClick={() => setOpen(!open)}>
             <UserIcon
               className="size-8 bg-zinc-900/40 border-zinc-800 rounded-lg p-1 font-extralight"
               strokeWidth={0.5}
             />
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col items-start text-accent">
               <span>Komolafe Praise</span>
-              <small className="text-green-600">Resident</small>
+              <small className="text-accent">Resident</small>
             </div>
             <ChevronDown
               className={`size-4 transition-transform ${open ? "rotate-180" : ""}`}
@@ -69,7 +69,7 @@ export default function Profile() {
           </Button>
 
           {open && (
-            <div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-lg border bg-green-800 p-4 shadow-lg">
+            <div className="absolute right-0 top-full z-50 mt-2 w-72 rounded-lg border bg-accent p-4 shadow-lg">
               <p><strong>Terminal:</strong> Terminal 2</p>
               <p><strong>Name:</strong> Solar</p>
               <p><strong>Connection status:</strong> Strong</p>
@@ -79,7 +79,7 @@ export default function Profile() {
         </div>
       </section>
 
-     <div className="flex justify-start mt-15 p-3 border rounded-lg bg-blue-100 m-5">
+     <div className="flex justify-start mt-15 p-3 border rounded-lg bg-accent m-5">
         <div className="flex flex-col">
           <small className="text-sm">GOOD AFTERNOON, PRAISE</small>
           <strong className="text-3xl tracking-widest">Your energy at a glance.</strong>
@@ -89,8 +89,8 @@ export default function Profile() {
 
 <div className="grid grid-cols-2">
       <div className="border mx-5 rounded-lg p-3">
-  <div className="flex items-center justify-between m-2">
-    <strong className="text-xl flex gap-1">
+  <div className="flex items-center justify-between">
+    <strong className="text-xl flex gap-1 text-secondary">
       <UserIcon /> Personal information
     </strong>
 
@@ -144,7 +144,7 @@ export default function Profile() {
         type="email"
         value={draft.email}
         onChange={(e) => setDraft({ ...draft, email: e.target.value })}
-        className="ml-12 mb-2 rounded-lg border px-3 py-1 text-lg font-mono"
+        className="ml-12 mb-2 w-[calc(100%-3rem)] rounded-lg border px-3 py-1 text-lg font-mono"
       />
     ) : (
       <>
@@ -189,7 +189,7 @@ export default function Profile() {
   )}
 </div>
 </div>
-<div className="border mx-5 mt-5 rounded-lg p-4">
+<div className="border mx-5 rounded-lg p-4">
   <div className="flex flex-col">
     <div className="flex items-center gap-1 text-xl font-bold"><House className="size-6 font-extralight"/>House-hold details
     </div>
@@ -197,7 +197,7 @@ export default function Profile() {
       <MapPin className="mt-3 border-gray-300/20 bg-gray-400/10 text-gray-400 p-1 size-10 rounded-full"/>
      <span>
       <small className="text-gray-400 font-semibold">Address</small></span>
-      <span className="translate-x-25 border-gray-500/10 bg-amber-400/15 text-gray-400 rounded-full text-sm p-1">
+      <span className="translate-x-12 border-gray-500/10 bg-amber-400/15 text-gray-400 rounded-full text-sm p-1">
        <small>Active</small>
        </span>
        </div>
