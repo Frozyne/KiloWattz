@@ -23,8 +23,7 @@ export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     useEffect(() => {
         console.log('[SOCKET PROVIDER EFFECT TRIGGERED] Token state:', {
-            nhasToken: Boolean(token),
-            tokenValue: token ? `${token.substring(0, 15)}...` : null
+            nhasToken: Boolean(token)
         })
 
         if (!token) {
