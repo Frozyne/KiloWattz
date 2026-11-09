@@ -19,7 +19,6 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
   const currentOutput = filteredData.at(-1)?.output ?? 18.42;
 
   return (
-    <>
     <div className="bg-white">
       <div className="border rounded-4xl mt-4 p-5 bg-white">
         <div className="flex justify-between items-center font-normal text-primary text-3xl">
@@ -142,6 +141,5 @@ export default function Analytics({ data = [] }: { readonly data?: Reading[] }) 
         <Health />
         </div>
       </div>
-    </>
   );
 }

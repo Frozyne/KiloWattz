@@ -1,4 +1,5 @@
-import { Routes, Route, Navigate } from "react-router";
+import { Routes, Route } from "react-router";
+
 import Dashboard from "./pages/admin/DashboardLayout";
 import LoginPage from "./pages/public/LoginPage";
 import { LandingPage } from "./pages/public/LandingPage";
@@ -7,11 +8,12 @@ import Devices from "./pages/admin/DevicesPages";
 import { OverviewPage } from "./pages/admin/OverviewPage";
 import SolarSites from "./pages/admin/SolarSites";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
-import ProfilePage from "./pages/admin/ProfilePage";
+import ProfilePage from './pages/admin/ProfilePage'
+
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 
 export default function App() {
-
+  
   return (
     <Routes>
       {/* Public Routes */}
@@ -20,8 +22,7 @@ export default function App() {
 
       {/* Authenticated Dashboard Branch */}
       <Route element={<ProtectedRoute />}>
-        <Route path="/admin/dashboard" element={<Dashboard />}>
-        <Route index element={<Navigate to="overview" replace />} />
+        <Route path="/dashboard" element={<Dashboard />}>
           {/* Accessible to all authenticated roles */}
           <Route path="overview" element={<OverviewPage />} />
           <Route path="alerts" element={<AlertPage />} />
