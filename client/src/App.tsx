@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router";
+import { Routes, Route, Navigate } from "react-router";
 import Dashboard from "./pages/admin/DashboardLayout";
 import LoginPage from "./pages/public/LoginPage";
 import { LandingPage } from "./pages/public/LandingPage";
@@ -21,6 +21,7 @@ export default function App() {
       {/* Authenticated Dashboard Branch */}
       <Route element={<ProtectedRoute />}>
         <Route path="/admin/dashboard" element={<Dashboard />}>
+        <Route index element={<Navigate to="overview" replace />} />
           {/* Accessible to all authenticated roles */}
           <Route path="overview" element={<OverviewPage />} />
           <Route path="alerts" element={<AlertPage />} />

@@ -23,25 +23,24 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { path: "/dashboard/overview", label: "Overview", icon: LayoutDashboard },
   
   {
-    path: "/admin/dashboard",
+    path: "/admin/dashboard/overview",
     label: "Overview",
     icon: LayoutDashboard
   },
   { 
-    path: "/admin/profile", 
+    path: "/admin/dashboard/profile", 
     label: "Profile", 
     icon: User 
   },
   {
-    path: "/admin/analytics",
+    path: "/admin/dashboard/analytics",
     label: "Analytics",
     icon: BarChart3
   },
   {
-    path: "/admin/alertList",
+    path: "/admin/dashboard/alerts",
     label: "Alerts",
     icon: Bell,
   },
