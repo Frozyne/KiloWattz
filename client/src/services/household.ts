@@ -8,6 +8,8 @@ export interface CreateHouseholdPayload {
     phaseConnection: 'Phase 1' | 'Phase 2' | 'Phase 3'
 }
 
+export type UpdateHouseholdPayload = Partial<CreateHouseholdPayload>
+
 export interface ToggleTerminalPayload {
     terminalNumber: number // 1 to 6
     connectionStatus: 'On' | 'Off' | 'Fault'
@@ -19,12 +21,12 @@ export const householdsService = {
         return res.data.data
     },
 
-    getAll: async (): Promise<IHousehold[]> => {
-        const res = await api.get<{ data: IHousehold[] }>('/household/all')
+    getAll: async (page: number, limit: number): Promise<IHousehold[]> => {
+        const res = await api.get<{ data: IHousehold[] }>(`/household/all?page=${page}&limit=${limit}`)
         return res.data.data
     },
 
-    getById: async (id: string): Promise<IHousehold> => {
+    getById: async (id?: string): Promise<IHousehold> => {
         const res = await api.get<{ data: IHousehold }>(`/household/${id}`)
         return res.data.data
     },
@@ -35,7 +37,7 @@ export const householdsService = {
         return res.data.data
     },
 
-    update: async (id: string, payload: CreateHouseholdPayload): Promise<IHousehold> => {
+    update: async (id: string, payload: UpdateHouseholdPayload): Promise<IHousehold> => {
         const reqData = JSON.stringify(payload)
         const res = await api.post<{ data: IHousehold }>(`/household/${id}`, {reqData})
         return res.data.data

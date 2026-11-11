@@ -39,19 +39,20 @@ export const signIn = async(req: Request, res: Response, next: NextFunction) => 
             const error = new ServerError('Invalid Credential', 401)
             throw error
         }
-
-        const accessToken = generateAccessToken(user._id.toString(), user.role)
         const refreshToken = generateRefreshToken(user._id.toString())
         const refreshTokenHash = hashToken(refreshToken)
 
         const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        await Session.create({
+        const newSession = await Session.create({
             userId: user._id,
-            token: refreshTokenHash,
+            token: refreshToken,
+            tokenHash: refreshTokenHash,
             ipAddress: req.ip,
             userAgent: req.get('user-agent'),
             expiresAt,
         })
+
+        const accessToken = generateAccessToken(user._id.toString(), user.role, newSession._id.toString())
 
         res
         .cookie('token', refreshToken, COOKIE_OPTIONS)
@@ -109,7 +110,7 @@ export const signOut =  async(req: Request, res: Response, next: NextFunction) =
 
 export const handleRefreshToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const incomingRefreshToken = req.cookies?.refreshToken
+        const incomingRefreshToken = req.cookies?.token
 
         if (!incomingRefreshToken) {
             return res.status(401).json({ message: 'Refresh token missing' })
@@ -128,7 +129,7 @@ export const handleRefreshToken = async (req: Request, res: Response, next: Next
         // 2. Query session in database
         const session = await Session.findOne({
             userId: payload.userId,
-            refreshTokenHash: tokenHash,
+            token: tokenHash,
         })
 
         // Reuse Attack Guard: If token signature is valid but no matching active session exists,
@@ -146,18 +147,19 @@ export const handleRefreshToken = async (req: Request, res: Response, next: Next
         }
 
         // 4. Generate new Token Pair (Token Rotation)
-        const newAccessToken = generateAccessToken(user._id.toString(), user.role)
+        const newAccessToken = generateAccessToken(user._id.toString(), user.role, session._id.toString())
         const newRefreshToken = generateRefreshToken(user._id.toString())
         const newRefreshTokenHash = hashToken(newRefreshToken)
 
         // 5. Update session in MongoDB with rotated hash
-        session.token = newRefreshTokenHash
+        session.token = newRefreshToken
+        session.tokenHash = newRefreshTokenHash
         session.ipAddress = req.ip
         session.userAgent = req.get('user-agent')
         await session.save()
 
         // 6. Set rotated refresh token in secure HTTP-Only cookie
-        res.cookie('refreshToken', newRefreshToken, {
+        res.cookie('token', newRefreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',

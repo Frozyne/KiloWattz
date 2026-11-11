@@ -2,18 +2,26 @@ import { AuthenticatedRequest } from "../types/auth.type";
 import { Response, NextFunction } from "express";
 import { ServerError } from "../utils/server.error";
 import { ApiResponse } from "../utils/server.success";
-import Telemetry from "../models/telemetry.model";
+import Telemetry, { ITelemetry } from "../models/telemetry.model";
 import Household from "../models/household.model";
 import { isAdmin } from "../utils/server.authorizer";
+
+interface CommunitySummary {
+    solarGeneratedKW: number,
+    powerConsumedKW: number,
+    batteryLevelPercent: number,
+    gridVoltage: number
+}
 
 export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
         const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
-        const telemetryData = await Telemetry.aggregate([
+        const households = await Household.find({ connectionStatus: 'Active' })
+
+        const telemetryData: ITelemetry[] = await Telemetry.aggregate([
         {
             $match: {
-                scope: 'Community',
                 timestamp: { $gte: twentyFourHoursAgo }
             }
         }, {
@@ -28,23 +36,28 @@ export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Resp
             $sort: { '_id': 1 }
         }]);
 
-        const summary = telemetryData.reduce((acc, curr) => {
+        const summary: CommunitySummary = telemetryData.reduce((acc, curr) => {
             acc.solarGeneratedKW += curr.solarGeneratedKW;
             acc.powerConsumedKW += curr.powerConsumedKW;
             acc.batteryLevelPercent += curr.batteryLevelPercent;
             acc.gridVoltage += curr.gridVoltage;
-            return acc;
+            return {
+                solarGeneratedKW: acc.solarGeneratedKW,
+                powerConsumedKW: acc.powerConsumedKW,
+                batteryLevelPercent: acc.batteryLevelPercent,
+                gridVoltage: acc.gridVoltage,
+            };
         }, {
             solarGeneratedKW: 0,
             powerConsumedKW: 0,
             batteryLevelPercent: 0,
-            gridVoltage: 0
+            gridVoltage: 0,
         });
 
         return ApiResponse.success({
             res,
             message: 'Community telemetry data retrieved successfully',
-            data: { summary, hourly: telemetryData }
+            data: { summary, hourly: telemetryData, activeHouseholds: households.length }
         });
 
     } catch (error) {

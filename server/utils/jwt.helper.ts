@@ -7,8 +7,8 @@ const refreshExpiresInSetting = (process.env.JWT_REFRESH_EXPIRES_IN || '3m') as 
 const ACCESS_SECRET = process.env.JWT_ACCESS_SECRET || 'access-super-secret'
 const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'refresh-super-secret'
 
-export const generateAccessToken = (userId: string, role: string): string => {
-    return jwt.sign({ userId, role }, ACCESS_SECRET, { expiresIn: accessExpiresInSetting })
+export const generateAccessToken = (userId: string, role: string, sessionID: string): string => {
+    return jwt.sign({ userId, role, sessionID }, ACCESS_SECRET, { expiresIn: accessExpiresInSetting })
 }
 
 export const generateRefreshToken = (userId: string): string => {

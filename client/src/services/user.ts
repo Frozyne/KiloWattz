@@ -5,7 +5,7 @@ export interface UserData {
   fullName: string
   email: string
   password: string
-  role: 'User' | 'Admin'
+  role: 'User' | 'Admin' | null
   households?: IHousehold[]
 }
 

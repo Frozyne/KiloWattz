@@ -3,15 +3,15 @@ import { type AlertPayload } from '../services/alert'
 export const queryKeys = {
     // Household endpoints (/household)
     household: {
-        all: ['household', 'all'] as const,
         mine: ['household', 'mine'] as const,
-        detail: (id: string) => ['household', 'detail', id] as const,
+        detail: (id?: string) => ['household', 'detail', id] as const,
+        list: (page: number, limit: number) => ['household', 'list', page, limit] as const,
     },
 
     // Telemetry endpoints (/telemetry)
     telemetry: {
         community: ['telemetry', 'community'] as const,
-        household: (householdId: string) => ['telemetry', 'household', householdId] as const,
+        household: (householdId?: string) => ['telemetry', 'household', householdId] as const,
     },
 
     // Infrastructure endpoints (/infrastructure)

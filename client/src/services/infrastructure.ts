@@ -8,9 +8,40 @@ export interface AssetPayload {
     healthPercent: number
 }
 
+export interface Summary {
+    totalAssets: number;
+    statusCounts: {
+        operational: number;
+        underMaintenance: number;
+        maintenanceRequired: number;
+        offline: number;
+    };
+    solarArrays: {
+        count: number;
+        totalCapacityKW: number;
+    };
+    batteryBanks: {
+        count: number;
+        totalCapacityKWh: number;
+    };
+    inverters: {
+        count: number;
+        totalCapacityKW: number;
+    };
+    transformers: {
+        count: number;
+        totalCapacityKW: number;
+    };
+}
+
+export interface Stats {
+    summary: Summary
+    assets: IInfrastructure[]
+}
+
 export const infrastructureService = {
-    getStats: async (): Promise<any> => {
-        const res = await api.get<{ data: any }>('/infrastructure')
+    getStats: async (): Promise<Stats> => {
+        const res = await api.get<{ data: Stats }>('/infrastructure')
         return res.data.data
     },
 

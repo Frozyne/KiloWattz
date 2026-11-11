@@ -3,7 +3,6 @@ import { IHousehold } from "./household.model.ts";
 
 export interface ITelemetry extends Document {
   timestamp: Date;
-  scope: 'Community' | 'Household';
   household?: Types.ObjectId | PopulatedDoc<IHousehold>; // Reference to Household model
   solarGeneratedKW: number;
   powerConsumedKW: number;
@@ -11,19 +10,12 @@ export interface ITelemetry extends Document {
   gridVoltage: number;
   solarGeneratedKWh?: number; // Optional, can be calculated from solarGeneratedKW over time
   powerConsumedKWh?: number; // Optional, can be calculated from powerConsumedKW over time
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const telemetrySchema = new mongoose.Schema<ITelemetry>({
     timestamp:{
         type:Date,
         default:Date.now
-    },
-    scope: {
-        type: String,
-        enum: ['Community', 'Household'],
-        default: 'Community'
     },
     household: {
         type: mongoose.Schema.Types.ObjectId,

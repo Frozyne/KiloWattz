@@ -3,6 +3,8 @@ import { Server } from 'socket.io'
 import Household, { type IMeter, type ITerminal } from '../models/household.model'
 import Telemetry from '../models/telemetry.model'
 import { checkHouseholdUsageSpike } from '../services/spike.service'
+import { calculateCentralSolarGeneration } from '../services/solar.service'
+import Enviroment from '../models/environment.model'
 
 const terminalKeys: (keyof IMeter)[] = [
     'terminal1',
@@ -15,7 +17,7 @@ const terminalKeys: (keyof IMeter)[] = [
 
 export const createTelemetryCron = (io: Server) => {
     return new CronJob(
-        '*/1 * * * *',
+        '*/3 * * * *',
         async () => {
             try {
                 const activeHouseholds = await Household.find({ connectionStatus: 'Active' })
@@ -23,6 +25,13 @@ export const createTelemetryCron = (io: Server) => {
 
                 const householdOps: any[] = []
                 const telemetryLogs: any[] = []
+
+                const latestEnvironment = await Enviroment.findOne().sort({ timestamp: -1 })
+
+                const { totalGeneratedKW } = await calculateCentralSolarGeneration(
+                    latestEnvironment?.solarIrradiance,
+                    latestEnvironment?.cloudCoverPercent
+                )
 
                 for (const household of activeHouseholds) {
                     let calculatedHouseholdKWh = 0
@@ -45,7 +54,7 @@ export const createTelemetryCron = (io: Server) => {
                     const newDailyKWh = Math.round((previousDailyKWh + finalIntervalKWh) * 100) / 100
                     
                     // Daily quota is automatically calculated by the system
-                    const quota = household.dailyKWHQuota
+                    const quota = household.dailyKWHQuota || 15
                     const hasBreached = quota > 0 && previousDailyKWh < quota && newDailyKWh >= quota
                     const householdName = `Plot ${household.plotNumber}, ${household.street}`
 
@@ -67,11 +76,10 @@ export const createTelemetryCron = (io: Server) => {
 
                     telemetryLogs.push({
                         householdId: household._id,
-                        householdName,
                         powerConsumedKWh: finalIntervalKWh,
                         powerConsumedKW: currentPowerKW,
                         batteryLevelPercent: Math.floor(Math.random() * (95 - 40 + 1) + 40),
-                        solarGeneratedKW: Math.round((Math.random() * (2.5 - 0.5) + 0.5) * 100) / 100,
+                        solarGeneratedKW: totalGeneratedKW,
                         gridVoltage: Math.floor(Math.random() * (242 - 220 + 1) + 220),
                         timestamp: new Date(),
                     })
@@ -81,6 +89,8 @@ export const createTelemetryCron = (io: Server) => {
                     Household.bulkWrite(householdOps),
                     Telemetry.insertMany(telemetryLogs),
                 ])
+
+                console.log('[CRON] Telemetry execution completed')
 
                 io.emit('telemetry:new', {
                     timestamp: new Date(),

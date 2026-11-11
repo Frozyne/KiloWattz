@@ -43,7 +43,7 @@ const processQueue = (error: any, token: string | null = null) => {
 api.interceptors.request.use((config) => {
   const token = useAuthStore.getState().token
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = token.startsWith('Bearer ') ? token : `Bearer ${token}`
   }
   return config
 })

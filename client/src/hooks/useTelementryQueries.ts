@@ -9,7 +9,7 @@ export const useCommunityTelemetryQuery = () => {
     })
 }
 
-export const useHouseholdTelemetryQuery = (householdId: string) => {
+export const useHouseholdTelemetryQuery = (householdId?: string) => {
     return useQuery({
         queryKey: queryKeys.telemetry.household(householdId),
         queryFn: () => getHouseholdTelemetry(householdId),

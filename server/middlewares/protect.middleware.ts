@@ -4,6 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken'
 import User from '../models/user.model.ts'
 import Session from '../models/session.model.ts'
 import { ServerError } from '../utils/server.error.ts'
+import { hashToken } from '../utils/jwt.helper.ts'
 
 // Type definition for JWT Payload
 interface DecodedToken extends JwtPayload {
@@ -24,7 +25,7 @@ export const protectRoute = async (req: AuthenticatedRequest, res: Response, nex
         }
 
         // 2. Verify JWT signature
-        const secret = process.env.JWT_SECRET
+        const secret = process.env.JWT_REFRESH_SECRET
         if (!secret) {
             throw new ServerError('JWT_SECRET is missing in environment variables', 500)
         }

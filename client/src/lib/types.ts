@@ -116,7 +116,6 @@ export interface IUser extends Document {
 export interface ITelemetry extends Document {
     _id: string
     timestamp: Date;
-    scope: 'Community' | 'Household';
     household?: string; // Reference to Household model
     solarGeneratedKW: number;
     powerConsumedKW: number;
@@ -124,6 +123,4 @@ export interface ITelemetry extends Document {
     gridVoltage: number;
     solarGeneratedKWh?: number; // Optional, can be calculated from solarGeneratedKW over time
     powerConsumedKWh?: number; // Optional, can be calculated from powerConsumedKW over time
-    createdAt: Date;
-    updatedAt: Date;
 }

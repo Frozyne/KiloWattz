@@ -3,6 +3,7 @@ import mongoose, {Document, Types} from "mongoose";
 export interface ISession extends Document {
     userId: Types.ObjectId;
     token: string;
+    tokenHash: string;
     ipAddress?: string
     userAgent?: string
     isRevoked: boolean

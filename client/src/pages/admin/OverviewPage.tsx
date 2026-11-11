@@ -1,23 +1,42 @@
+import { useState, useEffect } from "react";
 import NavBar from "../../components/admin/NavBar";
-import AdminLiveStat from "../../components/admin/AdminLiveStatsRow";
-import { Button } from "@/components/ui/button";
-import { ArrowDownToLineIcon, PlusIcon } from "lucide-react";
+import LiveStat from "../../components/admin/LiveStatsRow";
+import { useAuthStore } from "@/storage/useAuthStorage";
+import { useUserByIdQuery } from "@/hooks/useUserQureies";
+import HouseControl from "@/components/common/HouseControl";
+import type { IHousehold } from "@/lib/types";
+import WeatherStats from "@/components/common/WeatherStats";
 
 export const OverviewPage: React.FC = () => {
+
+  const id = useAuthStore().user?.id
+  const {data: user} = useUserByIdQuery(id!)
+  const [households, setHouseholds] = useState<IHousehold[]>([])
+  const data: IHousehold[] = user?.households!
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setHouseholds(data)
+    }, 1000)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
+
   return (
-    <div className="bg-secondary border-zinc-800/80 rounded-3xl mb-2">
+    <div>
       <NavBar />
-      <div> 
-        <div className="text-sm text-white mt-3 border-t-3 ml-2 p-3"><small>TUESDAY, JUNE 25. CLEAR SKIES</small>
-          <p className="flex text-accent text-2xl">Solar Operations Overview</p>
-          <small className="text-primary">Live generation and performance across your entire portfolio.</small>
-          <div className="flex justify-end mt-2">
-            <Button className="bg-white text-primary"><ArrowDownToLineIcon/>Export report</Button>
-            <Button className="bg-primary text-secondary ml-2"><PlusIcon/>Add site</Button>
-            </div>
-        </div>
-        </div>
-      <AdminLiveStat />
+      <WeatherStats />
+      <LiveStat />
+      { 
+        households?.length === 0 || !households ? 
+        (<p className="p-5">No Households Found</p>) :
+        (households?.map((household) => {
+          return <HouseControl id={household._id} key={household._id}/>
+        })
+        )
+      }
     </div>
   );
 }
