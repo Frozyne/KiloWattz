@@ -2,17 +2,20 @@ export interface IAlert extends Document {
     _id: string
     title: string
     message: string
-    severity: 'Info' | 'Warning' | 'Critical' | 'Emergency'
-    scope: 'System' | 'Household' | 'Infrastructure'
-    household?: string
-    infrastructure?: string
+    severity: AlertSeverity
+    scope: AlertScope
+    household?: IHousehold
+    infrastructure?: IInfrastructure
     isResolved: boolean
     resolvedAt?: Date
-    resolvedBy?: string
+    resolvedBy?: IUser
     metadata?: Record<string, any>
-    createdAt: Date
-    updatedAt: Date
+    createdAt: string
+    updatedAt: string
 }
+
+export type AlertSeverity = 'Info' | 'Warning' | 'Critical' | 'Emergency'
+export type AlertScope = 'System' | 'Household' | 'Infrastructure'
 
 export interface IDailyReport extends Document {
     _id: string

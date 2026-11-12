@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import { PersonalInfo } from '../../components/common/PersonalInfo'
-import { HouseholdInfo } from '../../components/common/HouuseholdInfo'
+import { PersonalInfo } from '../../common/profile/PersonalInfo'
+import { HouseholdInfo } from '../../common/profile/HouuseholdInfo'
 import { type IUser } from '@/lib/types'
 
 interface UserWidgetSectionProps {

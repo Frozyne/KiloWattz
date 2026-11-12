@@ -9,8 +9,8 @@ export function getSeedInfrastructure(): SeedInfrastructure[] {
         { model: 'ARR-50KW-BLK' }, { model: 'ARR-50KW-BLK' }, { model: 'ARR-50KW-BLK' },
         { model: 'ARR-50KW-BLK' }, { model: 'ARR-50KW-BLK' }, { model: 'ARR-50KW-BLK' },
         
-        // Inverters (Total 2 units = 300kW)
-        { model: 'INV-SG150HX' }, { model: 'INV-SG150HX' },
+        // Inverters (Total 3 units = 450kW)
+        { model: 'INV-SG150HX' }, { model: 'INV-SG150HX' }, { model: 'INV-SG150HX' },
         
         // Battery Storage Racks (Total 4 racks = 1.1MWh)
         { model: 'BAT-LFP-250' }, { model: 'BAT-LFP-250' }, { model: 'BAT-LFP-250' }, 

@@ -18,10 +18,16 @@ export const getAlerts = async (req: AuthenticatedRequest, res: Response, next: 
         if (isResolved !== undefined) filterQuery.isResolved = isResolved === 'true'
 
         if (!isAdmin(req)) {
-            const userHousehold = await Household.findOne({ user: req.user?._id })
+            const userHousehold = await Household.find({ user: req.user?._id })
+
+            const householdIds: mongoose.Types.ObjectId[] = []
+            userHousehold.forEach((household) => {
+                householdIds.push(household._id)
+            })
+
             filterQuery.$or = [
                 { scope: 'System' },
-                { household: userHousehold?._id }
+                { household: {$in: householdIds}}
             ]
         }
 
@@ -35,6 +41,7 @@ export const getAlerts = async (req: AuthenticatedRequest, res: Response, next: 
                 .skip(skip)
                 .limit(limitNum)
                 .populate('household', 'plotNumber street')
+                .populate('infrastructure')
                 .populate('resolvedBy', 'fullName email')
                 .exec(),
             Alert.countDocuments(filterQuery)

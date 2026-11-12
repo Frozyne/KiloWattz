@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router'
 import { Sun, ArrowRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { TelemetryPreviewCard } from './TelementryPreviewCard'
+import { TelemetryPreviewCard } from './analytics/TelementryPreviewCard'
 
 export const HeroSection: React.FC = () => {
   return (

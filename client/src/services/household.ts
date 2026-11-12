@@ -6,6 +6,7 @@ export interface CreateHouseholdPayload {
     street: string
     meterSerialNumber: string
     phaseConnection: 'Phase 1' | 'Phase 2' | 'Phase 3'
+    userID?: string
 }
 
 export type UpdateHouseholdPayload = Partial<CreateHouseholdPayload>

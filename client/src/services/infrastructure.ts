@@ -3,9 +3,9 @@ import { type IInfrastructure } from "../lib/types";
 
 export interface AssetPayload {
     modelNumber: string
-    notes: string
-    performedBy: string
-    healthPercent: number
+    notes?: string
+    performedBy?: string
+    healthPercent?: number
 }
 
 export interface Summary {

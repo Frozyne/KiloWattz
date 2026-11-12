@@ -10,12 +10,29 @@ export interface AlertPayload {
     isResolved?: boolean
 }
 
+export interface Alerts {
+    alerts: IAlert[];
+    pagination: {
+        totalAlerts: number;
+        currentPage: number;
+        totalPages: number;
+    };
+}
+
+export interface ELSAlert {
+    alert: IAlert;
+    householdsSuspended: number;
+}
+
+export interface ResolveELSAlert {
+    alert: IAlert;
+    householdsReactivated: number;
+}
+
 export const alertsService = {
-    getAlerts: async (payload: AlertPayload): Promise<any> => {
-        const res = await api.get<{ data: any }>(
-            `
-            /alert?isResolved=${payload.isResolved}&severity=${payload.severity}&scope=${payload.scope}&page=${payload.page}&limit=${payload.limit}
-            `
+    getAlerts: async (payload: AlertPayload): Promise<Alerts> => {
+        const res = await api.get<{ data: Alerts }>(
+            `/alert?isResolved=${payload.isResolved}&severity=${payload.severity}&scope=${payload.scope}&page=${payload.page}&limit=${payload.limit}`
         )
         return res.data.data
     },
@@ -27,14 +44,14 @@ export const alertsService = {
         return res.data.data
     },
 
-    triggerELS: async (payload: AlertPayload): Promise<any> => {
+    triggerELS: async (payload: AlertPayload): Promise<ELSAlert> => {
         const reqData = JSON.stringify(payload)
-        const res = await api.post<{ data: any }> (`/alert/els`, {reqData})
+        const res = await api.post<{ data: ELSAlert }> (`/alert/els`, {reqData})
         return res.data.data
     },
 
-    resolveELS: async (): Promise<any> => {
-        const res = await api.get<{ data: any }> ('/alert/els/resolve')
+    resolveELS: async (): Promise<ResolveELSAlert> => {
+        const res = await api.get<{ data: ResolveELSAlert }> ('/alert/els/resolve')
         return res.data.data
     }
 }

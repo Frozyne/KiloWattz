@@ -6,7 +6,7 @@ import { LandingPage } from "./pages/public/LandingPage";
 import AlertPage from "./pages/admin/AlertsPage";
 import Devices from "./pages/admin/DevicesPages";
 import { OverviewPage } from "./pages/admin/OverviewPage";
-import SolarSites from "./pages/admin/SolarSites";
+import UsersPage from "./pages/admin/UsersPage";
 import AnalyticsPage from "./pages/admin/AnalyticsPage";
 import ProfilePage from './pages/admin/ProfilePage'
 
@@ -32,7 +32,7 @@ export default function App() {
           {/* Restricted to Admin only within the same layout */}
           <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
             <Route path="devices" element={<Devices />} />
-            <Route path="users" element={<SolarSites />} />
+            <Route path="users" element={<UsersPage />} />
             <Route path="reports" />
           </Route>
         </Route>
