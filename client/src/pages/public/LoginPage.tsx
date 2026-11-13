@@ -26,7 +26,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const from = location.state?.from?.pathname || '/dashboard/overview'
+  const from = location.state?.from?.pathname || '/admin/dashboard/overview'
 
   const handleSubmit = async (
     event: SubmitEvent<HTMLFormElement>
