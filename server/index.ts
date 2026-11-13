@@ -16,8 +16,12 @@ import alertRouter from "./routes/alert.route.ts";
 import apiRouter from "./routes/api.route.ts";
 import { createServer } from 'node:http'
 import { Server } from 'socket.io'
+import mongoose from "mongoose";
 
-import { startAllCronJobs } from "./jobs/index.ts";
+import { startAllCronJobs } from "./jobs/index.js";
+import { seed } from "./seed/admin.seed.js";
+import { seedInf } from "./seed/infrastructure.seed.js";
+import Infrastructure from "./models/infrastructure.model.js";
 
 
 const app: Express = express();
@@ -94,6 +98,28 @@ const startServer = () => {
     console.log('Error starting server', error)
     process.exit(1)
   }
+}
+
+seed()
+    .catch((error: unknown) => {
+        console.error('Seeding failed', error)
+        process.exitCode = 1
+    })
+    .finally(async () => {
+        await mongoose.disconnect()
+    })
+
+const inf = await Infrastructure.find({})
+
+if(inf.length === 0) {
+  seedInf()
+    .catch((error: unknown) => {
+        console.error('Seeding failed', error)
+        process.exitCode = 1
+    })
+    .finally(async () => {
+        await mongoose.disconnect()
+    })
 }
 
 await connectToDB()

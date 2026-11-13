@@ -7,7 +7,7 @@ import { getSeedUser } from './data/user.data.js'
 
 const SALT_ROUNDS = 10
 
-async function seed(): Promise<void> {
+export async function seed(): Promise<void> {
     const uri = process.env.MONGODB_URI
     if (!uri) {
         throw new Error('Missing MONGODB URI in env file')

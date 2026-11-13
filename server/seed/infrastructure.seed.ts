@@ -7,7 +7,7 @@ import { getInfrastructureModelData } from '../utils/infrastructure.helper.js'
 
 const INITIAL_HARDWARE_MANIFEST = getSeedInfrastructure()
 
-async function seed(): Promise<void> {
+export async function seedInf(): Promise<void> {
     try {
         await connectToDB()
 
@@ -54,7 +54,7 @@ async function seed(): Promise<void> {
     }
 }
 
-seed()
+seedInf()
     .catch((error: unknown) => {
         console.error('Seeding failed', error)
         process.exitCode = 1
