@@ -26,7 +26,7 @@ export interface IHousehold extends Document {
   plotNumber: string;
   street: string;
   consumedKWh?: number
-  dailyKWHQuota?: number;
+  dailyKWHQuota: number;
   connectionStatus: 'Active' | 'Suspended' | 'Disconnected';
   quotaBreaches: IQuotaBreach[]; // Array of quota breach records
   meterSerialNumber?: string; // Optional since it has no required: true validator

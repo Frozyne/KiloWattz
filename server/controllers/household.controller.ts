@@ -145,6 +145,7 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
             plotNumber: plotNumber,
             street: street,
             meterSerialNumber: meterSerialNumber,
+            dailyKWHQuota: 0,
             phaseConnection: phaseConnection,
             user: existingUser._id
         });
