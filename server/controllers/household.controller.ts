@@ -115,16 +115,15 @@ export const getAllHouseholds = async (req: AuthenticatedRequest, res: Response,
 }
 
 export const createHousehold = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { userID } = req.params
 
-    const { plotNumber, street, meterSerialNumber, phaseConnection } = req.body;
+    const { plotNumber, street, meterSerialNumber, phaseConnection, userID } = req.body;
         
         
     if (!plotNumber || !street || !phaseConnection || !userID) {
         return next(new ServerError('Missing required fields', 400));
     }
 
-    const existingUser = await User.findById(userID);
+    const existingUser = await User.findOne({ userID });
     if (!existingUser) {
         return next(new ServerError('User not found', 404));
     }

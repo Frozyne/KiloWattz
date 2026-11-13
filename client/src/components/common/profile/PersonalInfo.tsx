@@ -257,9 +257,9 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
       </div>
 
       {/* The isolated assign modal */}
-      {isAssignModalOpen && user?._id && (
+      {isAssignModalOpen && user?.email && (
         < RegisterHouseholdModal 
-          targetUserId={user._id} 
+          targetUserId={user.email} 
           onClose={() => setIsAssignModalOpen(false)} 
         />
       )}

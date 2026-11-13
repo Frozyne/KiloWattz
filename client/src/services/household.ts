@@ -33,7 +33,7 @@ export const householdsService = {
     },
 
     create: async (payload: CreateHouseholdPayload): Promise<IHousehold> => {
-        const res = await api.post<{ data: IHousehold }>(`/household/${payload.userID}`, payload)
+        const res = await api.post<{ data: IHousehold }>(`/household`, payload)
         return res.data.data
     },
 
