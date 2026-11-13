@@ -10,7 +10,7 @@ householdRouter.use(protectRoute) // Apply authentication middleware to all rout
 householdRouter.get('/', getMyHouseholds)
 householdRouter.get('/all', authorizeUser, getAllHouseholds) // Admin only
 householdRouter.get('/:id', authorizeUser, getHouseholdById) // Admin only
-householdRouter.post('/:userId', authorizeUser, createHousehold) // Admin only
+householdRouter.post('/', authorizeUser, createHousehold) // Admin only
 householdRouter.post('/:id/toggle-terminal', ToggleTerminalConnection)
 householdRouter.patch('/:id', authorizeUser, updateHousehold) // Admin only
 householdRouter.patch('/:id/status', authorizeUser, updateHouseholdStatus) // Admin only
