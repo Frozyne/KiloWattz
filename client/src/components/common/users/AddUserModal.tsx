@@ -82,7 +82,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ onClose }) => {
               <input
                 name='password'
                 required
-                type="email"
+                type="password"
                 value={formData.password}
                 onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                 className="w-full h-10 pl-9 pr-3 text-sm bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-100 focus:border-emerald-400 outline-none transition-colors"

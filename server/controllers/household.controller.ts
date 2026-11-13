@@ -19,7 +19,6 @@ export const getMyHouseholds = async (req: AuthenticatedRequest, res: Response, 
         const households = await Household
             .find({ user: userId })
             .populate('user', 'fullName email')
-            .populate('quotaRecord', 'allocatedQuotaKWh consumedKWh quotaBreached');
 
         return ApiResponse.success({
             res,
@@ -37,7 +36,6 @@ export const getHouseholdById = async (req: AuthenticatedRequest, res: Response,
 
         const household = await Household.findById(householdId)
             .populate('user', 'fullName email')
-            .populate('quotaRecord', 'allocatedQuotaKWh consumedKWh quotaBreached');
 
         if(!household?.user) {
             return next(new ServerError(`Household with ID ${householdId} not found`, 404));
@@ -93,8 +91,7 @@ export const getAllHouseholds = async (req: AuthenticatedRequest, res: Response,
             Household.find(filterQuery)
                 .skip(skip)
                 .limit(limit)
-                .populate('user', 'fullName email avatarUrl')
-                .populate('quotaRecord', 'allocatedQuotaKWh consumedKWh quotaBreached'),
+                .populate('user', 'fullName email avatarUrl'),
             Household.countDocuments(filterQuery)
         ]);
 
