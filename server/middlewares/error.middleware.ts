@@ -1,6 +1,6 @@
 // src/middleware/error.middleware.ts
-import { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
-import { ServerError } from '../utils/server.error.ts';
+import type { Request, Response, NextFunction, ErrorRequestHandler } from 'express';
+import { ServerError } from '../utils/server.error.js';
 
 // ErrorRequestHandler forces Express to recognize this as a global error-handling catch block
 export const errorHandler: ErrorRequestHandler = (

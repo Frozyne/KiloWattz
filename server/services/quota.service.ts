@@ -1,10 +1,10 @@
-import Household from '../models/household.model'
-import Infrastructure from '../models/infrastructure.model'
+import Household from '../models/household.model.js'
+import Infrastructure, { type IInfrastructure } from '../models/infrastructure.model.js'
 
 export const recalculateAllHouseholdQuotas = async (): Promise<number> => {
     try {
         const solarAssets = await Infrastructure.find({ type: 'SolarArray', status: 'Operational' })
-        let totalSolarKW = solarAssets.reduce((sum, asset) => sum + (asset.capacityKW || 0), 0)
+        let totalSolarKW = solarAssets.reduce((sum: number, asset: IInfrastructure) => sum + (asset.capacityKW || 0), 0)
 
         if (totalSolarKW === 0) {
             totalSolarKW = Number.parseFloat(process.env.SOLAR_CAPACITY_KW || '250')

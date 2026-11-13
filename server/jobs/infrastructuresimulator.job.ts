@@ -1,7 +1,7 @@
 import { CronJob } from 'cron'
 import { Server } from 'socket.io'
-import Infrastructure from '../models/infrastructure.model'
-import Environment from '../models/environment.model'
+import Infrastructure from '../models/infrastructure.model.js'
+import Environment from '../models/environment.model.js'
 
 export const createInfrastructureSimulatorCron = (io: Server) => {
     return new CronJob(

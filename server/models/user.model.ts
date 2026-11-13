@@ -1,5 +1,5 @@
-import mongoose, {Document, Types, PopulatedDoc} from "mongoose";
-import { IHousehold } from "./household.model.ts";
+import mongoose, {Document, Types, type PopulatedDoc} from "mongoose";
+import type { IHousehold } from "./household.model.js";
 
 export interface IUser extends Document {
   fullName: string;

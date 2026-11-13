@@ -1,13 +1,13 @@
-import { Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "../types/auth.type.ts";
-import Household from "../models/household.model.ts";
-import User from "../models/user.model.ts";
+import type { Response, NextFunction } from "express";
+import type { AuthenticatedRequest } from "../types/auth.type.js";
+import Household from "../models/household.model.js";
+import User from "../models/user.model.js";
 import mongoose from "mongoose";
-import { ServerError } from "../utils/server.error.ts";
-import { ApiResponse } from "../utils/server.success.ts";
-import { isAdmin } from "../utils/server.authorizer.ts";
-import { isValidMeterNumber } from "../utils/meter.helper.ts";
-import { recalculateAllHouseholdQuotas } from "../services/quota.service.ts";
+import { ServerError } from "../utils/server.error.js";
+import { ApiResponse } from "../utils/server.success.js";
+import { isAdmin } from "../utils/server.authorizer.js";
+import { isValidMeterNumber } from "../utils/meter.helper.js";
+import { recalculateAllHouseholdQuotas } from "../services/quota.service.js";
 
 export const getMyHouseholds = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {

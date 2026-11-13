@@ -1,12 +1,12 @@
-import { Response, NextFunction } from 'express'
+import type { Response, NextFunction } from 'express'
 import mongoose from 'mongoose'
-import Infrastructure from '../models/infrastructure.model'
-import { AuthenticatedRequest } from '../types/auth.type'
-import { ApiResponse } from '../utils/server.success'
-import { ServerError } from '../utils/server.error'
-import { getInfrastructureModelData } from '../utils/infrastructure.helper'
-import { generateAssetSerialNumber } from '../utils/asset.helper'
-import { recalculateAllHouseholdQuotas } from '../services/quota.service'
+import Infrastructure, { type IInfrastructure } from '../models/infrastructure.model.js'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import { ApiResponse } from '../utils/server.success.js'
+import { ServerError } from '../utils/server.error.js'
+import { getInfrastructureModelData } from '../utils/infrastructure.helper.js'
+import { generateAssetSerialNumber } from '../utils/asset.helper.js'
+import { recalculateAllHouseholdQuotas } from '../services/quota.service.js'
 
 export const getInfrastructureStats = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -15,26 +15,26 @@ export const getInfrastructureStats = async (req: AuthenticatedRequest, res: Res
         const summary = {
             totalAssets: assets.length,
             statusCounts: {
-                operational: assets.filter(a => a.status === 'Operational').length,
-                underMaintenance: assets.filter(a => a.status === 'UnderMaintenance').length,
-                maintenanceRequired: assets.filter(a => a.status === 'MaintenanceRequired').length,
-                offline: assets.filter(a => a.status === 'Offline').length
+                operational: assets.filter((a: IInfrastructure) => a.status === 'Operational').length,
+                underMaintenance: assets.filter((a: IInfrastructure) => a.status === 'UnderMaintenance').length,
+                maintenanceRequired: assets.filter((a: IInfrastructure) => a.status === 'MaintenanceRequired').length,
+                offline: assets.filter((a: IInfrastructure) => a.status === 'Offline').length
             },
             solarArrays: {
-                count: assets.filter(a => a.type === 'SolarArray').length,
-                totalCapacityKW: assets.filter(a => a.type === 'SolarArray').reduce((acc, a) => acc + (a.capacityKW || 0), 0)
+                count: assets.filter((a: IInfrastructure) => a.type === 'SolarArray').length,
+                totalCapacityKW: assets.filter((a: IInfrastructure) => a.type === 'SolarArray').reduce((acc: number, a: IInfrastructure) => acc + (a.capacityKW || 0), 0)
             },
             batteryBanks: {
-                count: assets.filter(a => a.type === 'BatteryBank').length,
-                totalCapacityKWh: assets.filter(a => a.type === 'BatteryBank').reduce((acc, a) => acc + (a.capacityKWh || 0), 0)
+                count: assets.filter((a: IInfrastructure) => a.type === 'BatteryBank').length,
+                totalCapacityKWh: assets.filter((a: IInfrastructure) => a.type === 'BatteryBank').reduce((acc: number, a: IInfrastructure) => acc + (a.capacityKWh || 0), 0)
             },
             inverters: {
-                count: assets.filter(a => a.type === 'Inverter').length,
-                totalCapacityKW: assets.filter(a => a.type === 'Inverter').reduce((acc, a) => acc + (a.capacityKW || 0), 0)
+                count: assets.filter((a: IInfrastructure) => a.type === 'Inverter').length,
+                totalCapacityKW: assets.filter((a: IInfrastructure) => a.type === 'Inverter').reduce((acc: number, a: IInfrastructure) => acc + (a.capacityKW || 0), 0)
             },
             transformers: {
-                count: assets.filter(a => a.type === 'Transformer').length,
-                totalCapacityKW: assets.filter(a => a.type === 'Transformer').reduce((acc, a) => acc + (a.capacityKW || 0), 0)
+                count: assets.filter((a: IInfrastructure) => a.type === 'Transformer').length,
+                totalCapacityKW: assets.filter((a: IInfrastructure) => a.type === 'Transformer').reduce((acc: number, a: IInfrastructure) => acc + (a.capacityKW || 0), 0)
             }
         }
 

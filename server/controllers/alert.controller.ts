@@ -1,11 +1,11 @@
-import { Response, NextFunction } from 'express'
+import type { Response, NextFunction } from 'express'
 import mongoose from 'mongoose'
-import Alert from '../models/alert.model'
-import Household from '../models/household.model'
-import { AuthenticatedRequest } from '../types/auth.type'
-import { ApiResponse } from '../utils/server.success'
-import { ServerError } from '../utils/server.error'
-import { isAdmin } from '../utils/server.authorizer'
+import Alert from '../models/alert.model.js'
+import Household from '../models/household.model.js'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import { ApiResponse } from '../utils/server.success.js'
+import { ServerError } from '../utils/server.error.js'
+import { isAdmin } from '../utils/server.authorizer.js'
 
 export const getAlerts = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {

@@ -1,4 +1,4 @@
-import Alert from '../models/alert.model'
+import Alert from '../models/alert.model.js'
 import { Server } from 'socket.io'
 
 /**

@@ -1,7 +1,7 @@
 import { Router } from 'express'
-import { getMyHouseholds, getHouseholdById, getAllHouseholds, createHousehold, updateHousehold, updateHouseholdStatus, deleteHousehold , ToggleTerminalConnection} from '../controllers/household.controller.ts'
-import { protectRoute } from '../middlewares/protect.middleware.ts'
-import { authorizeUser } from '../middlewares/auth.middleware.ts'
+import { getMyHouseholds, getHouseholdById, getAllHouseholds, createHousehold, updateHousehold, updateHouseholdStatus, deleteHousehold , ToggleTerminalConnection} from '../controllers/household.controller.js'
+import { protectRoute } from '../middlewares/protect.middleware.js'
+import { authorizeUser } from '../middlewares/auth.middleware.js'
 
 const householdRouter: Router = Router()
 

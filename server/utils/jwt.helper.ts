@@ -1,4 +1,4 @@
-import jwt, { SignOptions } from 'jsonwebtoken'
+import jwt, { type SignOptions } from 'jsonwebtoken'
 import crypto from 'crypto'
 
 const accessExpiresInSetting = (process.env.JWT_ACCESS_EXPIRES_IN || '1d') as SignOptions['expiresIn']

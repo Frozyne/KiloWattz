@@ -1,7 +1,7 @@
 import { CronJob } from 'cron'
-import Infrastructure from '../models/infrastructure.model'
-import Alert from '../models/alert.model'
-import Household from '../models/household.model'
+import Infrastructure from '../models/infrastructure.model.js'
+import Alert from '../models/alert.model.js'
+import Household from '../models/household.model.js'
 
 export const initBatteryGuardJob = new CronJob('*/15 * * * *', async () => {
         try {

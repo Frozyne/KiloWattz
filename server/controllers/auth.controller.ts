@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from "express"
+import type { NextFunction, Request, Response } from "express"
 import bcrypt from 'bcryptjs'
-import User from "../models/user.model"
-import Session from "../models/session.model"
+import User from "../models/user.model.js"
+import Session from "../models/session.model.js"
 import { ServerError } from '../utils/server.error.ts'
 import { 
     generateAccessToken,

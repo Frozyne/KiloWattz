@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import process from "node:process"
 
 export interface SeedUser {
     name: string,

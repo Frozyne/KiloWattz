@@ -1,8 +1,8 @@
 import { Router } from 'express'
-import { getInfrastructureStats, updateInfrastructureMaintenance, getInfrastructureByType, addNewInfrastructureAsset } from '../controllers/infrastructure.controller'
-import { protectRoute}  from '../middlewares/protect.middleware'
-import {authorizeUser} from '../middlewares/auth.middleware'
-import { authorizeSuperUser } from '../middlewares/super.middleware'
+import { getInfrastructureStats, updateInfrastructureMaintenance, getInfrastructureByType, addNewInfrastructureAsset } from '../controllers/infrastructure.controller.js'
+import { protectRoute}  from '../middlewares/protect.middleware.js'
+import {authorizeUser} from '../middlewares/auth.middleware.js'
+import { authorizeSuperUser } from '../middlewares/super.middleware.js'
 
 const infrastructureRouter: Router = Router()
 

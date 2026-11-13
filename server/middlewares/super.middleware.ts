@@ -1,6 +1,6 @@
-import { Response, NextFunction } from 'express'
-import { AuthenticatedRequest } from '../types/auth.type.ts'
-import { isSuperUser } from '../utils/server.authorizer.ts'
+import type { Response, NextFunction } from 'express'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import { isSuperUser } from '../utils/server.authorizer.js'
 
 export const authorizeSuperUser = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {

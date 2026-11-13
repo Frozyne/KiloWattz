@@ -1,9 +1,9 @@
-import 'dotenv/config'
+import process from 'node:process'
 import bcrypt from 'bcryptjs'
 import mongoose from 'mongoose'
-import connectToDB from '../config/db_config'
-import User from '../models/user.model'
-import { getSeedUser } from './data/user.data'
+import connectToDB from '../config/db_config.js'
+import User from '../models/user.model.js'
+import { getSeedUser } from './data/user.data.js'
 
 const SALT_ROUNDS = 10
 

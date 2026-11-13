@@ -1,5 +1,5 @@
 import { CronJob } from 'cron'
-import Environment from '../models/environment.model'
+import Environment from '../models/environment.model.js'
 
 export const startEnvironmentCleanupCron = new CronJob('*/30 * * * *', async () => {
         try {

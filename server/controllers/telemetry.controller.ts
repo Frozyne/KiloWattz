@@ -1,10 +1,10 @@
-import { AuthenticatedRequest } from "../types/auth.type";
-import { Response, NextFunction } from "express";
-import { ServerError } from "../utils/server.error";
-import { ApiResponse } from "../utils/server.success";
-import Telemetry, { ITelemetry } from "../models/telemetry.model";
-import Household from "../models/household.model";
-import { isAdmin } from "../utils/server.authorizer";
+import type { AuthenticatedRequest } from "../types/auth.type.js";
+import type { Response, NextFunction } from "express";
+import { ServerError } from "../utils/server.error.js";
+import { ApiResponse } from "../utils/server.success.js";
+import Telemetry, { type ITelemetry } from "../models/telemetry.model.js";
+import Household from "../models/household.model.js";
+import { isAdmin } from "../utils/server.authorizer.js";
 
 interface CommunitySummary {
     solarGeneratedKW: number,

@@ -1,4 +1,4 @@
-import { AuthenticatedRequest } from '../types/auth.type.ts'
+import { type AuthenticatedRequest } from '../types/auth.type.ts'
 
 export const isSuperUser = (req: AuthenticatedRequest): boolean => {
     if (!req.user) {

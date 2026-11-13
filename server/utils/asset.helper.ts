@@ -1,4 +1,4 @@
-import Infrastructure from '../models/infrastructure.model'
+import Infrastructure from '../models/infrastructure.model.js'
 
 export const generateAssetSerialNumber = async (modelCode: string): Promise<string> => {
     const cleanCode = modelCode.trim().toUpperCase()

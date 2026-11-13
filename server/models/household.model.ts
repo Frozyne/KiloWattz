@@ -1,5 +1,5 @@
-import mongoose, { Document, Types, PopulatedDoc } from "mongoose";
-import { IUser } from "./user.model.ts";
+import mongoose, { Document, Types, type PopulatedDoc } from "mongoose";
+import type { IUser } from "./user.model.js";
 
 export interface IQuotaBreach {
     breachedAt: Date

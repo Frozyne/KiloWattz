@@ -1,7 +1,7 @@
-import 'dotenv/config'
+import process from 'node:process'
 import axios from 'axios'
 import { Server } from 'socket.io'
-import Environment from '../models/environment.model'
+import Environment from '../models/environment.model.js'
 
 const ESTATE_LATITUDE = process.env.ESTATE_LAT || '7.3775'
 const ESTATE_LONGITUDE = process.env.ESTATE_LNG || '3.9470'

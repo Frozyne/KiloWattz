@@ -1,7 +1,7 @@
-import { Response, NextFunction } from 'express'
-import Environment from '../models/environment.model'
-import { AuthenticatedRequest } from '../types/auth.type'
-import { ApiResponse } from '../utils/server.success'
+import type { Response, NextFunction } from 'express'
+import Environment from '../models/environment.model.js'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import { ApiResponse } from '../utils/server.success.js'
 
 export const getLatestEnvironment = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {

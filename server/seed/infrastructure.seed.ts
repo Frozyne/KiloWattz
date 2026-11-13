@@ -1,9 +1,9 @@
-import 'dotenv/config'
+import process from 'node:process'
 import mongoose from 'mongoose'
-import connectToDB from '../config/db_config'
-import Infrastructure from '../models/infrastructure.model'
-import { getSeedInfrastructure } from './data/asset.data'
-import { getInfrastructureModelData } from '../utils/infrastructure.helper'
+import connectToDB from '../config/db_config.js'
+import Infrastructure from '../models/infrastructure.model.js'
+import { getSeedInfrastructure } from './data/asset.data.js'
+import { getInfrastructureModelData } from '../utils/infrastructure.helper.js'
 
 const INITIAL_HARDWARE_MANIFEST = getSeedInfrastructure()
 

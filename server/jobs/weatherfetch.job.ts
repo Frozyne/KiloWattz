@@ -1,6 +1,6 @@
 import { CronJob } from 'cron'
 import { Server } from 'socket.io'
-import { fetchAndSaveEnvironmentMetrics } from '../services/weather.service'
+import { fetchAndSaveEnvironmentMetrics } from '../services/weather.service.js'
 
 export const createWeatherCronJob = (io: Server) => {
     return new CronJob(

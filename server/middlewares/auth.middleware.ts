@@ -1,6 +1,6 @@
-import { Response, NextFunction } from 'express'
-import { AuthenticatedRequest } from '../types/auth.type.ts'
-import { isAdmin } from '../utils/server.authorizer.ts'
+import type { Response, NextFunction } from 'express'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import { isAdmin } from '../utils/server.authorizer.js'
 
 export const authorizeUser = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {

@@ -1,7 +1,7 @@
-import mongoose, { Document, Types, PopulatedDoc } from "mongoose";
-import { IUser } from "./user.model";
-import { IHousehold } from "./household.model";
-import { IInfrastructure } from "./infrastructure.model";
+import mongoose, { Document, Types, type PopulatedDoc } from "mongoose";
+import type { IUser } from "./user.model.js";
+import type { IHousehold } from "./household.model.js";
+import type { IInfrastructure } from "./infrastructure.model.js";
 
 export interface IAlert extends Document {
     title: string

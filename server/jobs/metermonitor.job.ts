@@ -1,6 +1,6 @@
-import Household from '../models/household.model'
-import Telemetry from '../models/telemetry.model'
-import Alert from '../models/alert.model'
+import Household from '../models/household.model.js'
+import Telemetry from '../models/telemetry.model.js'
+import Alert from '../models/alert.model.js'
 import { CronJob } from 'cron'
 
 export const initMeterHeartbeatJob = new CronJob('*/10 * * * *', async () => {

@@ -1,7 +1,7 @@
 import {Router} from "express";
-import { getAllUserProfiles, getUserProfileById, createUserProfile, updateUserProfile, deleteUserProfile, getUserProfile } from "../controllers/user.controller.ts";
-import { protectRoute } from "../middlewares/protect.middleware.ts";
-import { authorizeUser } from "../middlewares/auth.middleware.ts";
+import { getAllUserProfiles, getUserProfileById, createUserProfile, updateUserProfile, deleteUserProfile, getUserProfile } from "../controllers/user.controller.js";
+import { protectRoute } from "../middlewares/protect.middleware.js";
+import { authorizeUser } from "../middlewares/auth.middleware.js";
 
 const userRouter: Router = Router()
 

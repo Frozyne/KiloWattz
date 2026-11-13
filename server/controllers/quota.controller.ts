@@ -1,11 +1,11 @@
-import { Response, NextFunction } from 'express'
+import type { Response, NextFunction } from 'express'
 import mongoose from 'mongoose'
-import Household from '../models/household.model'
-import Telemetry from '../models/telemetry.model'
-import { AuthenticatedRequest } from '../types/auth.type'
-import { ApiResponse } from '../utils/server.success'
-import { ServerError } from '../utils/server.error'
-import { isAdmin } from '../utils/server.authorizer'
+import Household from '../models/household.model.js'
+import Telemetry from '../models/telemetry.model.js'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import { ApiResponse } from '../utils/server.success.js'
+import { ServerError } from '../utils/server.error.js'
+import { isAdmin } from '../utils/server.authorizer.js'
 
 export const getTodayQuotaStatus = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
@@ -48,7 +48,7 @@ export const getTodayQuotaStatus = async (req: AuthenticatedRequest, res: Respon
         ])
 
         const currentUsageKWh = todayUsageAggregation[0]?.totalTodayKWh || 0
-        const baseQuotaKWh = household.dailyKWHQuota
+        const baseQuotaKWh = household.dailyKWHQuota || 0
 
         const remainingLimitKWh = Math.max(0, baseQuotaKWh - currentUsageKWh)
         const isQuotaBreached = currentUsageKWh >= baseQuotaKWh

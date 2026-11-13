@@ -1,5 +1,5 @@
 import { CronJob } from 'cron'
-import Telemetry from '../models/telemetry.model'
+import Telemetry from '../models/telemetry.model.js'
 
 export const initTelemetryArchiveJob = new CronJob('0 2 * * *', async () => {
         console.log('[CRON 02:00] Starting telemetry storage cleanup...')

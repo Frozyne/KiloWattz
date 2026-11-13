@@ -1,8 +1,8 @@
 import { CronJob } from 'cron'
-import Telemetry from '../models/telemetry.model'
-import Household from '../models/household.model'
-import Infrastructure from '../models/infrastructure.model'
-import DailyReport from '../models/dailyreport.model'
+import Telemetry from '../models/telemetry.model.js'
+import Household from '../models/household.model.js'
+import Infrastructure, { type IInfrastructure } from '../models/infrastructure.model.js'
+import DailyReport from '../models/dailyreport.model.js'
 
 export const initDailyReportJob = new CronJob('59 23 * * *', async () => {
         console.log('[CRON 23:59] Generating daily estate performance snapshot...')
@@ -46,7 +46,7 @@ export const initDailyReportJob = new CronJob('59 23 * * *', async () => {
             // 3. Compute average Battery Bank State of Charge (SoC) across infrastructure
             const batteries = await Infrastructure.find({ type: 'BatteryBank' })
             const avgSoC = batteries.length > 0
-                ? batteries.reduce((acc, b) => acc + (b.diagnostics?.stateOfChargePercent || 0), 0) / batteries.length
+                ? batteries.reduce((acc: number, b: IInfrastructure) => acc + (b.diagnostics?.stateOfChargePercent || 0), 0) / batteries.length
                 : 0
 
             // 4. Save daily report snapshot

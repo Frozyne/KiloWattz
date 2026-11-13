@@ -1,4 +1,4 @@
-import Infrastructure from '../models/infrastructure.model'
+import Infrastructure from '../models/infrastructure.model.js'
 
 export interface SolarGenerationResult {
     totalGeneratedKW: number

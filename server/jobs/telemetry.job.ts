@@ -1,10 +1,10 @@
 import { CronJob } from 'cron'
 import { Server } from 'socket.io'
-import Household, { type IMeter, type ITerminal } from '../models/household.model'
-import Telemetry from '../models/telemetry.model'
-import { checkHouseholdUsageSpike } from '../services/spike.service'
-import { calculateCentralSolarGeneration } from '../services/solar.service'
-import Enviroment from '../models/environment.model'
+import Household, { type IMeter, type ITerminal } from '../models/household.model.js'
+import Telemetry from '../models/telemetry.model.js'
+import { checkHouseholdUsageSpike } from '../services/spike.service.js'
+import { calculateCentralSolarGeneration } from '../services/solar.service.js'
+import Enviroment from '../models/environment.model.js'
 
 const terminalKeys: (keyof IMeter)[] = [
     'terminal1',
@@ -44,7 +44,7 @@ export const createTelemetryCron = (io: Server) => {
                         const draw = terminal.connectionStatus === 'On'
                             ? Math.round((Math.random() * (0.20 - 0.02) + 0.02) * 100) / 100
                             : 0
-                        updatedTerminals[`meter.${key}.consumedKWh`] = draw
+                        updatedTerminals[String(`meter.${key}.consumedKWh`)] = draw
                         calculatedHouseholdKWh += draw
                     }
 

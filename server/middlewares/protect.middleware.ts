@@ -1,10 +1,9 @@
-import { Response, NextFunction } from 'express'
-import { AuthenticatedRequest } from '../types/auth.type.ts'
-import jwt, { JwtPayload } from 'jsonwebtoken'
-import User from '../models/user.model.ts'
-import Session from '../models/session.model.ts'
-import { ServerError } from '../utils/server.error.ts'
-import { hashToken } from '../utils/jwt.helper.ts'
+import type { Response, NextFunction } from 'express'
+import type { AuthenticatedRequest } from '../types/auth.type.js'
+import jwt, { type JwtPayload } from 'jsonwebtoken'
+import User from '../models/user.model.js'
+import Session from '../models/session.model.js'
+import { ServerError } from '../utils/server.error.js'
 
 // Type definition for JWT Payload
 interface DecodedToken extends JwtPayload {

@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { getLatestEnvironment } from '../controllers/environment.controller'
-import { protectRoute } from '../middlewares/protect.middleware'
+import { getLatestEnvironment } from '../controllers/environment.controller.js'
+import { protectRoute } from '../middlewares/protect.middleware.js'
 
 const apiRouter : Router = Router()
 

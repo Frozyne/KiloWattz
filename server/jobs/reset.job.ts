@@ -1,5 +1,5 @@
 import { CronJob } from 'cron'
-import Household from '../models/household.model'
+import Household from '../models/household.model.js'
 
 export const initQuotaResetJob = new CronJob('0 0 * * *', async () => {
         console.log('[CRON 00:00] Starting midnight daily quota & transfer reset...')
