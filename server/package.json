@@ -7,7 +7,7 @@
   "type": "module",
   "main": "index.ts",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "npm index.ts",
     "dev": "tsx watch index.ts",
     "build": "tsc",
     "seed": "tsx seed/admin.seed.ts",
