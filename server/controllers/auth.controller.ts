@@ -14,7 +14,8 @@ const COOKIE_OPTIONS = {
     httpOnly: true, // Shields token from XSS attacks (JS cannot read it)
     secure: true, // Requires HTTPS in production
     sameSite: "none" as boolean | "none" | "strict" | "lax" | undefined,
-    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    path: '/'
 }
 
 export const signIn = async(req: Request, res: Response, next: NextFunction) => {

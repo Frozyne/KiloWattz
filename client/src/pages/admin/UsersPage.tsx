@@ -5,6 +5,7 @@ import { AddUserModal } from '@/components/common/users/AddUserModal'
 import { useCurrentUserQuery } from '@/hooks/useUserQureies'
 import { UserWidgetSection } from '@/components/common/profile/UserWidgetSection'
 import { type IUser } from '@/lib/types'
+import WeatherStats from '@/components/common/WeatherStats'
 
 export default function UsersPage() {
   const { data: user } = useCurrentUserQuery()
@@ -16,6 +17,8 @@ export default function UsersPage() {
   return (
     <div className="min-h-screen p-4 md:p-8 text-accent font-sans space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
+
+        <WeatherStats />
         
         {/* Header & Controls */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-secondary p-6 rounded-3xl border border-emerald-800/50 shadow-md">

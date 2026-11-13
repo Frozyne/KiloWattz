@@ -7,6 +7,7 @@ import { PhaseDistributionCard } from '@/components/common/analytics/PhaseDistri
 import { GridStabilityCard } from '@/components/common/analytics/GridStabilityCard'
 import { useCurrentUserQuery } from '@/hooks/useUserQureies'
 import { useAllHouseholdsQuery } from '@/hooks/useHouseholdQueries'
+import WeatherStats from '@/components/common/WeatherStats'
 
 export default function AnalyticsPage(): React.JSX.Element {
   const { data: user } = useCurrentUserQuery()
@@ -42,6 +43,7 @@ export default function AnalyticsPage(): React.JSX.Element {
   return (
     <div className="min-h-screen p-4 md:p-8 text-accent font-sans space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
+        <WeatherStats />
         <AnalyticsHeader
           scope={scope}
           setScope={setScope}

@@ -5,6 +5,7 @@ import { AlertsHeader } from '@/components/common/alerts/AlertsHeader'
 import { AlertsFilterBar, type StatusFilter } from '@/components/common/alerts/AlertsFilterBar'
 import { AlertsTable } from '@/components/common/alerts/AlertsTable'
 import { AlertsPagination } from '@/components/common/alerts/AlertsPagination'
+import WeatherStats from '@/components/common/WeatherStats'
 
 const PAGE_SIZE = 8
 
@@ -71,6 +72,7 @@ export default function AlertsPage() {
 
   return (
     <div className="mt-6 space-y-4">
+      <WeatherStats />
       <AlertsHeader hasActiveEmergency={hasActiveEmergency} />
 
       <AlertsFilterBar

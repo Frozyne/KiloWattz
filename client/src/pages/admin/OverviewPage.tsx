@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import NavBar from "../../components/admin/NavBar";
 import LiveStat from "../../components/admin/LiveStatsRow";
 import { useAuthStore } from "@/storage/useAuthStorage";
 import { useUserByIdQuery } from "@/hooks/useUserQureies";
@@ -26,7 +25,6 @@ export const OverviewPage: React.FC = () => {
 
   return (
     <div>
-      <NavBar />
       <WeatherStats />
       <LiveStat />
       { 

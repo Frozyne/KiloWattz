@@ -35,12 +35,14 @@ export const useAuthStore = create<AuthState>()(
                     isAuthenticated: true,
                 }),
 
-            logout: () =>
+            logout: () => {
                 set({
                     user: null,
                     token: null,
                     isAuthenticated: false,
-                }),
+                })
+                localStorage.removeItem('kilowattz-auth-storage')
+            },
 
             hasRole: (allowedRoles) => {
                 const currentUser = get().user

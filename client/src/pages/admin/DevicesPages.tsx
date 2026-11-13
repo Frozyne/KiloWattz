@@ -12,6 +12,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { useInfrastructureStatsQuery } from '@/hooks/useInfrastructureQueries'
 import { AddAssetModal } from '@/components/common/infrastructure/AddAssetModal'
+import WeatherStats from '@/components/common/WeatherStats'
 
 export default function DevicesPage() {
   const { data: statsData, isLoading } = useInfrastructureStatsQuery()
@@ -48,6 +49,8 @@ export default function DevicesPage() {
   return (
     <div className="min-h-screen p-4 md:p-8 text-accent font-sans space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
+
+        <WeatherStats />
 
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-secondary p-6 rounded-3xl border border-emerald-800/50 shadow-md">

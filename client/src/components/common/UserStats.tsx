@@ -4,12 +4,22 @@ import { User, ChevronDown, LogOut, ShieldCheck, Home } from 'lucide-react'
 import { useCurrentUserQuery } from '@/hooks/useUserQureies'
 import { useAuthStore } from '@/storage/useAuthStorage'
 import { useNavigate } from 'react-router'
+import { authService } from '@/services/auth'
 
 const UserStats = () => {
     const [open, setOpen] = useState(false)
     const { data: user } = useCurrentUserQuery()
-    const logout = useAuthStore((state) => state.logout)
     const navigate = useNavigate()
+    const logout = async () => {
+        try {
+            await authService.logout() // Clears the HttpOnly cookie on the backend
+        } catch (err) {
+            console.error('Logout error', err)
+        } finally {
+            useAuthStore.getState().logout() // Clears Zustand state and localStorage
+            await navigate('/') // Sends them back to the login screen cleanly
+        }
+    }
     const dropdownRef = useRef<HTMLDivElement>(null)
 
     // Primary household associated with the account
@@ -121,8 +131,7 @@ const UserStats = () => {
                         <button
                             onClick={async () => {
                                 setOpen(false)
-                                logout()
-                                await navigate('/login')
+                                await logout()
                             }}
                             className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-red-300 hover:bg-red-950/40 rounded-lg transition-colors"
                         >
