@@ -51,20 +51,20 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
         </div>
 
         {
-            terminals.map((terminal ) => {
+            terminals.map(( terminal ) => {
 
                 payload.terminalNumber = terminals.indexOf(terminal) + 1
-                payload.connectionStatus = terminal.connectionStatus
+                payload.connectionStatus = terminal?.connectionStatus
 
                 return (
                     <div key={terminals.indexOf(terminal)}>
                         <div>
-                            <h3>{terminal.name || `Terminal ${terminals.indexOf(terminal) + 1}`}</h3>
-                            <p className="text-sm text-secondary pl-11 -translate-y-2">Current Usage: {terminal.consumedKWh} KWH</p>
-                            <p className="text-sm text-secondary pl-11 -translate-y-2">Status: </p>{terminal.connectionStatus}
+                            <h3>{terminal?.name || `Terminal ${terminals.indexOf(terminal) + 1}`}</h3>
+                            <p className="text-sm text-secondary pl-11 -translate-y-2">Current Usage: {terminal?.consumedKWh} KWH</p>
+                            <p className="text-sm text-secondary pl-11 -translate-y-2">Status: </p>{terminal?.connectionStatus}
                         </div>
                         <Button onClick={() => toggleTerinal({householdId, payload })}>
-                            { terminal.connectionStatus ? 'Turn Off' : 'Turn On' }
+                            { terminal?.connectionStatus ? 'Turn Off' : 'Turn On' }
                         </Button>
                     </div>
                 )
