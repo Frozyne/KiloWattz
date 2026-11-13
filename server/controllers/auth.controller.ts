@@ -12,8 +12,8 @@ import {
 
 const COOKIE_OPTIONS = {
     httpOnly: true, // Shields token from XSS attacks (JS cannot read it)
-    secure: process.env.NODE_ENV === 'production', // Requires HTTPS in production
-    sameSite: (process.env.NODE_ENV === 'production' ? 'strict' : 'lax') as 'strict' | 'lax',
+    secure: true, // Requires HTTPS in production
+    sameSite: "none" as boolean | "none" | "strict" | "lax" | undefined,
     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds
 }
 
