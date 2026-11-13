@@ -1,5 +1,5 @@
 import React from 'react'
-import { Sun, Activity, BatteryCharging, TrendingUp } from 'lucide-react'
+import { Sun, Activity, BatteryCharging } from 'lucide-react'
 import { useCommunityTelemetryQuery } from '@/hooks/useTelementryQueries'
 
 export const TelemetryPreviewCard: React.FC = () => {

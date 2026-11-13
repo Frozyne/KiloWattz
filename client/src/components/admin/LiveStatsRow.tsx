@@ -1,4 +1,4 @@
-import { ArrowUpIcon, Power, PowerOff, BatteryFull, BatteryMedium, BatteryLow, BatteryWarning, Zap, ZapOff } from "lucide-react";
+import { Power, PowerOff, BatteryFull, BatteryMedium, BatteryLow, BatteryWarning, Zap, ZapOff } from "lucide-react";
 import { useCommunityTelemetryQuery } from "@/hooks/useTelementryQueries";
 
 const getBatteryStatusIcon = (batteryLevelPercent: number = 0) => {

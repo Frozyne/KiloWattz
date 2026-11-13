@@ -1,12 +1,9 @@
-import { Button } from "../ui/button"
-import { useState } from "react"
 import { ArrowRightIcon } from "lucide-react"
 export default function Health(){
-    const [activeNav, setActiveNav] = useState("Overview")
     return(
         <div className="border-zinc-800/80 rounded-2xl bg-green-100 py-1 p-2 mt-2">
           <span className="flex justify-between font-bold text-primary">Assets Health
-            <span><Button onClick={() => setActiveNav("Assets")} className="bg-white text-primary border-3">View all assets<ArrowRightIcon/></Button></span>
+            <span>View all assets <ArrowRightIcon/></span>
           </span>
           <p className="font-extralight text-sm text-primary">Real-time status across all field equipment</p>
           <div className="grid grid-cols-4 gap-4 mt-3 border-t p-2 ml-1">

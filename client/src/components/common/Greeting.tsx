@@ -1,5 +1,3 @@
-import React from 'react'
-
 const Greeting = () => {
   return (
     <div className="flex justify-start mt-15 p-3 border rounded-lg bg-accent m-5">
