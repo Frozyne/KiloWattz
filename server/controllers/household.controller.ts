@@ -147,9 +147,9 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
             meterSerialNumber: meterSerialNumber,
             phaseConnection: phaseConnection,
             user: existingUser._id
-        }, { session });
+        });
 
-        await household.save();
+        await household.save({ session });
 
         await recalculateAllHouseholdQuotas()
 

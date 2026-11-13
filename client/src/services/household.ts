@@ -62,10 +62,9 @@ export const householdsService = {
         householdId: string,
         payload: ToggleTerminalPayload
     ): Promise<IHousehold> => {
-        const reqData = JSON.stringify(payload)
         const res = await api.patch<{ data: { household: IHousehold } }>(
             `/households/${householdId}/toggle-terminal`,
-            {reqData}
+            payload
         )
         return res.data.data.household
     },
