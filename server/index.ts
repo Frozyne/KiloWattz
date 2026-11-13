@@ -100,7 +100,7 @@ const startServer = () => {
   }
 }
 
-seed()
+await seed()
     .catch((error: unknown) => {
         console.error('Seeding failed', error)
         process.exitCode = 1
@@ -112,7 +112,7 @@ seed()
 const inf = await Infrastructure.find({})
 
 if(inf.length === 0) {
-  seedInf()
+  await seedInf()
     .catch((error: unknown) => {
         console.error('Seeding failed', error)
         process.exitCode = 1
