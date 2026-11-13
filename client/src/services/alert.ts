@@ -45,8 +45,7 @@ export const alertsService = {
     },
 
     triggerELS: async (payload: AlertPayload): Promise<ELSAlert> => {
-        const reqData = JSON.stringify(payload)
-        const res = await api.post<{ data: ELSAlert }> (`/alert/els`, {reqData})
+        const res = await api.post<{ data: ELSAlert }> (`/alert/els`, payload)
         return res.data.data
     },
 

@@ -212,7 +212,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
               title="Register New Property"
             >
               <Plus className="size-3" />
-              <span className="text-[10px] uppercase font-bold tracking-wider">Assign</span>
+              <span className="text-[10px] uppercase font-bold tracking-wider">Register New Property</span>
             </button>
           )}
         </div>

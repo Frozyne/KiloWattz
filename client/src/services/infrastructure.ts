@@ -51,19 +51,17 @@ export const infrastructureService = {
     },
 
     addAsset: async (payload: AssetPayload): Promise<IInfrastructure> => {
-        const reqData = JSON.stringify(payload)
         const res = await api.post<{ data: { asset: IInfrastructure } }>(
             '/infrastructure', 
-            { reqData }
+            payload
         )
         return res.data.data.asset
     },
 
     updateMaintainance: async (id: string, payload: AssetPayload): Promise<IInfrastructure> => {
-        const reqData = JSON.stringify(payload)
         const res = await api.patch<{ data: IInfrastructure }>(
             `/infrastructure/${id}`, 
-            {reqData}
+            payload
         )
         return res.data.data
     },

@@ -33,14 +33,12 @@ export const householdsService = {
     },
 
     create: async (payload: CreateHouseholdPayload): Promise<IHousehold> => {
-        const reqData = JSON.stringify(payload)
-        const res = await api.post<{ data: IHousehold }>('/household', {reqData})
+        const res = await api.post<{ data: IHousehold }>(`/household/${payload.userID}`, payload)
         return res.data.data
     },
 
     update: async (id: string, payload: UpdateHouseholdPayload): Promise<IHousehold> => {
-        const reqData = JSON.stringify(payload)
-        const res = await api.post<{ data: IHousehold }>(`/household/${id}`, {reqData})
+        const res = await api.post<{ data: IHousehold }>(`/household/${id}`, payload)
         return res.data.data
     },
 
