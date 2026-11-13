@@ -20,8 +20,6 @@ export async function seed(): Promise<void> {
         throw new Error('Refusing to run --fresh in production')
     }
 
-    await connectToDB()
-
     const users = getSeedUser()
 
     const filteredUser = isProduction ? 
@@ -63,12 +61,3 @@ export async function seed(): Promise<void> {
 
     console.log(`Seeding complete. Created: ${created}, Skipped: ${skipped}`)
 }
-
-seed()
-    .catch((error: unknown) => {
-        console.error('Seeding failed', error)
-        process.exitCode = 1
-    })
-    .finally(async () => {
-        await mongoose.disconnect()
-    })

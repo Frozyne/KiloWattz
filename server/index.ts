@@ -100,31 +100,29 @@ const startServer = () => {
   }
 }
 
-await seed()
-    .catch((error: unknown) => {
-        console.error('Seeding failed', error)
-        process.exitCode = 1
-    })
-    .finally(async () => {
-        await mongoose.disconnect()
-    })
+await connectToDB()
+  .catch((error) => {
+    console.error('Failed to connect to database:', error)
+    process.exit(1)
+  })
 
-const inf = await Infrastructure.find({})
-
-if(inf.length === 0) {
-  await seedInf()
-    .catch((error: unknown) => {
-        console.error('Seeding failed', error)
-        process.exitCode = 1
-    })
-    .finally(async () => {
-        await mongoose.disconnect()
-    })
+try {
+  await seed()
+} catch (error) {
+  console.error('Admin seeding failed:', error)
 }
 
-await connectToDB()
-  .then(() => startAllCronJobs(io))
-  .finally(() => startServer())
+try {
+  const inf = await Infrastructure.find({})
+  if (inf.length === 0) {
+    await seedInf()
+  }
+} catch (error) {
+  console.error('Infrastructure seeding failed:', error)
+}
+
+startAllCronJobs(io)
+startServer()
 
 process.on('unhandledRejection', (reason: Error) => {
     console.error('Unhandled Rejection:', reason.message || reason)

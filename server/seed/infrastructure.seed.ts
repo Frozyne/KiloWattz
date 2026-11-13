@@ -9,7 +9,6 @@ const INITIAL_HARDWARE_MANIFEST = getSeedInfrastructure()
 
 export async function seedInf(): Promise<void> {
     try {
-        await connectToDB()
 
         // Clear existing assets to prevent duplicate seed errors on restart
         await Infrastructure.deleteMany({})
@@ -53,12 +52,3 @@ export async function seedInf(): Promise<void> {
         console.error('[SEED ERROR] Failed to seed infrastructure:', error)
     }
 }
-
-seedInf()
-    .catch((error: unknown) => {
-        console.error('Seeding failed', error)
-        process.exitCode = 1
-    })
-    .finally(async () => {
-        await mongoose.disconnect()
-    })
