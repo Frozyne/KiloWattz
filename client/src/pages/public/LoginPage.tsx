@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Zap, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react'
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,6 +23,8 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const queryClient = useQueryClient()
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -45,6 +48,8 @@ export default function LoginPage() {
       }
 
       useAuthStore.getState().setAuth(user, token)
+
+      await queryClient.invalidateQueries()
 
       await navigate(from, { replace: true })
 
