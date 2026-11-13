@@ -1,7 +1,5 @@
 import process from 'node:process'
 import bcrypt from 'bcryptjs'
-import mongoose from 'mongoose'
-import connectToDB from '../config/db_config.js'
 import User from '../models/user.model.js'
 import { getSeedUser } from './data/user.data.js'
 
@@ -23,7 +21,7 @@ export async function seed(): Promise<void> {
     const users = getSeedUser()
 
     const filteredUser = isProduction ? 
-        users.filter((u) => u.role === 'admin') : 
+        users.filter((u) => u.role === 'Admin') : 
         users
 
     if (isFresh) {
