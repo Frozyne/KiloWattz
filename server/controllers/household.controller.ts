@@ -123,7 +123,7 @@ export const createHousehold = async (req: AuthenticatedRequest, res: Response, 
         return next(new ServerError('Missing required fields', 400));
     }
 
-    const existingUser = await User.findOne({ userID });
+    const existingUser = await User.findById(userID);
     if (!existingUser) {
         return next(new ServerError('User not found', 404));
     }
