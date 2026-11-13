@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 export interface SeedUser {
     name: string,
     email: string,

@@ -48,7 +48,7 @@ export const AddAssetModal: React.FC<AddAssetModalProps> = ({ onClose }) => {
                 type="text"
                 value={modelNumber}
                 onChange={(e) => setModelNumber(e.target.value)}
-                placeholder="e.g. SG35OHX, SUN2000, Sunny Central"
+                placeholder="e.g. BAT-LFP-X, ARR-X-BLK"
                 className="w-full h-10 pl-9 pr-3 text-sm bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-100 focus:border-emerald-400 outline-none transition-colors font-mono"
               />
             </div>

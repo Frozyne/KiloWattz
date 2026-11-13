@@ -73,11 +73,11 @@ export const RegisterHouseholdModal: React.FC<RegisterHouseholdModalProps> = ({ 
                 <input
                   name='meter'
                   required
-                  type="number"
-                  min="1"
+                  type="text"
                   value={formData.meterSerialNumber}
                   onChange={(e) => setFormData(prev => ({ ...prev, meterSerialNumber: e.target.value }))}
                   className="w-full h-10 pl-9 pr-3 text-sm bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-100 focus:border-emerald-400 outline-none transition-colors"
+                  placeholder='e.g. MTR-00000000'
                 />
               </div>
             </div>

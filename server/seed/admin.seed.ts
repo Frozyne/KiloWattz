@@ -54,7 +54,7 @@ async function seed(): Promise<void> {
             fullName: user.name,
             email,
             password: hashedPassword,
-            role: user.role
+            role: user.role as 'User' | 'Admin'
         })
 
         console.log(`Created ${user.role}: ${user.email}`)
