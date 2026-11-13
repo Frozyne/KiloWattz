@@ -4,7 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 export type UserRole = 'Admin' | 'User'
 
 export interface User {
-    id: string
+    _id: string
     name: string
     email: string
     role: UserRole
