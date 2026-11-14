@@ -12,7 +12,7 @@ import {
   Loader2 
 } from 'lucide-react'
 import { useCurrentUserQuery } from '@/hooks/useUserQureies'
-import { useHouseholdDetailQuery, useUpdateHouseholdMutation } from '@/hooks/useHouseholdQueries'
+import { useHouseholdDetailQuery, useUpdateHouseholdMutation, useUpdateHouseholdStatusMutation } from '@/hooks/useHouseholdQueries'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -30,6 +30,7 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId }) => 
   const { data: currentUser } = useCurrentUserQuery()
   const { data: household, isLoading } = useHouseholdDetailQuery(householdId || '')
   const updateHouseholdMutation = useUpdateHouseholdMutation()
+  const updateHouseholdStatus = useUpdateHouseholdStatusMutation()
 
   const isAdmin = currentUser?.role === 'Admin'
   const [isEditing, setIsEditing] = useState(false)
@@ -83,6 +84,7 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId }) => 
       id: householdId,
       payload: draft,
     })
+    await updateHouseholdStatus.mutateAsync({id: householdId, status: draft.connectionStatus})
     setIsEditing(false)
   }
 

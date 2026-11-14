@@ -38,7 +38,7 @@ export const householdsService = {
     },
 
     update: async (id: string, payload: UpdateHouseholdPayload): Promise<IHousehold> => {
-        const res = await api.post<{ data: IHousehold }>(`/household/${id}`, payload)
+        const res = await api.patch<{ data: IHousehold }>(`/household/${id}`, payload)
         return res.data.data
     },
 
