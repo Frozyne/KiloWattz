@@ -52,7 +52,7 @@ export const householdsService = {
         connectionStatus: 'Active' | 'Suspended' | 'Disconnected'
     ): Promise<IHousehold> => {
         const res = await api.patch<{ data: { household: IHousehold } }>(
-            `/households/${id}/status`, 
+            `/household/${id}/status`, 
             {connectionStatus}
         )
         return res.data.data.household
