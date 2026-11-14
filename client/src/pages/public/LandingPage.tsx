@@ -27,7 +27,7 @@ export const LandingPage: React.FC = () => {
         </div>
       </div>
   <img
-    src="/src/assets/solar.IMG.jpg"
+    src="/images/solar.IMG.jpg"
     alt="Solar panels on a home"
     className="absolute inset-0 h-full w-full object-cover"
   />
