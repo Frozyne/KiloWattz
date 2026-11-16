@@ -120,7 +120,7 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId, onDel
                 onClick={() => setIsEditing(true)}
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-1.5 text-xs font-semibold text-shadow-green-900"
+                className="flex items-center gap-1.5 text-xs font-semibold text-shadow-green-900 hover:bg-green-900 hover:text-green-50"
               >
                 <Pencil className="size-3.5" /> Edit Household
               </Button>
@@ -280,18 +280,9 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId, onDel
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
           <Zap className="size-4 text-slate-400" /> Daily Quota
         </div>
-        {isEditing ? (
-          <input
-            type="number"
-            value={draft.dailyKWHQuota}
-            onChange={(e) => setDraft({ ...draft, dailyKWHQuota: Number(e.target.value) })}
-            className="rounded border px-2 py-1 text-sm w-32 font-mono"
-          />
-        ) : (
-          <p className="text-base font-mono font-medium text-slate-800">
-            {household?.dailyKWHQuota ?? 0} kWh
-          </p>
-        )}
+        <p className="text-base font-mono font-medium text-slate-800">
+          {household?.dailyKWHQuota ?? 0} kWh
+        </p>
       </div>
 
       {/* Editable Phase Connection */}
@@ -310,13 +301,14 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId, onDel
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="Single Phase">Single Phase</SelectItem>
-              <SelectItem value="Three Phase">Three Phase</SelectItem>
+              <SelectItem value="Phase 1">Phase 1</SelectItem>
+              <SelectItem value="Phase 2">Phase 2</SelectItem>
+              <SelectItem value="Phase 3">Phase 3</SelectItem>
             </SelectContent>
           </Select>
         ) : (
           <p className="text-base font-medium text-slate-800">
-            {household?.phaseConnection || 'Single Phase'}
+            {household?.phaseConnection || 'Phase not Entered'}
           </p>
         )}
       </div>
