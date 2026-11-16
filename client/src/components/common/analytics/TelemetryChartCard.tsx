@@ -38,7 +38,7 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
       }))
     : (householdLogs || []).slice(0, 24).reverse().map((log: any) => ({
         label: new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        solar: log.solarGeneratedKW ?? 0,
+        solar: log.powerConsumedKWh ?? 0,
         consumed: log.powerConsumedKW ?? 0,
       }))
 
