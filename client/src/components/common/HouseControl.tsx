@@ -35,7 +35,7 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
     const toggle = anyOn ? 'On' : 'Off'
 
   return (
-    <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm">
+    <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm gap-5">
       <div>
         <div>
           <div className="mb-1 flex items-center gap-2">
@@ -55,7 +55,7 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
           </Button>
         </div>
 
-        <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="grid grid-cols-3 justify-between gap-5 ">
           {
             terminals.map(( terminal ) => {
 

@@ -11,6 +11,7 @@ import AnalyticsPage from "./pages/admin/AnalyticsPage";
 import ProfilePage from './pages/admin/ProfilePage'
 
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
+import UserDetailPage from "./pages/admin/UserDetailPgae";
 
 export default function App() {
   
@@ -33,6 +34,7 @@ export default function App() {
           <Route element={<ProtectedRoute allowedRoles={['Admin']} />}>
             <Route path="devices" element={<Devices />} />
             <Route path="users" element={<UsersPage />} />
+            <Route path="users/:userId" element={<UserDetailPage />} />
             <Route path="reports" />
           </Route>
         </Route>

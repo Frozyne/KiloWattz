@@ -1,7 +1,7 @@
 import { CronJob } from 'cron'
 import { Server } from 'socket.io'
 import Household, { type IMeter, type ITerminal } from '../models/household.model.js'
-import Telemetry from '../models/telemetry.model.js'
+import Telemetry, { type ITelemetry } from '../models/telemetry.model.js'
 import { checkHouseholdUsageSpike } from '../services/spike.service.js'
 import { calculateCentralSolarGeneration } from '../services/solar.service.js'
 import Enviroment from '../models/environment.model.js'
@@ -49,7 +49,7 @@ export const createTelemetryCron = (io: Server) => {
                     }
 
                     const finalIntervalKWh = Math.round(calculatedHouseholdKWh * 100) / 1000
-                    const currentPowerKW = Math.round((Math.random() * (3.2 - 0.8) + 0.8) * 100) / 1000
+                    const currentPowerKW = Math.round((Math.random() * (3.2 - 0.8) + 0.8) * 100) / 100
                     const previousDailyKWh = household.consumedKWh || 0
                     const newDailyKWh = Math.round((previousDailyKWh + finalIntervalKWh) * 100) / 100
                     
@@ -75,7 +75,7 @@ export const createTelemetryCron = (io: Server) => {
                     })
 
                     telemetryLogs.push({
-                        householdId: household._id,
+                        household: household._id,
                         powerConsumedKWh: finalIntervalKWh,
                         powerConsumedKW: currentPowerKW,
                         batteryLevelPercent: Math.floor(Math.random() * (95 - 40 + 1) + 40),

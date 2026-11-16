@@ -306,3 +306,7 @@ export const ToggleTerminalConnection = async (req: AuthenticatedRequest, res: R
         next(error);
     }
 }
+
+export const ChangeTerminalName = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    
+}
