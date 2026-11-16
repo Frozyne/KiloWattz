@@ -48,8 +48,8 @@ export const createTelemetryCron = (io: Server) => {
                         calculatedHouseholdKWh += draw
                     }
 
-                    const finalIntervalKWh = Math.round(calculatedHouseholdKWh * 100) / 100
-                    const currentPowerKW = Math.round((Math.random() * (3.2 - 0.8) + 0.8) * 100) / 100
+                    const finalIntervalKWh = Math.round(calculatedHouseholdKWh * 100) / 1000
+                    const currentPowerKW = Math.round((Math.random() * (3.2 - 0.8) + 0.8) * 100) / 1000
                     const previousDailyKWh = household.consumedKWh || 0
                     const newDailyKWh = Math.round((previousDailyKWh + finalIntervalKWh) * 100) / 100
                     

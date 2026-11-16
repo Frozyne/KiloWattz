@@ -197,7 +197,7 @@ export const updateUserProfile = async (req: AuthenticatedRequest, res: Response
 }
 
 export const deleteUserProfile = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    const { targetUserId } = req.params
+    const { id: targetUserId } = req.params
 
     if (req.user?._id.toString() === targetUserId) {
         return next(new ServerError('You cannot delete your own account', 403))

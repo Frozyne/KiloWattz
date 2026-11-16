@@ -35,8 +35,8 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
     const toggle = anyOn ? 'On' : 'Off'
 
   return (
-    <div className="mx-5 rounded-2xl border bg-accent mt-2 p-5 shadow-sm">
-      <div className="flex flex-wrap items-start justify-between gap-4">
+    <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm">
+      <div>
         <div>
           <div className="mb-1 flex items-center gap-2">
             <Button size="icon" variant="outline" aria-label="Power" className="bg-secondary text-accent translate-y-3">
@@ -44,24 +44,30 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
             </Button>
             <small className="font-medium text-primary uppercase">Whole-home control: {household?.meterSerialNumber}</small>
           </div>
-          <h2 className="text-2xl font-bold pl-11 -translate-y-3">All Terminals</h2>
           <p className="text-sm text-secondary pl-11 -translate-y-2">
             {on} of {total} terminals are on
           </p>
+          <Button onClick={() => toggleAll(toggle, householdId, payload, terminals, toggleTerinal)}>
+            <div className="flex items-center gap-2">
+              <PowerIcon size={16} />
+              {anyOn ? "Turn all off" : "Turn all on"}
+            </div>
+          </Button>
         </div>
 
-        {
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          {
             terminals.map(( terminal ) => {
 
                 payload.terminalNumber = terminals.indexOf(terminal) + 1
                 payload.connectionStatus = terminal?.connectionStatus
 
                 return (
-                    <div key={terminals.indexOf(terminal)}>
+                    <div key={terminals.indexOf(terminal)} className="bg-green-50 p-5 rounded-2xl">
                         <div>
                             <h3>{terminal?.name || `Terminal ${terminals.indexOf(terminal) + 1}`}</h3>
                             <p className="text-sm text-secondary pl-11 -translate-y-2">Current Usage: {terminal?.consumedKWh} KWH</p>
-                            <p className="text-sm text-secondary pl-11 -translate-y-2">Status: </p>{terminal?.connectionStatus}
+                            <p className="text-sm text-secondary pl-11 -translate-y-2">Status: {terminal?.connectionStatus}</p>
                         </div>
                         <Button onClick={() => toggleTerinal({householdId, payload })}>
                             { terminal?.connectionStatus ? 'Turn Off' : 'Turn On' }
@@ -69,23 +75,9 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
                     </div>
                 )
             })
-            
-        }
-
-        <Button onClick={() => toggleAll(toggle, householdId, payload, terminals, toggleTerinal)}>
-          <div className="flex items-center gap-2">
-            <PowerIcon size={16} />
-            {anyOn ? "Turn all off" : "Turn all on"}
-          </div>
-        </Button>
+          }
+        </div>
       </div>
-
-      <p className="mt-4 flex items-center gap-2 text-sm text-secondary border-t-2">
-        <span className="h-2 w-2 rounded-full bg-green-500" />
-        Connected to the Daylight Home Energy Hub
-      </p>
-
-      <p className="text-sm text-secondary pl-5"></p>
     </div>
   )
 }

@@ -43,7 +43,7 @@ export const householdsService = {
     },
 
     delete: async (id: string): Promise<any> => {
-        const res = await api.delete(`/households/${id}`)
+        const res = await api.delete(`/household/${id}`)
         return res
     },
 
@@ -63,7 +63,7 @@ export const householdsService = {
         payload: ToggleTerminalPayload
     ): Promise<IHousehold> => {
         const res = await api.patch<{ data: { household: IHousehold } }>(
-            `/households/${householdId}/toggle-terminal`,
+            `/household/${householdId}/toggle-terminal`,
             payload
         )
         return res.data.data.household

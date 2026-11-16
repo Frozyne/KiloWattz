@@ -78,13 +78,13 @@ export const getHouseholdTelemetry = async (req: AuthenticatedRequest, res: Resp
             return next(new ServerError(`Household with ID ${householdId} does not have an associated user`, 404));
         }
 
-        const isOwner = household.user.toString() === req.user?._id.toString();
+        const isOwner = household.user._id.toString() === req.user?._id.toString();
 
         if (!isAdmin(req) && !isOwner) {
             return next(new ServerError('Unauthorized access to this household telemetry data', 403));
         }
 
-        const logs = await Telemetry.find({ household: householdId, scope: 'Household' })
+        const logs = await Telemetry.find({ household: householdId })
             .sort({ timestamp: -1 })
             .limit(50);
 
