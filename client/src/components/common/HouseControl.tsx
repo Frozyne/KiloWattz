@@ -23,14 +23,17 @@ function toggleAll(
   toggle: (args: { householdId: string; payload: ToggleTerminalPayload }) => Promise<unknown>
 ) {
   terminals.forEach(async (terminal, index) => {
-    if (terminal.connectionStatus !== targetStatus) {
-      await toggle({
-        householdId,
-        payload: {
-          terminalNumber: index + 1,
-          connectionStatus: targetStatus,
-        },
-      })
+    for (let i = 0; i < terminals.length; i++) {
+      const terminal = terminals[i]
+      if (terminal.connectionStatus !== targetStatus) {
+        await toggle({
+          householdId,
+          payload: {
+            terminalNumber: i + 1,
+            connectionStatus: targetStatus,
+          },
+        })
+      }
     }
   })
 }
