@@ -16,26 +16,24 @@ function handleMeter(meter?: IMeter | null): ITerminal[] {
   ].filter((t): t is ITerminal => Boolean(t))
 }
 
-function toggleAll(
+async function toggleAll(
   targetStatus: 'On' | 'Off',
   householdId: string,
   terminals: ITerminal[],
   toggle: (args: { householdId: string; payload: ToggleTerminalPayload }) => Promise<unknown>
 ) {
-  terminals.forEach(async (terminal, index) => {
-    for (let i = 0; i < terminals.length; i++) {
-      const terminal = terminals[i]
-      if (terminal.connectionStatus !== targetStatus) {
-        await toggle({
-          householdId,
-          payload: {
-            terminalNumber: i + 1,
-            connectionStatus: targetStatus,
-          },
-        })
-      }
+  for (let i = 0; i < terminals.length; i++) {
+    const terminal = terminals[i]
+    if (terminal.connectionStatus !== targetStatus) {
+      await toggle({
+        householdId,
+        payload: {
+          terminalNumber: i + 1,
+          connectionStatus: targetStatus,
+        },
+      })
     }
-  })
+  }
 }
 
 const HouseControl = ({ id: householdId }: { id: string }) => {
