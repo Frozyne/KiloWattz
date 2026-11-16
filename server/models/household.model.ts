@@ -38,23 +38,23 @@ export interface IHousehold extends Document {
 }
 
 const terminalSchema = new mongoose.Schema<ITerminal>({
-    name: {type: String},
-    consumedKWh: {type: Number},
+    name: { type: String, default: '' },
+    consumedKWh: { type: Number, default: 0 },
     connectionStatus: {
         type: String,
         enum: ['On', 'Off', 'Fault'],
         default: 'On'
     }
-})
+}, { _id: false })
 
 const meterSchema = new mongoose.Schema<IMeter>({
-    terminal1: terminalSchema, 
-    terminal2: terminalSchema,
-    terminal3: terminalSchema,
-    terminal4: terminalSchema,
-    terminal5: terminalSchema,
-    terminal6: terminalSchema,
-})
+    terminal1: { type: terminalSchema, default: () => ({ name: 'Terminal 1' }) },
+    terminal2: { type: terminalSchema, default: () => ({ name: 'Terminal 2' }) },
+    terminal3: { type: terminalSchema, default: () => ({ name: 'Terminal 3' }) },
+    terminal4: { type: terminalSchema, default: () => ({ name: 'Terminal 4' }) },
+    terminal5: { type: terminalSchema, default: () => ({ name: 'Terminal 5' }) },
+    terminal6: { type: terminalSchema, default: () => ({ name: 'Terminal 6' }) },
+}, { _id: false })
 
 const quotaBreachSchema = new mongoose.Schema<IQuotaBreach>({
     breachedAt: { 
@@ -110,7 +110,10 @@ const householdSchema = new mongoose.Schema<IHousehold>({
         minLength: [10, 'Please enter a valid serial number'],
         maxLength: [15, 'Serial number is invalid']
     },
-    meter: meterSchema,
+    meter: {
+        type: meterSchema,
+        default: () => ({})
+    },
     phaseConnection: {
         type: String,
         enum: ['Phase 1', 'Phase 2', 'Phase 3'],

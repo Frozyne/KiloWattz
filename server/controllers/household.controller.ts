@@ -290,7 +290,7 @@ export const ToggleTerminalConnection = async (req: AuthenticatedRequest, res: R
 
         const terminalKey = `terminal${terminalNumber}` as keyof typeof household.meter;
 
-        if (!household.meter[terminalKey]) {
+        if (!household?.meter?.[terminalKey]) {
             return next(new ServerError(`Terminal ${terminalNumber} does not exist`, 400));
         }
 

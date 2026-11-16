@@ -9,10 +9,11 @@ import {
   Pencil, 
   Check, 
   X, 
-  Loader2 
+  Loader2,
+  Trash2
 } from 'lucide-react'
 import { useCurrentUserQuery } from '@/hooks/useUserQureies'
-import { useHouseholdDetailQuery, useUpdateHouseholdMutation, useUpdateHouseholdStatusMutation } from '@/hooks/useHouseholdQueries'
+import { useHouseholdDetailQuery, useUpdateHouseholdMutation, useUpdateHouseholdStatusMutation, useDeleteHouseholdMutation } from '@/hooks/useHouseholdQueries'
 import { Button } from '@/components/ui/button'
 import {
   Select,
@@ -23,17 +24,20 @@ import {
 } from "@/components/ui/select"
 
 interface HouseholdInfoProps {
-  householdId?: string
+  householdId?: string,
+  onDeleted?: () => void
 }
 
-export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId }) => {
+export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId, onDeleted }) => {
   const { data: currentUser } = useCurrentUserQuery()
   const { data: household, isLoading } = useHouseholdDetailQuery(householdId || '')
   const updateHouseholdMutation = useUpdateHouseholdMutation()
-  const updateHouseholdStatus = useUpdateHouseholdStatusMutation()
+  const updateHouseholdStatus = useUpdateHouseholdStatusMutation()  
+  const deleteHousehold = useDeleteHouseholdMutation()
 
   const isAdmin = currentUser?.role === 'Admin'
   const [isEditing, setIsEditing] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   // Draft state includes meterSerialNumber & phaseConnection
   const [draft, setDraft] = useState({
@@ -58,6 +62,10 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId }) => 
       })
     }
   }, [household])
+
+  useEffect(() => {
+    setConfirmDelete(false)
+  }, [householdId])
 
   if (!householdId) {
     return (
@@ -88,6 +96,14 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId }) => 
     setIsEditing(false)
   }
 
+  const handleDelete = async () => {
+    if (!householdId) return
+
+    await deleteHousehold.mutateAsync(householdId)
+    setConfirmDelete(false)
+    onDeleted?.()
+  }
+
   return (
     <div className="border rounded-xl p-5 bg-white shadow-sm space-y-4">
       {/* Header */}
@@ -99,14 +115,50 @@ export const HouseholdInfo: React.FC<HouseholdInfoProps> = ({ householdId }) => 
 
         {isAdmin && (
           !isEditing ? (
-            <Button
-              onClick={() => setIsEditing(true)}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1.5 text-xs font-semibold"
-            >
-              <Pencil className="size-3.5" /> Edit Household
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setIsEditing(true)}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1.5 text-xs font-semibold text-shadow-green-900"
+              >
+                <Pencil className="size-3.5" /> Edit Household
+              </Button>
+
+              {!confirmDelete ? (
+                <Button
+                  onClick={() => setConfirmDelete(true)}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-1.5 text-xs font-semibold text-red-600 border-red-200 hover:bg-red-50"
+                >
+                  <Trash2 className="size-3.5" /> Delete
+                </Button>
+              ) : (
+                <div className="flex items-center gap-1">
+                  <Button
+                    onClick={handleDelete}
+                    disabled={deleteHousehold.isPending}
+                    size="sm"
+                    className="bg-red-600 hover:bg-red-700 text-white text-xs"
+                  >
+                    {deleteHousehold.isPending ? (
+                      <Loader2 className="size-3.5 animate-spin" />
+                    ) : (
+                      'Confirm'
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => setConfirmDelete(false)}
+                    variant="ghost"
+                    size="sm"
+                    className="text-xs px-2"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <Button

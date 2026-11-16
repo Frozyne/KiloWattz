@@ -24,7 +24,7 @@ export const UserWidgetSection: React.FC<UserWidgetSectionProps> = ({ user }) =>
         selectedHouseholdId={selectedHouseholdId}
         onSelectHousehold={(id) => setSelectedHouseholdId(id)}
       />
-      <HouseholdInfo householdId={selectedHouseholdId} />
+      <HouseholdInfo householdId={selectedHouseholdId} onDeleted={() => setSelectedHouseholdId(undefined)} />
     </div>
   )
 }

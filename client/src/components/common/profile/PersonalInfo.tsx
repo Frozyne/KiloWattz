@@ -10,9 +10,10 @@ import {
   Home, 
   Loader2, 
   Key,
-  Plus
+  Plus,
+  Trash2
 } from 'lucide-react'
-import { useCurrentUserQuery, useUpdateUserMutation } from '@/hooks/useUserQureies'
+import { useCurrentUserQuery, useUpdateUserMutation, useDeleteUserMutation} from '@/hooks/useUserQureies'
 import { type IUser } from '@/lib/types'
 import { Button } from '@/components/ui/button'
 import {
@@ -30,21 +31,26 @@ interface PersonalInfoProps {
   targetUser?: IUser
   selectedHouseholdId?: string
   onSelectHousehold?: (id: string) => void
+  onDeleted?: () => void
 }
 
 export const PersonalInfo: React.FC<PersonalInfoProps> = ({
   targetUser,
   selectedHouseholdId,
   onSelectHousehold,
+  onDeleted
 }) => {
   const { data: currentUser } = useCurrentUserQuery()
   const updateUserMutation = useUpdateUserMutation()
+  const deleteUser = useDeleteUserMutation()
 
   const user = targetUser || currentUser
   const isAdmin = currentUser?.role === 'Admin'
 
   const [isEditing, setIsEditing] = useState(false)
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const canDeleteUser = isAdmin && user?._id && user._id !== currentUser?._id
   
   const [draft, setDraft] = useState({
     fullName: '',
@@ -73,6 +79,13 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
     setIsEditing(false)
   }
 
+  const handleDeleteUser = async () => {
+    if (!user?._id) return
+    await deleteUser.mutateAsync(user._id)
+    setConfirmDelete(false)
+    onDeleted?.() // Navigate back to UsersTable
+  }
+
   return (
     <div className="border border-emerald-800/50 rounded-2xl p-5 bg-secondary shadow-md space-y-4">
       {/* Header */}
@@ -83,14 +96,52 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
 
         {isAdmin && (
           !isEditing ? (
-            <Button
-              onClick={() => setIsEditing(true)}
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-1.5 text-xs font-semibold border-emerald-700/50 text-emerald-300 hover:bg-emerald-900/40"
-            >
-              <Pencil className="size-3.5" /> Edit Profile
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                onClick={() => setIsEditing(true)}
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1.5 text-xs font-semibold border-emerald-700/50 text-emerald-300 hover:bg-emerald-900/40"
+              >
+                <Pencil className="size-3.5" /> Edit Profile
+              </Button>
+
+              {canDeleteUser && (
+                !confirmDelete ? (
+                  <Button
+                    onClick={() => setConfirmDelete(true)}
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-1.5 text-xs font-semibold border-red-500/40 text-red-400 hover:bg-red-950/50"
+                  >
+                    <Trash2 className="size-3.5" /> Delete
+                  </Button>
+                ) : (
+                  <div className="flex items-center gap-1">
+                    <Button
+                      onClick={handleDeleteUser}
+                      disabled={deleteUser.isPending}
+                      size="sm"
+                      className="bg-red-600 hover:bg-red-500 text-white text-xs"
+                    >
+                      {deleteUser.isPending ? (
+                        <Loader2 className="size-3.5 animate-spin" />
+                      ) : (
+                        'Confirm'
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => setConfirmDelete(false)}
+                      variant="ghost"
+                      size="sm"
+                      className="text-xs text-emerald-300 hover:bg-emerald-900/40 px-2"
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )
+              )}
+            </div>
           ) : (
             <div className="flex items-center gap-2">
               <Button

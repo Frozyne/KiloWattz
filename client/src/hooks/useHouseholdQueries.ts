@@ -57,6 +57,7 @@ export const useDeleteHouseholdMutation = () => {
         mutationFn: (id: string) => householdsService.delete(id),
         onSuccess: async() => {
             await queryClient.invalidateQueries({ queryKey: ['household'] })
+            await queryClient.invalidateQueries({queryKey: ['user']})
         },
     })
 }
