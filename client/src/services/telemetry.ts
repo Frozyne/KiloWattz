@@ -12,6 +12,7 @@ export interface CommunityTem {
   summary: CommunitySum
   hourly: ITelemetry[]
   activeHouseholds: number
+  batteryCharge: number
 }
 
 

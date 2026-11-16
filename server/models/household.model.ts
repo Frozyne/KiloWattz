@@ -94,8 +94,7 @@ const householdSchema = new mongoose.Schema<IHousehold>({
     dailyKWHQuota: {
         type: Number,
         required: true,
-        min: [0, 'Allocated Quota must be more than 0kwh'],
-        max: [15, 'Allocated Quota must not exceed 15kwh']
+        min: [0, 'Allocated Quota must be more than 0kwh']
     },
     connectionStatus: {
         type: String,

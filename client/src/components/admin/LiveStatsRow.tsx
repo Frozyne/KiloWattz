@@ -40,9 +40,9 @@ export default function LiveStat(){
       <div className="border bg-background mt-5 p-5 rounded-4xl text-2xl font-bold text-secondary">
         <h1 className="flex justify-between pt-2 mb-2 font-extralight text-sm text-primary">
           BATTERY
-          {getBatteryStatusIcon(stats?.summary.batteryLevelPercent)}
+          {getBatteryStatusIcon(stats?.batteryCharge)}
         </h1>
-        {stats?.summary.batteryLevelPercent} %
+        {stats?.batteryCharge} %
         {/* <p className="flex items-center gap-1 mt-4 text-sm">
           <ArrowUpIcon size={10}
             className="font-extralight" /> 1.4% this month

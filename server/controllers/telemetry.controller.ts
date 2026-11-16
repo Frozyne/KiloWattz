@@ -5,6 +5,7 @@ import { ApiResponse } from "../utils/server.success.js";
 import Telemetry, { type ITelemetry } from "../models/telemetry.model.js";
 import Household from "../models/household.model.js";
 import { isAdmin } from "../utils/server.authorizer.js";
+import Infrastructure from "../models/infrastructure.model.ts";
 
 interface CommunitySummary {
     solarGeneratedKW: number,
@@ -18,6 +19,14 @@ export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Resp
         const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
         const households = await Household.find({ connectionStatus: 'Active' })
+
+        const batteryBanks = await Infrastructure.find({ type: 'BatteryBank' })
+        const centralBatterySoC = batteryBanks.length > 0
+            ? Math.round(
+                batteryBanks.reduce((acc, b) => acc + (b.diagnostics?.stateOfChargePercent ?? 85), 0) /
+                batteryBanks.length
+            )
+            : 85
 
         const telemetryData: ITelemetry[] = await Telemetry.aggregate([
         {
@@ -57,7 +66,7 @@ export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Resp
         return ApiResponse.success({
             res,
             message: 'Community telemetry data retrieved successfully',
-            data: { summary, hourly: telemetryData, activeHouseholds: households.length }
+            data: { summary, hourly: telemetryData, activeHouseholds: households.length, batteryCharge: centralBatterySoC }
         });
 
     } catch (error) {

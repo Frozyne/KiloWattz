@@ -109,7 +109,7 @@ export const AnalyticsKpiRow: React.FC<AnalyticsKpiRowProps> = ({ scope, selecte
           <BatteryCharging className="h-4 w-4 text-emerald-400" />
         </div>
         <div className="text-2xl font-bold text-accent font-mono">
-          {communityTelemetry?.summary?.batteryLevelPercent ?? 0} <span className="text-sm font-normal text-emerald-200">%</span>
+          {communityTelemetry?.batteryCharge ?? 0} <span className="text-sm font-normal text-emerald-200">%</span>
         </div>
         <div className="text-xs text-emerald-400 mt-2 font-medium">
           {infrastructure?.summary?.batteryBanks?.totalCapacityKWh ?? 1100} kWh Capacity
