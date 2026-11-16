@@ -22,13 +22,13 @@ function toggleAll(
   terminals: ITerminal[],
   toggle: (args: { householdId: string; payload: ToggleTerminalPayload }) => Promise<unknown>
 ) {
-  terminals.forEach((terminal, index) => {
-    if (terminal.connectionStatus === targetStatus) {
-      toggle({
+  terminals.forEach(async (terminal, index) => {
+    if (terminal.connectionStatus !== targetStatus) {
+      await toggle({
         householdId,
         payload: {
           terminalNumber: index + 1,
-          connectionStatus: terminal.connectionStatus,
+          connectionStatus: targetStatus,
         },
       })
     }
@@ -53,7 +53,7 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
   const total = terminals.length
   const on = terminals.filter((d) => d.connectionStatus === 'On').length
   const anyOn = on > 0
-  const toggleTarget = anyOn ? 'On' : 'Off'
+  const toggleTarget = anyOn ? 'Off' : 'On'
 
   return (
     <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm gap-5">
@@ -100,7 +100,7 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
                       householdId,
                       payload: {
                         terminalNumber,
-                        connectionStatus: terminal.connectionStatus,
+                        connectionStatus: isOn ? 'Off' : 'On' ,
                       },
                     })
                   }

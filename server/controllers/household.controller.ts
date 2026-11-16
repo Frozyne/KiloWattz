@@ -295,6 +295,7 @@ export const ToggleTerminalConnection = async (req: AuthenticatedRequest, res: R
         }
 
         household.meter[terminalKey].connectionStatus = connectionStatus;
+        household.markModified('meter')
         await household.save();
         
         return ApiResponse.success({
@@ -308,5 +309,5 @@ export const ToggleTerminalConnection = async (req: AuthenticatedRequest, res: R
 }
 
 export const ChangeTerminalName = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
-    
+
 }

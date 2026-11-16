@@ -26,6 +26,8 @@ export const useHouseholdDetailQuery = (id?: string) => {
         queryKey: queryKeys.household.detail(id),
         queryFn: () => householdsService.getById(id),
         enabled: Boolean(id),
+        refetchInterval: 5000,
+        refetchIntervalInBackground: false,
     })
 }
 
