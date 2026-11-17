@@ -9,6 +9,6 @@ telemetryRouter.use(protectRoute) // Apply authentication middleware to all rout
 
 telemetryRouter.get('/household/:id', getHouseholdTelemetry)
 
-telemetryRouter.get('/community', authorizeUser, getCommunityTelemetry) // Admin only
+telemetryRouter.get('/community', getCommunityTelemetry) // Admin only
 
 export default telemetryRouter
