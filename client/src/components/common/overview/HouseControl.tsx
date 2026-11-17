@@ -62,7 +62,14 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="mb-1 flex items-center gap-2">
-            <Button size="icon" variant="outline" aria-label="Power" className="bg-secondary text-accent">
+            <Button 
+              size="icon" 
+              variant="outline" 
+              aria-label="Power" 
+              className="bg-secondary text-accent"
+              disabled={isPending}
+              onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}
+              >
               <PowerIcon size={20} />
             </Button>
             <div>
