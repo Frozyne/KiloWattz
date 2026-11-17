@@ -61,13 +61,13 @@ export const createTelemetryCron = (io: Server) => {
                         const terminal: ITerminal = household.meter[key]
                         if (!terminal) continue
 
-                        // Realistic per-circuit draw in kW (0.10 - 0.55 kW when On, 0 when Off)
+                        // Live wattage/kW reading for this terminal (0 when Off/Fault)
                         const terminalKW = terminal.connectionStatus === 'On'
                             ? Math.round((Math.random() * (0.55 - 0.10) + 0.10) * loadMultiplier * 100) / 100
                             : 0
 
-                        const terminalIntervalKWh = Math.round(terminalKW * INTERVAL_HOURS * 1000) / 1000
-                        updatedTerminals[`meter.${key}.consumedKWh`] = terminalIntervalKWh
+                        // Save the live kW reading directly onto the terminal document
+                        updatedTerminals[`meter.${key}.consumedKW`] = terminalKW
                         currentPowerKW += terminalKW
                     }
 

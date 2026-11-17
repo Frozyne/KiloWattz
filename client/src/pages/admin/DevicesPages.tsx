@@ -55,7 +55,7 @@ export default function DevicesPage() {
         <WeatherStats />
 
         {/* Page Header */}
-        <div>
+        <div className='bg-secondary'>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-secondary p-6 rounded-3xl border border-emerald-800/50 shadow-md">
             <div>
               <h1 className="text-3xl font-bold tracking-tight text-accent flex items-center gap-2">
@@ -87,7 +87,7 @@ export default function DevicesPage() {
               <span className="border border-emerald-700/50 bg-emerald-950/80 text-emerald-400 p-3.5 rounded-2xl">
                 <ShapesIcon className="size-6" />
               </span>
-              <div>
+              <div className='p-0 m-0'>
                 <span className="text-xs font-medium text-emerald-300">Total Registered</span>
                 <p className="text-3xl font-bold font-mono text-accent mt-0.5">{summary?.statusCounts?.operational || 0} Devices</p>
               </div>
