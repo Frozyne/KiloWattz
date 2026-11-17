@@ -1,3 +1,4 @@
+// server/src/services/solar.service.ts
 import Infrastructure from '../models/infrastructure.model.js'
 
 export interface SolarGenerationResult {
@@ -7,36 +8,47 @@ export interface SolarGenerationResult {
 
 export const calculateCentralSolarGeneration = async (
     solarIrradianceWm2: number = 800,
-    cloudCoverPercent: number = 20
+    cloudCoverPercent: number = 20,
+    temperatureC: number = 25
 ): Promise<SolarGenerationResult> => {
-    const currentHour = new Date().getHours()
-    const isDaytime = currentHour >= 6 && currentHour <= 18
-
-    if (!isDaytime) {
-        return { totalGeneratedKW: 0, activeArrayCount: 0 }
-    }
-
-    // 1. Fetch all SolarArray assets from DB
     const solarArrays = await Infrastructure.find({ type: 'SolarArray' })
-
     if (!solarArrays.length) {
         return { totalGeneratedKW: 0, activeArrayCount: 0 }
     }
 
-    // 2. Compute solar irradiance & daytime curves
+    const currentHour = new Date().getHours()
+    const isDaytime = currentHour >= 6 && currentHour <= 18
+
+    // Zero out all array live outputs at night so UI diagnostics don't stay stuck on sunset values
+    if (!isDaytime || solarIrradianceWm2 <= 0) {
+        await Infrastructure.updateMany(
+            { type: 'SolarArray' },
+            { $set: { 'diagnostics.currentOutputKW': 0 } }
+        )
+        return { totalGeneratedKW: 0, activeArrayCount: 0 }
+    }
+
     const timeFactor = Math.sin(((currentHour - 6) / 12) * Math.PI)
-    const cloudReduction = 1 - (cloudCoverPercent / 100) * 0.75
+    const cloudReduction = 1 - (Math.min(100, Math.max(0, cloudCoverPercent)) / 100) * 0.75
     const weatherFactor = Math.min(solarIrradianceWm2 / 1000, 1.0) * cloudReduction
+
+    // Thermal derating: -0.4% efficiency per °C above 25°C STC
+    const thermalFactor = temperatureC > 25
+        ? Math.max(0.7, 1 - (temperatureC - 25) * 0.004)
+        : 1
 
     let totalGeneratedKW = 0
     let activeArrayCount = 0
+    const bulkOps: any[] = []
 
-    // 3. Dynamic iteration using document fields
     for (const array of solarArrays) {
-        // Zero output if array is currently offline or under maintenance
         if (array.status === 'Offline' || array.status === 'UnderMaintenance') {
-            if (array.diagnostics) array.diagnostics.currentOutputKW = 0
-            await array.save()
+            bulkOps.push({
+                updateOne: {
+                    filter: { _id: array._id },
+                    update: { $set: { 'diagnostics.currentOutputKW': 0 } },
+                },
+            })
             continue
         }
 
@@ -46,16 +58,22 @@ export const calculateCentralSolarGeneration = async (
         const healthFactor = (array.healthPercent ?? 100) / 100
         const efficiencyFactor = (array.diagnostics?.efficiencyPercent ?? 85) / 100
 
-        // Calculate output scaled by array capacity, efficiency, health, and solar conditions
-        const arrayOutputKW = capacity * timeFactor * weatherFactor * efficiencyFactor * healthFactor
+        const arrayOutputKW =
+            capacity * timeFactor * weatherFactor * thermalFactor * efficiencyFactor * healthFactor
         const finalArrayKW = Math.max(0, Math.round(arrayOutputKW * 100) / 100)
 
         totalGeneratedKW += finalArrayKW
 
-        // Sync live output back to individual array diagnostics for UI monitoring
-        if (!array.diagnostics) array.diagnostics = {}
-        array.diagnostics.currentOutputKW = finalArrayKW
-        await array.save()
+        bulkOps.push({
+            updateOne: {
+                filter: { _id: array._id },
+                update: { $set: { 'diagnostics.currentOutputKW': finalArrayKW } },
+            },
+        })
+    }
+
+    if (bulkOps.length > 0) {
+        await Infrastructure.bulkWrite(bulkOps)
     }
 
     return {

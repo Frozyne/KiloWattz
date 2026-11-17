@@ -47,7 +47,7 @@ export interface IQuotaBreach {
 
 export interface ITerminal {
     name: string,
-    consumedKWh: number,
+    consumedKW: number,
     connectionStatus: 'On' | 'Off' | 'Fault'
 }
 

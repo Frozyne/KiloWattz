@@ -89,7 +89,7 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
                 <div>
                   <h3>{terminal.name || `Terminal ${terminalNumber}`}</h3>
                   <p className="text-sm text-secondary pl-11 -translate-y-2">
-                    Current Usage: {terminal.consumedKWh} KWH
+                    Power Draw: {terminal.consumedKW} KW
                   </p>
                   <p className="text-sm text-secondary pl-11 -translate-y-2">
                     Status: {terminal.connectionStatus}

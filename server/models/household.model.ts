@@ -9,7 +9,7 @@ export interface IQuotaBreach {
 
 export interface ITerminal {
     name: string,
-    consumedKWh: number,
+    consumedKW: number,
     connectionStatus: 'On' | 'Off' | 'Fault'
 }
 
@@ -39,7 +39,7 @@ export interface IHousehold extends Document {
 
 const terminalSchema = new mongoose.Schema<ITerminal>({
     name: { type: String, default: '' },
-    consumedKWh: { type: Number, default: 0 },
+    consumedKW: { type: Number, default: 0 },
     connectionStatus: {
         type: String,
         enum: ['On', 'Off', 'Fault'],
