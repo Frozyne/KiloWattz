@@ -27,6 +27,7 @@ export interface Summary {
     inverters: {
         count: number;
         totalCapacityKW: number;
+        efficiency: number
     };
     transformers: {
         count: number;

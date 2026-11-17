@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { AnalyticsHeader } from '@/components/common/analytics/AnalyticsHeader'
 import { AnalyticsKpiRow } from '@/components/common/analytics/AnalyticsKpiRow'
 import { TelemetryChartCard } from '@/components/common/analytics/TelemetryChartCard'
@@ -10,6 +11,7 @@ import { useAllHouseholdsQuery } from '@/hooks/useHouseholdQueries'
 import WeatherStats from '@/components/common/WeatherStats'
 
 export default function AnalyticsPage(): React.JSX.Element {
+  const queryClient = useQueryClient()
   const { data: user } = useCurrentUserQuery()
   const { data: allHouseholds } = useAllHouseholdsQuery()
   const isAdmin = user?.role === 'Admin'
@@ -18,7 +20,6 @@ export default function AnalyticsPage(): React.JSX.Element {
   const [selectedHouseholdId, setSelectedHouseholdId] = useState<string | undefined>()
   const [isRefreshing, setIsRefreshing] = useState(false)
 
-  // Initialize selectedHouseholdId when data resolves
   useEffect(() => {
     if (!selectedHouseholdId) {
       const list = isAdmin ? allHouseholds : user?.households
@@ -28,16 +29,19 @@ export default function AnalyticsPage(): React.JSX.Element {
     }
   }, [user, allHouseholds, isAdmin, selectedHouseholdId])
 
-  // Force non-admins to household scope
   useEffect(() => {
     if (user && !isAdmin) {
       setScope('household')
     }
   }, [user, isAdmin])
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setIsRefreshing(true)
-    setTimeout(() => setIsRefreshing(false), 600)
+    try {
+      await queryClient.invalidateQueries()
+    } finally {
+      setIsRefreshing(false)
+    }
   }
 
   return (
@@ -60,7 +64,7 @@ export default function AnalyticsPage(): React.JSX.Element {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <EnvironmentalYieldCard />
           <PhaseDistributionCard scope={scope} selectedHouseholdId={selectedHouseholdId} />
-          <GridStabilityCard />
+          <GridStabilityCard scope={scope} selectedHouseholdId={selectedHouseholdId} />
         </div>
       </div>
     </div>

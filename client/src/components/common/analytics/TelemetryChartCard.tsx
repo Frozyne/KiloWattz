@@ -16,7 +16,7 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
   const { data: householdLogs, isLoading: isHouseholdLoading } = useHouseholdTelemetryQuery(
     scope === 'household' ? selectedHouseholdId : undefined
   )
-  const { data: household } = useHouseholdDetailQuery(selectedHouseholdId)
+  const { data: household } = useHouseholdDetailQuery(selectedHouseholdId || '')
 
   const isLoading = scope === 'community' ? isCommunityLoading : isHouseholdLoading
 
@@ -31,20 +31,32 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
   const hourlyData = communityTelemetry?.hourly || []
 
   const displayLogs = scope === 'community'
-    ? hourlyData.map((d: any) => ({
-        label: d.hour || `${new Date(d.timestamp).getHours()}:00`,
-        solar: d.solarGeneratedKW ?? 0,
-        consumed: d.powerConsumedKW ?? 0,
-      }))
+    ? hourlyData.map((d: any) => {
+        const hourNum = typeof d._id === 'number' ? d._id : Number(d.hour)
+        const label = !Number.isNaN(hourNum)
+          ? `${String(hourNum).padStart(2, '0')}:00`
+          : '--:--'
+
+        return {
+          label,
+          primary: Math.round((d.solarGeneratedKW ?? 0) * 100) / 100,
+          secondary: Math.round((d.powerConsumedKW ?? 0) * 100) / 100,
+        }
+      })
     : (householdLogs || []).slice(0, 24).reverse().map((log: any) => ({
         label: new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        solar: log.powerConsumedKWh ?? 0,
-        consumed: log.powerConsumedKW ?? 0,
+        primary: Math.round((log.powerConsumedKW ?? 0) * 100) / 100,
+        secondary: Math.round((log.powerConsumedKWh ?? 0) * 1000) / 1000,
       }))
+
+  const primaryLabel = scope === 'community' ? 'Solar (kW)' : 'Power Draw (kW)'
+  const secondaryLabel = scope === 'community' ? 'Avg Load (kW)' : 'Interval Usage (kWh)'
+  const primaryUnit = 'kW'
+  const secondaryUnit = scope === 'community' ? 'kW' : 'kWh'
 
   const maxVal = Math.max(
     1,
-    ...displayLogs.map((d: any) => Math.max(d.solar, d.consumed))
+    ...displayLogs.map((d: any) => Math.max(d.primary, d.secondary))
   )
 
   return (
@@ -52,58 +64,64 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-4 border-b border-emerald-800/60">
         <div>
           <h3 className="text-lg font-bold text-accent">
-            {scope === 'community' ? '24-Hour Microgrid Generation & Load' : 'Meter Readings'}
+            {scope === 'community' ? '24-Hour Microgrid Generation & Load' : 'Household Meter Telemetry'}
           </h3>
           <p className="text-xs text-emerald-300/80">
             {scope === 'community'
-              ? 'Hourly telemetry across central arrays and active meters'
-              : `Telemetry log readings for household: ${household?.meterSerialNumber}`}
+              ? 'Hourly solar output vs. average household demand'
+              : `Recent readings for meter: ${household?.meterSerialNumber || 'N/A'}`}
           </p>
         </div>
 
         <div className="flex items-center gap-4 text-xs font-medium">
           <div className="flex items-center gap-1.5 text-amber-300">
             <span className="h-3 w-3 rounded-full bg-amber-400 inline-block" />
-            <span>Solar (kW)</span>
+            <span>{primaryLabel}</span>
           </div>
           <div className="flex items-center gap-1.5 text-emerald-300">
             <span className="h-3 w-3 rounded-full bg-emerald-500 inline-block" />
-            <span>Load (kW)</span>
+            <span>{secondaryLabel}</span>
           </div>
         </div>
       </div>
 
-      <div className="h-64 flex items-end gap-1.5 sm:gap-2 pt-6 pb-2 px-2 overflow-x-auto">
-        {displayLogs.map((item: any, idx: number) => {
-          const solarHeight = (item.solar / maxVal) * 100
-          const consumedHeight = (item.consumed / maxVal) * 100
+      {displayLogs.length === 0 ? (
+        <div className="h-64 flex items-center justify-center text-xs text-emerald-300/60 italic">
+          No telemetry logs recorded for this period yet.
+        </div>
+      ) : (
+        <div className="h-64 flex items-end gap-1.5 sm:gap-2 pt-6 pb-2 px-2 overflow-x-auto">
+          {displayLogs.map((item: any, idx: number) => {
+            const primaryHeight = (item.primary / maxVal) * 100
+            const secondaryHeight = (item.secondary / maxVal) * 100
 
-          return (
-            <div key={idx} className="flex-1 min-w-[20px] flex flex-col items-center gap-1 h-full justify-end group">
-              <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -translate-y-16 bg-emerald-950 border border-emerald-700 p-1.5 rounded text-[10px] text-accent z-20 pointer-events-none whitespace-nowrap shadow-xl">
-                <div>{item.label}</div>
-                <div className="text-amber-300">Solar: {item.solar} kW</div>
-                <div className="text-emerald-400">Draw: {item.consumed} kW</div>
+            return (
+              <div key={idx} className="relative flex-1 min-w-[24px] flex flex-col items-center gap-1 h-full justify-end group">
+                <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2 bg-emerald-950 border border-emerald-700 p-1.5 rounded text-[10px] text-accent z-20 pointer-events-none whitespace-nowrap shadow-xl">
+                  <div className="font-semibold">{item.label}</div>
+                  <div className="text-amber-300">{primaryLabel}: {item.primary} {primaryUnit}</div>
+                  <div className="text-emerald-400">{secondaryLabel}: {item.secondary} {secondaryUnit}</div>
+                </div>
+
+                <div className="w-full flex items-end justify-center gap-0.5 h-full">
+                  <div
+                    style={{ height: `${Math.max(4, primaryHeight)}%` }}
+                    className="w-1/2 bg-amber-400/90 hover:bg-amber-300 rounded-t transition-all"
+                  />
+                  <div
+                    style={{ height: `${Math.max(4, secondaryHeight)}%` }}
+                    className="w-1/2 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
+                  />
+                </div>
+
+                <span className="text-[9px] font-mono text-emerald-300/70 truncate w-full text-center">
+                  {item.label}
+                </span>
               </div>
-
-              <div className="w-full flex items-end justify-center gap-0.5 h-full">
-                <div
-                  style={{ height: `${Math.max(4, solarHeight)}%` }}
-                  className="w-1/2 bg-amber-400/90 hover:bg-amber-300 rounded-t transition-all"
-                />
-                <div
-                  style={{ height: `${Math.max(4, consumedHeight)}%` }}
-                  className="w-1/2 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
-                />
-              </div>
-
-              <span className="text-[9px] font-mono text-emerald-300/70 truncate w-full text-center">
-                {item.label}
-              </span>
-            </div>
-          )
-        })}
-      </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }

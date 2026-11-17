@@ -30,7 +30,8 @@ export const getInfrastructureStats = async (req: AuthenticatedRequest, res: Res
             },
             inverters: {
                 count: assets.filter((a: IInfrastructure) => a.type === 'Inverter').length,
-                totalCapacityKW: assets.filter((a: IInfrastructure) => a.type === 'Inverter').reduce((acc: number, a: IInfrastructure) => acc + (a.capacityKW || 0), 0)
+                totalCapacityKW: assets.filter((a: IInfrastructure) => a.type === 'Inverter').reduce((acc: number, a: IInfrastructure) => acc + (a.capacityKW || 0), 0),
+                efficiency: assets.filter((a: IInfrastructure) => a.type === 'Inverter').reduce((acc: number, a: IInfrastructure) => acc + (a.healthPercent || 0), 0)
             },
             transformers: {
                 count: assets.filter((a: IInfrastructure) => a.type === 'Transformer').length,
