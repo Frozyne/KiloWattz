@@ -45,7 +45,7 @@ export default function AnalyticsPage(): React.JSX.Element {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8 text-accent font-sans space-y-6">
+    <div className="min-h-screen text-accent font-sans space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <WeatherStats />
         <AnalyticsHeader

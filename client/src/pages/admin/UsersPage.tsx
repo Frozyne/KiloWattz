@@ -14,7 +14,7 @@ export default function UsersPage() {
   const [isAddUserOpen, setIsAddUserOpen] = useState(false)
 
   return (
-    <div className="min-h-screen p-4 md:p-8 text-accent font-sans space-y-6">
+    <div className="min-h-screen text-accent font-sans space-y-6">
       <div className="max-w-7xl mx-auto space-y-6">
         <WeatherStats />
 
@@ -39,7 +39,7 @@ export default function UsersPage() {
         </div>
 
         <UsersTable
-          onRowClick={(clickedUser: IUser) => navigate(`/users/${clickedUser._id}`)}
+          onRowClick={(clickedUser: IUser) => navigate(`/dashboard/users/${clickedUser._id}`)}
         />
       </div>
 

@@ -23,7 +23,7 @@ export default function UserDetailPage() {
       <div className="p-8 text-center space-y-4">
         <p className="text-emerald-200/70">User not found.</p>
         <button
-          onClick={() => navigate('/users')}
+          onClick={() => navigate('/dashboard/users')}
           className="text-sm text-emerald-400 hover:underline"
         >
           Back to Users List
@@ -36,7 +36,7 @@ export default function UserDetailPage() {
     <div className="min-h-screen p-4 md:p-8 text-accent font-sans">
       <div className="max-w-7xl mx-auto space-y-4">
         <button
-          onClick={() => navigate('/users')}
+          onClick={() => navigate('/dashboard/users')}
           className="flex items-center gap-1 text-sm text-emerald-400 hover:text-emerald-300 font-medium transition-colors"
         >
           <ChevronLeft className="size-4" /> Back to Users List
@@ -44,7 +44,7 @@ export default function UserDetailPage() {
 
         <UserWidgetSection
           user={targetUser}
-          onDeleted={() => navigate('/users')}
+          onDeleted={() => navigate('/dashboard/users')}
         />
       </div>
     </div>
