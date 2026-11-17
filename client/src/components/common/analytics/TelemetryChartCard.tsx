@@ -87,7 +87,7 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
             <span className="h-3 w-3 rounded-full bg-emerald-500 inline-block" />
             <span>{secondaryLabel}</span>
           </div>
-          <div className="flex items-center gap-1.5 text-violet-300">
+          <div className={`flex items-center gap-1.5 text-violet-300 ${!isCommunity && 'hidden'}`}>
             <span className="h-3 w-3 rounded-full bg-violet-500 inline-block" />
             <span>{batteryLabel}</span>
           </div>
