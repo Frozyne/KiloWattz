@@ -116,15 +116,15 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
                 <div className="w-full flex items-end justify-center gap-0.5 h-full">
                   <div
                     style={{ height: `${Math.max(4, primaryHeight)}%` }}
-                    className="w-1/2 bg-amber-400/90 hover:bg-amber-300 rounded-t transition-all"
+                    className="w-1/3 bg-amber-400/90 hover:bg-amber-300 rounded-t transition-all"
                   />
                   <div
                     style={{ height: `${Math.max(4, secondaryHeight)}%` }}
-                    className="w-1/2 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
+                    className="w-1/3 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
                   />
                   <div
                     style={{ height: `${Math.max(4, batteryHeight)}%` }}
-                    className="w-1/2 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all"
+                    className="w-1/3 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all"
                   />
                 </div>
 
