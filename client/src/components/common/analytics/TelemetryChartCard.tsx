@@ -41,22 +41,26 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
           label,
           primary: Math.round((d.solarGeneratedKW ?? 0) * 100) / 100,
           secondary: Math.round((d.powerConsumedKW ?? 0) * 100) / 100,
+          battery: Math.round((d.batteryLevelPercent ?? 0) * 100) / 100,
         }
       })
     : (householdLogs || []).slice(0, 24).reverse().map((log: any) => ({
         label: new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         primary: Math.round((log.powerConsumedKW ?? 0) * 100) / 100,
         secondary: Math.round((log.powerConsumedKWh ?? 0) * 1000) / 1000,
+        battery: Math.round((log.batteryLevelPercent ?? 0) * 100) / 100,
       }))
 
   const primaryLabel = scope === 'community' ? 'Solar (kW)' : 'Power Draw (kW)'
   const secondaryLabel = scope === 'community' ? 'Avg Load (kW)' : 'Interval Usage (kWh)'
+  const batteryLabel = 'Battery (%)'
   const primaryUnit = 'kW'
   const secondaryUnit = scope === 'community' ? 'kW' : 'kWh'
+  const batteryUnit = '%'
 
   const maxVal = Math.max(
     1,
-    ...displayLogs.map((d: any) => Math.max(d.primary, d.secondary))
+    ...displayLogs.map((d: any) => Math.max(d.primary, d.secondary, d.battery))
   )
 
   return (
@@ -82,6 +86,10 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
             <span className="h-3 w-3 rounded-full bg-emerald-500 inline-block" />
             <span>{secondaryLabel}</span>
           </div>
+          <div className="flex items-center gap-1.5 text-violet-300">
+            <span className="h-3 w-3 rounded-full bg-violet-500 inline-block" />
+            <span>{batteryLabel}</span>
+          </div>
         </div>
       </div>
 
@@ -94,13 +102,15 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
           {displayLogs.map((item: any, idx: number) => {
             const primaryHeight = (item.primary / maxVal) * 100
             const secondaryHeight = (item.secondary / maxVal) * 100
+            const batteryHeight = (item.battery / maxVal) * 100
 
             return (
-              <div key={idx} className="relative flex-1 min-w-[24px] flex flex-col items-center gap-1 h-full justify-end group">
+              <div key={idx} className="relative flex-1 min-w-6 flex flex-col items-center gap-1 h-full justify-end group">
                 <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2 bg-emerald-950 border border-emerald-700 p-1.5 rounded text-[10px] text-accent z-20 pointer-events-none whitespace-nowrap shadow-xl">
                   <div className="font-semibold">{item.label}</div>
                   <div className="text-amber-300">{primaryLabel}: {item.primary} {primaryUnit}</div>
                   <div className="text-emerald-400">{secondaryLabel}: {item.secondary} {secondaryUnit}</div>
+                  <div className="text-emerald-400">{batteryLabel}: {item.battery} {batteryUnit}</div>
                 </div>
 
                 <div className="w-full flex items-end justify-center gap-0.5 h-full">
@@ -111,6 +121,10 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
                   <div
                     style={{ height: `${Math.max(4, secondaryHeight)}%` }}
                     className="w-1/2 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
+                  />
+                  <div
+                    style={{ height: `${Math.max(4, batteryHeight)}%` }}
+                    className="w-1/2 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all"
                   />
                 </div>
 
