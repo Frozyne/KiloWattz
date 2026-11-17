@@ -35,7 +35,6 @@ export default function App() {
             <Route path="devices" element={<Devices />} />
             <Route path="users" element={<UsersPage />} />
             <Route path="users/:userId" element={<UserDetailPage />} />
-            <Route path="reports" />
           </Route>
         </Route>
       </Route>

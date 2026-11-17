@@ -8,6 +8,8 @@ export default function UserDetailPage() {
   const navigate = useNavigate()
   const { data: targetUser, isLoading } = useUserByIdQuery(userId || '')
 
+  console.log('UserDetailPage mounted:', { userId, targetUser, isLoading })
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
