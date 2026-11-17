@@ -111,7 +111,7 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
                   <div className="font-semibold">{item.label}</div>
                   <div className="text-amber-300">{primaryLabel}: {item.primary} {primaryUnit}</div>
                   <div className="text-emerald-400">{secondaryLabel}: {item.secondary} {secondaryUnit}</div>
-                  <div className="text-emerald-400">{batteryLabel}: {item.battery} {batteryUnit}</div>
+                  <div className={`text-emerald-400 ${!isCommunity && 'hidden'}`}>{batteryLabel}: {item.battery} {batteryUnit}</div>
                 </div>
 
                 <div className="w-full flex items-end justify-center gap-0.5 h-full">
