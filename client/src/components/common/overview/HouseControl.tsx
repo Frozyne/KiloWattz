@@ -59,30 +59,34 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
   return (
     <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm space-y-5">
       {/* Header & Master Toggle */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-secondary/15">
         <div>
-          <div className="mb-1 flex items-center gap-2">
-            <Button 
-              size="icon" 
-              variant="outline" 
-              aria-label="Power" 
-              className="bg-secondary text-accent"
-              disabled={isPending}
-              onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}
-              >
-              <PowerIcon size={20} />
-              {anyOn ? 'Turn all off' : 'Turn all on'}
-            </Button>
-            <div>
-              <small className="block font-medium text-primary uppercase">
-                Whole-home control: {household.meterSerialNumber}
-              </small>
-              <p className="text-sm text-secondary">
-                {on} of {total} terminals are on
-              </p>
-            </div>
-          </div>
+          <small className="block font-semibold text-primary uppercase tracking-wider">
+            Whole-home control · {household.meterSerialNumber}
+          </small>
+          <p className="text-sm text-secondary/80 mt-0.5">
+            {on} of {total} terminals are on
+          </p>
         </div>
+
+        <Button
+          type="button"
+          size="sm"
+          disabled={isPending || total === 0}
+          onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}
+          className={`flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold shadow-sm transition-colors ${
+            anyOn
+              ? 'bg-red-600 hover:bg-red-700 text-white'
+              : 'bg-secondary hover:bg-secondary/90 text-accent'
+          }`}
+        >
+          {isPending ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <PowerIcon className="size-4" />
+          )}
+          <span>{anyOn ? 'Turn all off' : 'Turn all on'}</span>
+        </Button>
       </div>
 
       {/* 6-Terminal Interactive Tile Grid */}

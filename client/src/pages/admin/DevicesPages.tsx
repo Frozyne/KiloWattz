@@ -54,53 +54,57 @@ export default function DevicesPage() {
 
         <WeatherStats />
 
-        {/* Page Header */}
-        <div className='bg-secondary'>
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-secondary p-6 rounded-3xl border border-emerald-800/50 shadow-md">
+        {/* Unified Page Header & Summary Banner */}
+        <div className="bg-secondary rounded-3xl border border-emerald-800/50 shadow-md overflow-hidden">
+          {/* Top Title Row */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 border-b border-emerald-800/50">
             <div>
-              <h1 className="text-3xl font-bold tracking-tight text-accent flex items-center gap-2">
-                <Cpu className="h-6 w-6 text-emerald-400" /> Devices & Infrastructure
+              <h1 className="text-3xl font-bold tracking-tight text-accent flex items-center gap-2.5">
+                <Cpu className="h-7 w-7 text-emerald-400" />
+                <span>Devices & Infrastructure</span>
               </h1>
               <p className="text-sm text-emerald-100/80 mt-1">
                 Monitor inverters, meters, solar arrays, battery banks, and gateway controllers.
               </p>
             </div>
 
-            {
-              isSuper &&
-              <div className="flex items-center gap-3 flex-wrap">
-                <Button 
-                  onClick={() => setIsAddModalOpen(true)}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-500 text-xs gap-1.5 rounded-xl shadow-sm"
-                >
-                  <Plus className="size-4" /> Register Device
-                </Button>
-              </div>
-            }
+            {isSuper && (
+              <Button
+                onClick={() => setIsAddModalOpen(true)}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold gap-1.5 rounded-xl px-4 py-2.5 shadow-sm self-start md:self-auto"
+              >
+                <Plus className="size-4" /> Register Device
+              </Button>
+            )}
           </div>
 
-          <hr className='bg-green-200' />
-          
-          {/* Dynamic Summary Metric Banner */}
-          <div className="bg-secondary border border-emerald-800/50 rounded-3xl p-6 shadow-md grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          {/* Summary Metrics Strip */}
+          <div className="p-6 bg-emerald-950/20 grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
             <div className="flex items-center gap-4">
               <span className="border border-emerald-700/50 bg-emerald-950/80 text-emerald-400 p-3.5 rounded-2xl">
                 <ShapesIcon className="size-6" />
               </span>
-              <div className='p-0 m-0'>
+              <div>
                 <span className="text-xs font-medium text-emerald-300">Total Registered</span>
-                <p className="text-3xl font-bold font-mono text-accent mt-0.5">{summary?.statusCounts?.operational || 0} Devices</p>
+                <p className="text-2xl sm:text-3xl font-bold font-mono text-accent mt-0.5">
+                  {totalAssets} <span className="text-sm font-normal text-emerald-200">Devices</span>
+                </p>
               </div>
             </div>
 
             <div className="flex flex-col md:items-center border-t md:border-t-0 md:border-x border-emerald-800/40 pt-4 md:pt-0">
               <span className="text-xs font-medium text-emerald-300">System Online Rate</span>
-              <strong className="text-3xl font-bold font-mono text-accent mt-0.5">{onlinePercent}%</strong>
+              <strong className="text-2xl sm:text-3xl font-bold font-mono text-emerald-400 mt-0.5">
+                {onlinePercent}%
+              </strong>
             </div>
 
             <div className="flex flex-col md:items-end border-t md:border-t-0 border-emerald-800/40 pt-4 md:pt-0">
-              <span className="text-xs font-medium text-emerald-300">Current Output Capacity</span>
-              <strong className="text-3xl font-bold font-mono text-accent mt-0.5">{totalOutputKW} KW</strong>
+              <span className="text-xs font-medium text-emerald-300">Inverter Output Capacity</span>
+              <strong className="text-2xl sm:text-3xl font-bold font-mono text-accent mt-0.5">
+                {summary?.inverters?.totalCapacityKW || 0}{' '}
+                <span className="text-sm font-normal text-emerald-200">kW</span>
+              </strong>
             </div>
           </div>
         </div>
