@@ -123,13 +123,10 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
                     style={{ height: `${Math.max(4, secondaryHeight)}%` }}
                     className="w-1/3 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
                   />
-                  {
-                    isCommunity &&
-                    <div
-                      style={{ height: `${Math.max(4, batteryHeight)}%` }}
-                      className="w-1/3 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all"
-                    />
-                  }
+                  <div
+                    style={{ height: `${Math.max(4, batteryHeight)}%` }}
+                    className={`w-1/3 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all ${!isCommunity && 'hidden'}`}
+                  />
                 </div>
 
                 <span className="text-[9px] font-mono text-emerald-300/70 truncate w-full text-center">
