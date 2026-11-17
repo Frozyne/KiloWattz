@@ -61,7 +61,7 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
 
   const maxVal = Math.max(
     1,
-    ...displayLogs.map((d: any) => Math.max(d.primary, d.secondary, d.battery))
+    ...displayLogs.map((d: any) => Math.max(d.primary, d.secondary))
   )
 
   return (
@@ -94,49 +94,46 @@ export const TelemetryChartCard: React.FC<TelemetryChartCardProps> = ({
         </div>
       </div>
 
-      {displayLogs.length === 0 ? (
-        <div className="h-64 flex items-center justify-center text-xs text-emerald-300/60 italic">
-          No telemetry logs recorded for this period yet.
-        </div>
-      ) : (
-        <div className="h-64 flex items-end gap-1.5 sm:gap-2 pt-6 pb-2 px-2 overflow-x-auto">
-          {displayLogs.map((item: any, idx: number) => {
-            const primaryHeight = (item.primary / maxVal) * 100
-            const secondaryHeight = (item.secondary / maxVal) * 100
-            const batteryHeight = (item.battery / maxVal) * 100
+      {displayLogs.map((item: any, idx: number) => {
+        const primaryHeight = (item.primary / maxVal) * 100
+        const secondaryHeight = (item.secondary / maxVal) * 100
+        const batteryHeight = Math.min(100, Math.max(0, item.battery)) // Already 0–100%
+        const barWidthClass = isCommunity ? 'w-1/3' : 'w-1/2'
 
-            return (
-              <div key={idx} className="relative flex-1 min-w-6 flex flex-col items-center gap-1 h-full justify-end group">
-                <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2 bg-emerald-950 border border-emerald-700 p-1.5 rounded text-[10px] text-accent z-20 pointer-events-none whitespace-nowrap shadow-xl">
-                  <div className="font-semibold">{item.label}</div>
-                  <div className="text-amber-300">{primaryLabel}: {item.primary} {primaryUnit}</div>
-                  <div className="text-emerald-400">{secondaryLabel}: {item.secondary} {secondaryUnit}</div>
-                  <div className={`text-emerald-400 ${!isCommunity && 'hidden'}`}>{batteryLabel}: {item.battery} {batteryUnit}</div>
-                </div>
+        return (
+          <div key={idx} className="relative flex-1 min-w-6 flex flex-col items-center gap-1 h-full justify-end group">
+            <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute -top-2 bg-emerald-950 border border-emerald-700 p-1.5 rounded text-[10px] text-accent z-20 pointer-events-none whitespace-nowrap shadow-xl">
+              <div className="font-semibold">{item.label}</div>
+              <div className="text-amber-300">{primaryLabel}: {item.primary} {primaryUnit}</div>
+              <div className="text-emerald-400">{secondaryLabel}: {item.secondary} {secondaryUnit}</div>
+              {isCommunity && (
+                <div className="text-violet-300">{batteryLabel}: {item.battery}{batteryUnit}</div>
+              )}
+            </div>
 
-                <div className="w-full flex items-end justify-center gap-0.5 h-full">
-                  <div
-                    style={{ height: `${Math.max(4, primaryHeight)}%` }}
-                    className="w-1/3 bg-amber-400/90 hover:bg-amber-300 rounded-t transition-all"
-                  />
-                  <div
-                    style={{ height: `${Math.max(4, secondaryHeight)}%` }}
-                    className="w-1/3 bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all"
-                  />
-                  <div
-                    style={{ height: `${Math.max(4, batteryHeight)}%` }}
-                    className={`w-1/3 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all ${!isCommunity && 'hidden'}`}
-                  />
-                </div>
+            <div className="w-full flex items-end justify-center gap-0.5 h-full">
+              <div
+                style={{ height: `${Math.max(4, primaryHeight)}%` }}
+                className={`${barWidthClass} bg-amber-400/90 hover:bg-amber-300 rounded-t transition-all`}
+              />
+              <div
+                style={{ height: `${Math.max(4, secondaryHeight)}%` }}
+                className={`${barWidthClass} bg-emerald-500/90 hover:bg-emerald-400 rounded-t transition-all`}
+              />
+              {isCommunity && (
+                <div
+                  style={{ height: `${Math.max(4, batteryHeight)}%` }}
+                  className="w-1/3 bg-violet-500/90 hover:bg-violet-400 rounded-t transition-all"
+                />
+              )}
+            </div>
 
-                <span className="text-[9px] font-mono text-emerald-300/70 truncate w-full text-center">
-                  {item.label}
-                </span>
-              </div>
-            )
-          })}
-        </div>
-      )}
+            <span className="text-[9px] font-mono text-emerald-300/70 truncate w-full text-center">
+              {item.label}
+            </span>
+          </div>
+        )
+      })}
     </div>
   )
 }
