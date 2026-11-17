@@ -28,7 +28,7 @@ const WeatherStats = () => {
       {/* Overview Details */}
       <div className="space-y-2">
         {/* Date & Weather Pill */}
-        <div className="inline-flex items-center gap-2 rounded-full border border-emerald-700/40 bg-emerald-950/60 px-3.5 py-1 text-xs font-medium text-emerald-100">
+        <div className="inline-flex items-center gap-2 rounded-full border text-3xl border-emerald-700/40 bg-emerald-950/60 px-3.5 py-1 text-xs font-medium text-emerald-100">
           <Clock className="size-3.5 text-emerald-300" />
           <span className="font-mono">{currentDate.toLocaleTimeString()}</span>
           <span className="text-emerald-600">•</span>
@@ -38,16 +38,6 @@ const WeatherStats = () => {
             <Sun className="size-3.5" />
             {weatherCondition.condition}
           </span>
-        </div>
-
-        {/* Header Title */}
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-accent">
-            Solar Operations Overview
-          </h1>
-          <p className="text-xs sm:text-sm text-emerald-100/80 mt-1">
-            Live generation and performance across your entire portfolio.
-          </p>
         </div>
       </div>
 

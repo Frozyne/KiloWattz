@@ -1,4 +1,4 @@
-import { Button } from '../ui/button'
+import { Button } from '../../ui/button'
 import { PowerIcon, Loader2 } from 'lucide-react'
 import { useHouseholdDetailQuery, useToggleTerminalMutation } from '@/hooks/useHouseholdQueries'
 import type { ToggleTerminalPayload } from '@/services/household'

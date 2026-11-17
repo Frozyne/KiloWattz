@@ -1,7 +1,7 @@
 import { Loader2 } from "lucide-react";
-import LiveStat from "../../components/admin/LiveStatsRow";
+import LiveStat from "../../components/common/overview/LiveStatsRow";
 import { useCurrentUserQuery } from "@/hooks/useUserQureies";
-import HouseControl from "@/components/common/HouseControl";
+import HouseControl from "@/components/common/overview/HouseControl";
 import WeatherStats from "@/components/common/WeatherStats";
 
 export const OverviewPage: React.FC = () => {

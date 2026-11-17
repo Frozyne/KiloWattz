@@ -28,8 +28,9 @@ export const AnalyticsHeader: React.FC<AnalyticsHeaderProps> = ({
   isRefreshing,
 }) => {
   const { data: user } = useCurrentUserQuery()
-  const { data: allHouseholds } = useAllHouseholdsQuery()
   const isAdmin = user?.role === 'Admin'
+
+  const { data: allHouseholds } = useAllHouseholdsQuery()
 
   // Admins pick from all community meters; Residents pick from their assigned meters
   const availableHouseholds = isAdmin ? (allHouseholds || []) : (user?.households || [])

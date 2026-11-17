@@ -2,7 +2,6 @@ import React from 'react'
 import { Link } from 'react-router'
 import { Sun, ArrowRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { TelemetryPreviewCard } from './analytics/TelementryPreviewCard'
 
 export const HeroSection: React.FC = () => {
   return (
@@ -43,8 +42,6 @@ export const HeroSection: React.FC = () => {
             View System Specs
           </a>
         </div>
-
-        <TelemetryPreviewCard />
       </div>
     </section>
   )

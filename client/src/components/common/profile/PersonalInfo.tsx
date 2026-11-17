@@ -243,7 +243,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
           </Select>
         ) : (
           <span className={`inline-block px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider ${user?.role === 'Admin' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-emerald-950 border border-emerald-800 text-emerald-400'}`}>
-            {user?.role}
+            {user?.role === 'Admin' ? 'Admin' : 'Resident'}
           </span>
         )}
       </div>

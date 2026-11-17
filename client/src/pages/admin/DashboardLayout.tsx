@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { Outlet } from "react-router"
-import Sidebar from "@/components/admin/SideBar"
+import Sidebar from "@/components/common/SideBar"
 import { useSocket } from "@/context/socketContext"
 import { toast, Toaster } from "@/components/ui/toast"
 

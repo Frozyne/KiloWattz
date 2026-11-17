@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { getCommunityTelemetry, getHouseholdTelemetry } from "../controllers/telemetry.controller.js";
 import { protectRoute } from "../middlewares/protect.middleware.js";
-import { authorizeUser } from "../middlewares/auth.middleware.js";
 
 const telemetryRouter: Router = Router()
 

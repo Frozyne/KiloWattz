@@ -22,15 +22,15 @@ export const AnalyticsKpiRow: React.FC<AnalyticsKpiRowProps> = ({ scope, selecte
   const activeHouseholdsCount = communityTelemetry?.activeHouseholds || 1
 
   const totalSolarOutputKW = scope === 'community'
-    ? (communityTelemetry?.summary?.solarGeneratedKW ?? 0)
+    ? Math.round((communityTelemetry?.summary?.solarGeneratedKW ?? 0) * 100) / 100
     : Math.round(((communityTelemetry?.summary?.solarGeneratedKW ?? 0) / activeHouseholdsCount) * 100) / 100
 
   const totalConsumedKWh = scope === 'community'
-    ? (communityTelemetry?.summary?.powerConsumedKW ?? 0)
-    : (activeHousehold?.consumedKWh ?? 0)
+    ? Math.round((communityTelemetry?.summary?.powerConsumedKW ?? 0) * 100) / 100
+    : Math.round((activeHousehold?.consumedKWh ?? 0) * 100) / 100
 
   const currentPowerLoadKW = scope === 'community'
-    ? (communityTelemetry?.summary?.powerConsumedKW ?? 0)
+    ? Math.round((communityTelemetry?.summary?.livePowerConsumedKW ?? 0) * 100) / 100
     : 0
 
   const dailyQuotaKWh = activeHousehold?.dailyKWHQuota ?? 20
@@ -109,7 +109,7 @@ export const AnalyticsKpiRow: React.FC<AnalyticsKpiRowProps> = ({ scope, selecte
           <BatteryCharging className="h-4 w-4 text-emerald-400" />
         </div>
         <div className="text-2xl font-bold text-accent font-mono">
-          {communityTelemetry?.batteryCharge ?? 0} <span className="text-sm font-normal text-emerald-200">%</span>
+          {communityTelemetry?.summary.liveBatteryPercent ?? 0} <span className="text-sm font-normal text-emerald-200">%</span>
         </div>
         <div className="text-xs text-emerald-400 mt-2 font-medium">
           {infrastructure?.summary?.batteryBanks?.totalCapacityKWh ?? 1100} kWh Capacity

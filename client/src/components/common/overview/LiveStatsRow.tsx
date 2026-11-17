@@ -26,12 +26,12 @@ export default function LiveStat(){
         <h1 className="flex justify-between pt-2 mb-2 font-extralight text-sm text-primary">
           POWER 
           {
-            stats?.summary.solarGeneratedKW ? 
+            stats?.summary.liveSolarGeneratedKW ? 
             <Power size={20} className="text-amber-300" /> : 
             <PowerOff size={20} className="text-gray-500"/> 
           } 
         </h1>
-        {stats?.summary.solarGeneratedKW} W
+        {Math.round((Number(stats?.summary.liveSolarGeneratedKW) * 100) / 100)} W
         {/* <p className="flex items-center gap-1 mt-4 text-sm">
           <ArrowUpIcon size={10}
             className="font-extralight" /> 7.2% vs yesterday
@@ -40,9 +40,9 @@ export default function LiveStat(){
       <div className="border bg-background mt-5 p-5 rounded-4xl text-2xl font-bold text-secondary">
         <h1 className="flex justify-between pt-2 mb-2 font-extralight text-sm text-primary">
           BATTERY
-          {getBatteryStatusIcon(stats?.batteryCharge)}
+          {getBatteryStatusIcon(stats?.summary.liveBatteryPercent)}
         </h1>
-        {stats?.batteryCharge} %
+        {Math.round((Number(stats?.summary.liveBatteryPercent) * 100) / 100)} %
         {/* <p className="flex items-center gap-1 mt-4 text-sm">
           <ArrowUpIcon size={10}
             className="font-extralight" /> 1.4% this month
@@ -52,12 +52,12 @@ export default function LiveStat(){
         <h1 className="flex justify-between pt-2 mb-2 font-extralight text-sm text-primary">
           GRID VOLTAGE 
           {
-            stats?.summary.gridVoltage ? 
+            stats?.summary.liveGridVoltage ? 
             <Zap size={20} className="text-amber-300" /> : 
             <ZapOff size={20} className="text-gray-500"/> 
           } 
         </h1>
-        {stats?.summary.gridVoltage} V
+        {Math.round((Number(stats?.summary.liveGridVoltage) * 100) / 100)} V
         {/* <p className="flex items-center gap-1 mt-4 text-sm">
           <ArrowUpIcon size={10}
             className="font-extralight" /> 0.6% vs. baseline

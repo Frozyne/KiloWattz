@@ -1,5 +1,5 @@
 import { Outlet } from "react-router";
-import Sidebar from "./SideBar";
+import Sidebar from "../common/SideBar";
 
 export default function AdminLayout() {
   return (

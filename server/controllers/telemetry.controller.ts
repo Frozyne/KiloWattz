@@ -5,72 +5,118 @@ import { ApiResponse } from "../utils/server.success.js";
 import Telemetry, { type ITelemetry } from "../models/telemetry.model.js";
 import Household from "../models/household.model.js";
 import { isAdmin } from "../utils/server.authorizer.js";
-import Infrastructure from "../models/infrastructure.model.ts";
 
 interface CommunitySummary {
-    solarGeneratedKW: number,
-    powerConsumedKW: number,
-    batteryLevelPercent: number,
+    solarGeneratedKW: number
+    powerConsumedKW: number
+    batteryLevelPercent: number
     gridVoltage: number
+    liveGridVoltage: number
+    liveBatteryPercent: number
+    liveSolarGeneratedKW: number
+    livePowerConsumedKW: number
 }
 
 export const getCommunityTelemetry = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     try {
-        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000)
 
         const households = await Household.find({ connectionStatus: 'Active' })
 
-        const batteryBanks = await Infrastructure.find({ type: 'BatteryBank' })
-        const centralBatterySoC = batteryBanks.length > 0
-            ? Math.round(
-                batteryBanks.reduce((acc, b) => acc + (b.diagnostics?.stateOfChargePercent ?? 85), 0) /
-                batteryBanks.length
-            )
-            : 85
-
+        // 1. 24-hour hourly breakdown
         const telemetryData: ITelemetry[] = await Telemetry.aggregate([
-        {
-            $match: {
-                timestamp: { $gte: twentyFourHoursAgo }
+            {
+                $match: {
+                    timestamp: { $gte: twentyFourHoursAgo }
+                }
+            },
+            {
+                $group: {
+                    _id: { $hour: "$timestamp" },
+                    solarGeneratedKW: { $avg: "$solarGeneratedKW" },
+                    powerConsumedKW: { $avg: "$powerConsumedKW" },
+                    batteryLevelPercent: { $avg: "$batteryLevelPercent" },
+                    gridVoltage: { $avg: "$gridVoltage" }
+                }
+            },
+            {
+                $sort: { '_id': 1 }
             }
-        }, {
-            $group: {
-                _id: { $hour: "$timestamp" },
-                solarGeneratedKW: { $avg: "$solarGeneratedKW" },
-                powerConsumedKW: { $avg: "$powerConsumedKW" },
-                batteryLevelPercent: { $avg: "$batteryLevelPercent" },
-                gridVoltage: { $avg: "$gridVoltage" }
-            }
-        }, {
-            $sort: { '_id': 1 }
-        }]);
+        ])
 
-        const summary: CommunitySummary = telemetryData.reduce((acc, curr) => {
-            acc.solarGeneratedKW += curr.solarGeneratedKW;
-            acc.powerConsumedKW += curr.powerConsumedKW;
-            acc.batteryLevelPercent += curr.batteryLevelPercent;
-            acc.gridVoltage += curr.gridVoltage;
-            return {
-                solarGeneratedKW: acc.solarGeneratedKW,
-                powerConsumedKW: acc.powerConsumedKW,
-                batteryLevelPercent: acc.batteryLevelPercent,
-                gridVoltage: acc.gridVoltage,
-            };
-        }, {
-            solarGeneratedKW: 0,
-            powerConsumedKW: 0,
-            batteryLevelPercent: 0,
-            gridVoltage: 0,
-        });
+        // 2. Latest live reading across all active households (most recent entry per household)
+        const latestReadings = await Telemetry.aggregate([
+            {
+                $match: {
+                    timestamp: { $gte: twentyFourHoursAgo }
+                }
+            },
+            { $sort: { timestamp: -1 } },
+            {
+                $group: {
+                    _id: "$household",
+                    latestVoltage: { $first: "$gridVoltage" },
+                    latestBattery: { $first: "$batteryLevelPercent" },
+                    latestSolarKW: { $first: "$solarGeneratedKW" },
+                    latestConsumedKW: { $first: "$powerConsumedKW" }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    liveGridVoltage: { $avg: "$latestVoltage" },
+                    liveBatteryPercent: { $avg: "$latestBattery" },
+                    liveSolarGeneratedKW: { $avg: "$latestSolarKW" },
+                    livePowerConsumedKW: { $sum: "$latestConsumedKW" }
+                }
+            }
+        ])
+
+        const live = latestReadings[0]
+        const count = telemetryData.length
+
+        const totals = telemetryData.reduce(
+            (acc, curr) => ({
+                solarGeneratedKW: acc.solarGeneratedKW + curr.solarGeneratedKW,
+                powerConsumedKW: acc.powerConsumedKW + curr.powerConsumedKW,
+                batteryLevelPercent: acc.batteryLevelPercent + curr.batteryLevelPercent,
+                gridVoltage: acc.gridVoltage + curr.gridVoltage,
+            }),
+            {
+                solarGeneratedKW: 0,
+                powerConsumedKW: 0,
+                batteryLevelPercent: 0,
+                gridVoltage: 0,
+            }
+        )
+
+        const summary: CommunitySummary = count > 0
+            ? {
+                solarGeneratedKW: Math.round((totals.solarGeneratedKW / count) * 100) / 100,
+                powerConsumedKW: Math.round((totals.powerConsumedKW / count) * 100) / 100,
+                batteryLevelPercent: Math.round((totals.batteryLevelPercent / count) * 10) / 10,
+                gridVoltage: Math.round((totals.gridVoltage / count) * 10) / 10,
+                liveGridVoltage: Math.round((live?.liveGridVoltage ?? 0) * 10) / 10,
+                liveBatteryPercent: Math.round((live?.liveBatteryPercent ?? 0) * 10) / 10,
+                liveSolarGeneratedKW: Math.round((live?.liveSolarGeneratedKW ?? 0) * 100) / 100,
+                livePowerConsumedKW: Math.round((live?.livePowerConsumedKW ?? 0) * 100) / 100,
+            }
+            : {
+                ...totals,
+                liveGridVoltage: 0,
+                liveBatteryPercent: 0,
+                liveSolarGeneratedKW: 0,
+                livePowerConsumedKW: 0,
+            }
 
         return ApiResponse.success({
             res,
             message: 'Community telemetry data retrieved successfully',
-            data: { summary, hourly: telemetryData, activeHouseholds: households.length, batteryCharge: centralBatterySoC }
-        });
+            data: { summary, hourly: telemetryData, activeHouseholds: households.length }
+        })
 
     } catch (error) {
-        next(error);
+        next(error)
     }
 }
 

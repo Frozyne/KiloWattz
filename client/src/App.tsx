@@ -11,7 +11,7 @@ import AnalyticsPage from "./pages/admin/AnalyticsPage";
 import ProfilePage from './pages/admin/ProfilePage'
 
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
-import UserDetailPage from "./pages/admin/UserDetailPgae";
+import UserDetailPage from "./pages/admin/UserDetailPage";
 
 export default function App() {
   

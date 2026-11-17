@@ -1,7 +1,5 @@
 import { useState, useMemo } from 'react'
 import { 
-  ArrowDownToLineIcon, 
-  ArrowUpIcon, 
   ShapesIcon, 
   SearchIcon, 
   Plus, 
@@ -13,15 +11,19 @@ import { Button } from '@/components/ui/button'
 import { useInfrastructureStatsQuery } from '@/hooks/useInfrastructureQueries'
 import { AddAssetModal } from '@/components/common/infrastructure/AddAssetModal'
 import WeatherStats from '@/components/common/WeatherStats'
+import { isSuperUser } from '@/lib/superAdmin'
+import { useCurrentUserQuery } from '@/hooks/useUserQureies'
 
 export default function DevicesPage() {
   const { data: statsData, isLoading } = useInfrastructureStatsQuery()
+  const { data: currentUser } = useCurrentUserQuery()
   const [query, setQuery] = useState('')
   const [typeFilter, setTypeFilter] = useState('All')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
 
   const summary = statsData?.summary
   const assets = statsData?.assets || []
+  const isSuper = isSuperUser(currentUser)
 
   // Filter assets by search query and asset type
   const filteredAssets = useMemo(() => {
@@ -63,20 +65,17 @@ export default function DevicesPage() {
             </p>
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
-            <Button 
-              onClick={() => setIsAddModalOpen(true)}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-500 text-xs gap-1.5 rounded-xl shadow-sm"
-            >
-              <Plus className="size-4" /> Register Device
-            </Button>
-            <Button 
-              variant="outline" 
-              className="bg-secondary text-emerald-100 border-emerald-800/60 hover:bg-emerald-900/40 text-xs gap-1.5 rounded-xl"
-            >
-              <ArrowDownToLineIcon className="size-4" /> Export Devices
-            </Button>
-          </div>
+          {
+            isSuper &&
+            <div className="flex items-center gap-3 flex-wrap">
+              <Button 
+                onClick={() => setIsAddModalOpen(true)}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white border-emerald-500 text-xs gap-1.5 rounded-xl shadow-sm"
+              >
+                <Plus className="size-4" /> Register Device
+              </Button>
+            </div>
+          }
         </div>
 
         {/* Dynamic Summary Metric Banner */}
@@ -87,29 +86,18 @@ export default function DevicesPage() {
             </span>
             <div>
               <span className="text-xs font-medium text-emerald-300">Total Tracked Devices</span>
-              <p className="text-3xl font-bold font-mono text-accent mt-0.5">{totalAssets}</p>
-              <p className="flex items-center gap-1 text-xs text-emerald-400 mt-1 font-medium">
-                <ArrowUpIcon size={12} />
-                <span>{summary?.statusCounts?.operational || 0} Operational Assets</span>
-              </p>
+              <p className="text-3xl font-bold font-mono text-accent mt-0.5">{summary?.statusCounts?.operational || 0} Operational Assets</p>
             </div>
           </div>
 
           <div className="flex flex-col md:items-center border-t md:border-t-0 md:border-x border-emerald-800/40 pt-4 md:pt-0">
             <span className="text-xs font-medium text-emerald-300">System Online Rate</span>
             <strong className="text-3xl font-bold font-mono text-accent mt-0.5">{onlinePercent}%</strong>
-            <small className="text-xs text-emerald-200/80 mt-1">
-              {operationalCount} of {totalAssets} reporting normally
-            </small>
           </div>
 
           <div className="flex flex-col md:items-end border-t md:border-t-0 border-emerald-800/40 pt-4 md:pt-0">
             <span className="text-xs font-medium text-emerald-300">Current Output Capacity</span>
             <strong className="text-3xl font-bold font-mono text-accent mt-0.5">{totalOutputKW} KW</strong>
-            <p className="flex items-center gap-1 text-xs text-emerald-400 mt-1 font-medium">
-              <ArrowUpIcon size={12} />
-              <span>Active Grid Load</span>
-            </p>
           </div>
         </div>
 

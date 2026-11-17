@@ -99,7 +99,7 @@ const UserStats = () => {
                                 <div>
                                     <span className="text-emerald-300/70 block text-[11px]">Today's Usage</span>
                                     <span className="font-mono text-accent font-semibold">
-                                        {primaryHousehold.consumedKWh ?? 0} kWh
+                                        {Math.floor(primaryHousehold.consumedKWh) ?? 0} kWh
                                     </span>
                                 </div>
                                 <div>

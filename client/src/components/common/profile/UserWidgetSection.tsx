@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { PersonalInfo } from '../../common/profile/PersonalInfo'
 import { HouseholdInfo } from '../../common/profile/HouuseholdInfo'
+import { useCurrentUserQuery } from '@/hooks/useUserQureies'
 import { type IUser } from '@/lib/types'
 
 interface UserWidgetSectionProps {
@@ -9,23 +10,25 @@ interface UserWidgetSectionProps {
 }
 
 export const UserWidgetSection: React.FC<UserWidgetSectionProps> = ({ user, onDeleted }) => {
+  const { data: currentUser } = useCurrentUserQuery()
+  const activeUser = user || currentUser
   const [selectedHouseholdId, setSelectedHouseholdId] = useState<string | undefined>()
 
   useEffect(() => {
-    if (user?.households && user.households.length > 0) {
-      const stillExists = user.households.some((hh) => hh._id === selectedHouseholdId)
+    if (activeUser?.households && activeUser.households.length > 0) {
+      const stillExists = activeUser.households.some((hh) => hh._id === selectedHouseholdId)
       if (!stillExists) {
-        setSelectedHouseholdId(user.households[0]._id)
+        setSelectedHouseholdId(activeUser.households[0]._id)
       }
     } else {
       setSelectedHouseholdId(undefined)
     }
-  }, [user, selectedHouseholdId])
+  }, [activeUser, selectedHouseholdId])
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
       <PersonalInfo
-        targetUser={user}
+        targetUser={activeUser}
         selectedHouseholdId={selectedHouseholdId}
         onSelectHousehold={(id) => setSelectedHouseholdId(id)}
         onDeleted={onDeleted}

@@ -2,17 +2,20 @@ import api from "../api/api";
 import { type ITelemetry } from "@/lib/types";
 
 interface CommunitySum {
-  solarGeneratedKW: number,
-  powerConsumedKW: number,
-  batteryLevelPercent: number,
-  gridVoltage: number
+    solarGeneratedKW: number
+    powerConsumedKW: number
+    batteryLevelPercent: number
+    gridVoltage: number
+    liveGridVoltage: number
+    liveBatteryPercent: number
+    liveSolarGeneratedKW: number
+    livePowerConsumedKW: number
 }
 
 export interface CommunityTem {
   summary: CommunitySum
   hourly: ITelemetry[]
   activeHouseholds: number
-  batteryCharge: number
 }
 
 

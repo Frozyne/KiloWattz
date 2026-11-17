@@ -56,12 +56,12 @@ const navItems: NavItem[] = [
     icon: Cpu,
     allowedRoles: ["Admin"],
   },
-  {
-    path: "/dashboard/reports",
-    label: "Reports",
-    icon: ClipboardList,
-    allowedRoles: ["Admin"],
-  },
+  // {
+  //   path: "/dashboard/reports",
+  //   label: "Reports",
+  //   icon: ClipboardList,
+  //   allowedRoles: ["Admin"],
+  // },
 ];
 
 export default function Sidebar() {
@@ -81,15 +81,25 @@ export default function Sidebar() {
     >
       <div className="flex items-center justify-between mb-6 px-1">
         <div className="flex items-center gap-2">
-          <Sun className="text-amber-300 shrink-0" size={24} />
-          {open && <span className="font-bold text-sm tracking-wide">KiloWattz</span>}
-        </div>
-        <button
+          <button
           onClick={() => setOpen(!open)}
-          aria-label={open ? "Collapse sidebar" : "Expand sidebar"}
-          className="p-2 rounded-lg hover:bg-zinc-800/10 mx-auto"       >
-          {open ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
-        </button>
+          aria-label="Expand sidebar"
+          className="p-2 rounded-lg hover:bg-zinc-800/10 mx-auto"       
+          >
+            <Sun className="text-amber-300 shrink-0" size={24} />
+            {open && <span className="font-bold text-sm tracking-wide">KiloWattz</span>}
+          </button>
+          
+        </div>
+        { open &&
+          <button
+            onClick={() => setOpen(!open)}
+            aria-label="Collapse sidebar"
+            className="p-2 rounded-lg hover:bg-zinc-800/10 mx-auto"       
+            >
+            {open && <PanelLeftClose size={18} /> }
+          </button>
+        }
       </div>
 
       <nav className="flex flex-col gap-1">
