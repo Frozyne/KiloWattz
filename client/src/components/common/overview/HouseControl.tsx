@@ -71,6 +71,7 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
               onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}
               >
               <PowerIcon size={20} />
+              {anyOn ? 'Turn all off' : 'Turn all on'}
             </Button>
             <div>
               <small className="block font-medium text-primary uppercase">
@@ -82,16 +83,6 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
             </div>
           </div>
         </div>
-
-        <Button
-          disabled={isPending}
-          onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}
-        >
-          <div className="flex items-center gap-2">
-            <PowerIcon size={16} />
-            {anyOn ? 'Turn all off' : 'Turn all on'}
-          </div>
-        </Button>
       </div>
 
       {/* 6-Terminal Interactive Tile Grid */}
