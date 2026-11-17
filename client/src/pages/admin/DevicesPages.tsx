@@ -102,7 +102,7 @@ export default function DevicesPage() {
             <div className="flex flex-col md:items-end border-t md:border-t-0 border-emerald-800/40 pt-4 md:pt-0">
               <span className="text-xs font-medium text-emerald-300">Inverter Output Capacity</span>
               <strong className="text-2xl sm:text-3xl font-bold font-mono text-accent mt-0.5">
-                {summary?.inverters?.totalCapacityKW || 0}{' '}
+                {totalOutputKW || 0}{' '}
                 <span className="text-sm font-normal text-emerald-200">kW</span>
               </strong>
             </div>
