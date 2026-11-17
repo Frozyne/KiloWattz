@@ -1,5 +1,5 @@
 import { Button } from '../../ui/button'
-import { PowerIcon, Loader2 } from 'lucide-react'
+import { PowerIcon, Zap, Loader2 } from 'lucide-react'
 import { useHouseholdDetailQuery, useToggleTerminalMutation } from '@/hooks/useHouseholdQueries'
 import type { ToggleTerminalPayload } from '@/services/household'
 import type { ITerminal, IMeter } from '@/lib/types'
@@ -38,7 +38,7 @@ async function toggleAll(
 
 const HouseControl = ({ id: householdId }: { id: string }) => {
   const { data: household, isLoading } = useHouseholdDetailQuery(householdId)
-  const { mutateAsync: toggleTerminal } = useToggleTerminalMutation()
+  const { mutateAsync: toggleTerminal, isPending } = useToggleTerminalMutation()
 
   if (isLoading) {
     return (
@@ -57,61 +57,88 @@ const HouseControl = ({ id: householdId }: { id: string }) => {
   const toggleTarget = anyOn ? 'Off' : 'On'
 
   return (
-    <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm gap-5">
-      <div>
+    <div className="rounded-2xl border bg-accent mt-5 p-5 shadow-sm space-y-5">
+      {/* Header & Master Toggle */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <div className="mb-1 flex items-center gap-2">
-            <Button size="icon" variant="outline" aria-label="Power" className="bg-secondary text-accent translate-y-3">
+            <Button size="icon" variant="outline" aria-label="Power" className="bg-secondary text-accent">
               <PowerIcon size={20} />
             </Button>
-            <small className="font-medium text-primary uppercase">
-              Whole-home control: {household.meterSerialNumber}
-            </small>
-          </div>
-          <p className="text-sm text-secondary pl-11 -translate-y-2">
-            {on} of {total} terminals are on
-          </p>
-          <Button onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}>
-            <div className="flex items-center gap-2">
-              <PowerIcon size={16} />
-              {anyOn ? 'Turn all off' : 'Turn all on'}
+            <div>
+              <small className="block font-medium text-primary uppercase">
+                Whole-home control: {household.meterSerialNumber}
+              </small>
+              <p className="text-sm text-secondary">
+                {on} of {total} terminals are on
+              </p>
             </div>
-          </Button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 justify-between gap-5">
-          {terminals.map((terminal, index) => {
-            const terminalNumber = index + 1
-            const isOn = terminal.connectionStatus === 'On'
+        <Button
+          disabled={isPending}
+          onClick={() => toggleAll(toggleTarget, householdId, terminals, toggleTerminal)}
+        >
+          <div className="flex items-center gap-2">
+            <PowerIcon size={16} />
+            {anyOn ? 'Turn all off' : 'Turn all on'}
+          </div>
+        </Button>
+      </div>
 
-            return (
-              <div key={terminalNumber} className="bg-green-50 p-5 rounded-2xl">
-                <div>
-                  <h3>{terminal.name || `Terminal ${terminalNumber}`}</h3>
-                  <p className="text-sm text-secondary pl-11 -translate-y-2">
-                    Power Draw: {terminal.consumedKW} KW
-                  </p>
-                  <p className="text-sm text-secondary pl-11 -translate-y-2">
-                    Status: {terminal.connectionStatus}
-                  </p>
-                </div>
-                <Button
-                  onClick={() =>
-                    toggleTerminal({
-                      householdId,
-                      payload: {
-                        terminalNumber,
-                        connectionStatus: isOn ? 'Off' : 'On' ,
-                      },
-                    })
-                  }
-                >
-                  {isOn ? 'Turn Off' : 'Turn On'}
-                </Button>
+      {/* 6-Terminal Interactive Tile Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        {terminals.map((terminal, index) => {
+          const terminalNumber = index + 1
+          const isOn = terminal.connectionStatus === 'On'
+          const isFault = terminal.connectionStatus === 'Fault'
+
+          return (
+            <button
+              key={terminalNumber}
+              type="button"
+              disabled={isPending}
+              onClick={() =>
+                toggleTerminal({
+                  householdId,
+                  payload: {
+                    terminalNumber,
+                    connectionStatus: isOn ? 'Off' : 'On',
+                  },
+                })
+              }
+              aria-pressed={isOn}
+              className={`flex w-full flex-col items-start gap-1 rounded-xl border p-3 text-left transition-colors cursor-pointer disabled:opacity-60 ${
+                isOn
+                  ? 'bg-secondary text-accent border-secondary'
+                  : 'bg-background text-secondary hover:bg-gray-100'
+              }`}
+            >
+              <div className="flex w-full items-center justify-between">
+                <Zap className="size-6" strokeWidth={1.5} />
+                <span
+                  className={`h-2 w-2 rounded-full ${
+                    isFault ? 'bg-red-500' : isOn ? 'bg-green-500' : 'bg-gray-400'
+                  }`}
+                  aria-hidden
+                />
               </div>
-            )
-          })}
-        </div>
+
+              <span className="font-medium">
+                {terminal.name || `Terminal ${terminalNumber}`}
+              </span>
+
+              <small className="opacity-70">
+                {isFault
+                  ? 'Fault'
+                  : isOn
+                    ? `On · ${terminal.consumedKW ?? 0} kW`
+                    : 'Off'}
+              </small>
+            </button>
+          )
+        })}
       </div>
     </div>
   )
