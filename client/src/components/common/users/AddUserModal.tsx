@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Loader2, Mail, User, Shield } from 'lucide-react'
+import { X, Loader2, Mail, User, Shield, Eye, EyeOff } from 'lucide-react'
 import { useCreateUserMutation } from '@/hooks/useUserQureies'
 
 interface AddUserModalProps {
@@ -8,6 +8,7 @@ interface AddUserModalProps {
 
 export const AddUserModal: React.FC<AddUserModalProps> = ({ onClose }) => {
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -30,6 +31,7 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ onClose }) => {
       onClose()
     }, 1000)
   }
+
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -88,6 +90,18 @@ export const AddUserModal: React.FC<AddUserModalProps> = ({ onClose }) => {
                 className="w-full h-10 pl-9 pr-3 text-sm bg-emerald-950/40 border border-emerald-800/60 rounded-xl text-emerald-100 focus:border-emerald-400 outline-none transition-colors"
                 placeholder="Password123#"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 focus:outline-none"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                ) : (
+                    <Eye className="h-4 w-4" />
+                )}
+            </button>
             </div>
           </div>
 

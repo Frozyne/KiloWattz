@@ -11,7 +11,9 @@ import {
   Loader2, 
   Key,
   Plus,
-  Trash2
+  Trash2,
+  Eye,
+  EyeOff
 } from 'lucide-react'
 import { useCurrentUserQuery, useUpdateUserMutation, useDeleteUserMutation} from '@/hooks/useUserQureies'
 import { type IUser } from '@/lib/types'
@@ -48,6 +50,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
   const isAdmin = currentUser?.role === 'Admin'
 
   const [isEditing, setIsEditing] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const [isAssignModalOpen, setIsAssignModalOpen] = useState(false)
   const [confirmDelete, setConfirmDelete] = useState(false)
   const canDeleteUser = isAdmin && user?._id && user._id !== currentUser?._id
@@ -206,7 +209,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
 
       {/* Password (Only show field if editing) */}
       {isEditing && (
-        <div className="space-y-1 border-b border-emerald-800/50 pb-3">
+        <div className="space-y-1 border-b border-emerald-800/50 pb-3 relative">
           <span className="text-xs font-semibold text-emerald-300/80 flex items-center gap-2">
             <Key className="size-4" /> Reset Password
           </span>
@@ -217,6 +220,18 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
             onChange={(e) => setDraft({ ...draft, password: e.target.value })}
             className="w-full rounded-xl border border-emerald-800/60 bg-emerald-950/40 px-3 py-1.5 text-sm font-medium text-emerald-100 focus:border-emerald-400 outline-none"
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-200 focus:outline-none"
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? (
+                <EyeOff className="h-4 w-4" />
+            ) : (
+                <Eye className="h-4 w-4" />
+            )}
+        </button>
         </div>
       )}
 
