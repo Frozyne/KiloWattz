@@ -214,7 +214,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({
             <Key className="size-4" /> Reset Password
           </span>
           <input
-            type="text"
+            type={showPassword ? 'text' : 'password'}
             placeholder="Enter new password (optional)"
             value={draft.password}
             onChange={(e) => setDraft({ ...draft, password: e.target.value })}
