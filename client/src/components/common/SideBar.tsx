@@ -81,7 +81,7 @@ export default function Sidebar() {
           <button
           onClick={() => setOpen(!open)}
           aria-label="Expand sidebar"
-          className=" hover:bg-zinc-800/10 mx-auto"       
+          className=" flex items-center gap-2.5 text-left cursor-pointer"       
           >
             <span className="p-1.5 rounded-xl text-amber-300 shrink-0">
             <Sun size={18} />
