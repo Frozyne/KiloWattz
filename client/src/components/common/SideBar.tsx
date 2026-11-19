@@ -74,7 +74,7 @@ export default function Sidebar() {
   return (
     <aside
       className={`shrink-0 bg-secondary text-accent flex flex-col p-3 transition-all duration-300 ${
-        open ? "w-40" : "w-15"
+        open ? "w-48" : "w-16"
       }`}
     >
       <div className="flex items-center justify-between mb-7 px-1 pt-1">
