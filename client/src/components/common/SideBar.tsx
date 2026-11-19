@@ -98,7 +98,7 @@ export default function Sidebar() {
             aria-label="Collapse sidebar"
             className="p-2 rounded-lg hover:bg-zinc-800/10 mx-auto"       
             >
-            {open && <PanelLeftClose size={20} /> }
+            {open && <PanelLeftClose size={16} /> }
           </button>
         }
       </div>
