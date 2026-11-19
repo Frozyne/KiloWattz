@@ -77,18 +77,21 @@ export default function Sidebar() {
         open ? "w-40" : "w-15"
       }`}
     >
-      <div className="flex justify-between mb-6 px-1">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between mb-7 px-1 pt-1">
           <button
           onClick={() => setOpen(!open)}
           aria-label="Expand sidebar"
           className=" hover:bg-zinc-800/10 mx-auto"       
           >
-            <Sun className="text-amber-300 shrink-0" size={20} />
-            {open && <span className="font-bold text-sm tracking-wide">KiloWattz</span>}
+            <span className="p-1.5 rounded-xl text-amber-300 shrink-0">
+            <Sun size={18} />
+          </span>
+          {open && (
+            <span className="font-bold text-base tracking-wide text-green-50">
+              KiloWattz
+            </span>
+          )}
           </button>
-          
-        </div>
         { open &&
           <button
             onClick={() => setOpen(!open)}

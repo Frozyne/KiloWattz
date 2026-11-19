@@ -31,7 +31,7 @@ export default function LiveStat(){
             <PowerOff size={20} className="text-gray-500"/> 
           } 
         </h1>
-        {Math.round((Number(stats?.summary.liveSolarGeneratedKW) * 100) / 100)} W
+        {Math.round((Number(stats?.summary.liveSolarGeneratedKW) * 100) / 100)} KW
         {/* <p className="flex items-center gap-1 mt-4 text-sm">
           <ArrowUpIcon size={10}
             className="font-extralight" /> 7.2% vs yesterday
